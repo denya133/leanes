@@ -1,0 +1,9 @@
+[include]
+../es/**/*
+./interfaces
+
+[libs]
+./declares
+
+[options]
+all=true

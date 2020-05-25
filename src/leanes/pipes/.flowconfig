@@ -1,0 +1,9 @@
+[include]
+../patternes/**/*
+
+[libs]
+./declares
+
+[options]
+all=true
+esproposal.decorators=ignore

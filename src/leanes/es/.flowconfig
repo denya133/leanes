@@ -1,0 +1,16 @@
+[ignore]
+
+
+[include]
+
+
+[libs]
+./declares
+
+[lints]
+
+[options]
+all=true
+esproposal.decorators=ignore
+
+[strict]
