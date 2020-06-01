@@ -9,6 +9,7 @@ const cphFilesList = Symbol.for('~filesList');
 
 
 export default function resolver(req, amReg) {
+
   return target => {
     assert(target[cpoMetaObject] != null, 'Target for `resolver` decorator must be a Module subclass');
     const vmFunctor = function (name, isRecursion = false) {
@@ -52,36 +53,36 @@ export default function resolver(req, amReg) {
     };
     const [
       pathMap, utilsMap, migrationsMap, templatesList, filesList
-    ] = req
-      .keys()
-      .sort((a, b) =>
-        (a.match(/\//g) || []).length - (b.match(/\//g) || []).length
-      )
-      .reduce(([cp, up, mp, tp, fp], vsItem) => {
-        if (/\.[.]+$/.test(vsItem)) {
-          fp.push(vsItem);
-        }
-        if (/\.js$/.test(vsItem)) {
-          const vsPathMatch = vsItem.match(/([\w\-\_]+)\.js$/);
-          const [ blackhole, vsName ] = vsPathMatch != null ? vsPathMatch : [];
-          if (vsItem && vsName) {
-            switch (false) {
-              case !/.*\/templates\/.*/.test(vsItem):
-                tp.push(vsItem);
-                break;
-              case !(/.*\/migrations\/.*/.test(vsItem) && vsName !== 'BaseMigration'):
-                if (mp[vsName] == null) mp[vsName] = vsItem;
-                break;
-              case !/.*\/utils\/.*/.test(vsItem):
-                if (up[vsName] == null) up[vsName] = vsItem;
-                break;
-              default:
-                if (cp[vsName] == null) cp[vsName] = vsItem;
+    ] =
+      Object.keys(req)
+        .sort((a, b) =>
+          (a.match(/\//g) || []).length - (b.match(/\//g) || []).length
+        )
+        .reduce(([cp, up, mp, tp, fp], vsItem) => {
+          if (/\.[.]+$/.test(vsItem)) {
+            fp.push(vsItem);
+          }
+          if (/\.js$/.test(vsItem)) {
+            const vsPathMatch = vsItem.match(/([\w\-\_]+)\.js$/);
+            const [blackhole, vsName] = vsPathMatch != null ? vsPathMatch : [];
+            if (vsItem && vsName) {
+              switch (false) {
+                case !/.*\/templates\/.*/.test(vsItem):
+                  tp.push(vsItem);
+                  break;
+                case !(/.*\/migrations\/.*/.test(vsItem) && vsName !== 'BaseMigration'):
+                  if (mp[vsName] == null) mp[vsName] = vsItem;
+                  break;
+                case !/.*\/utils\/.*/.test(vsItem):
+                  if (up[vsName] == null) up[vsName] = vsItem;
+                  break;
+                default:
+                  if (cp[vsName] == null) cp[vsName] = vsItem;
+              }
             }
           }
-        }
-        return [cp, up, mp, tp, fp];
-      }, [{}, {}, {}, [], []]);
+          return [cp, up, mp, tp, fp];
+        }, [{}, {}, {}, [], []]);
     if (target[cphPathMap] == null) {
       Reflect.defineProperty(target, cphPathMap, {
         enumerable: true,

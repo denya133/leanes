@@ -77,8 +77,10 @@ Reflect.defineProperty(_ES.prototype, 'constant', { value: constant });
 Reflect.defineProperty(_ES.prototype, 'util', { value: util });
 Reflect.defineProperty(_ES.prototype, 'nameBy', { value: nameBy });
 
-_ES.prototype.MetaObject = require('./MetaObject').default(_ES);
-_ES.prototype.CoreObject = require('./CoreObject').default(_ES);
+import MetaObjectTF from './MetaObject';
+import CoreObjectTF from './CoreObject';
+_ES.prototype.MetaObject = MetaObjectTF(_ES);
+_ES.prototype.CoreObject = CoreObjectTF(_ES);
 
 Reflect.defineProperty(_ES, cpoMetaObject, {
   enumerable: false,
@@ -87,8 +89,10 @@ Reflect.defineProperty(_ES, cpoMetaObject, {
 });
 
 
-_ES.prototype.Proto = require('./Proto').default(_ES);
-_ES.prototype.Module = require('./Module').default(_ES);
+import ProtoTF from './Proto';
+import ModuleTF from './Module';
+_ES.prototype.Proto = ProtoTF(_ES);
+_ES.prototype.Module = ModuleTF(_ES);
 
 
 @initialize

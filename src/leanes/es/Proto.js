@@ -3,6 +3,8 @@ const hasProp = {}.hasOwnProperty;
 
 var _class = null;
 
+import CoreObjectTF from './CoreObject';
+
 export default (NS) => {
   if (_class !== null) {
     return _class;
@@ -16,7 +18,7 @@ export default (NS) => {
 
   // console.log('>>> IN Proto', meta, NS.__proto__, nameBy);
 
-  const CoreObject = require('./CoreObject').default(NS);
+  const CoreObject = CoreObjectTF(NS);
 
   class Proto extends CoreObject {
     @nameBy static  __filename = __filename;

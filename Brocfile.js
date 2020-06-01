@@ -20,7 +20,7 @@ let js = new Rollup(appRoot, {
     input: __dirname + "/src/leanes/index.js",
     output: {
       file: __dirname + '/lib/index.js',
-      format: "esm",
+      format: "cjs",
       sourcemap: true,
     },
     external: ['crypto', 'net', 'dns'],

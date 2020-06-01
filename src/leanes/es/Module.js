@@ -4,6 +4,7 @@ const hasProp = {}.hasOwnProperty;
 
 var _class = null;
 
+import CoreObjectTF from './CoreObject';
 
 export default (NS) => {
   if (_class !== null) {
@@ -16,7 +17,7 @@ export default (NS) => {
     _, inflect, assert, meta, nameBy,
   } = NS.prototype;
 
-  const CoreObject = require('./CoreObject').default(NS);
+  const CoreObject = CoreObjectTF(NS);
 
   const cphFilesList = Symbol.for('~filesList');
   const cphTemplatesList = Symbol.for('~templatesList');

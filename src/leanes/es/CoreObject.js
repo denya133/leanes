@@ -6,6 +6,7 @@ const hasProp = {}.hasOwnProperty;
 
 var _class = null;
 
+import MetaObjectTF from './MetaObject';
 
 export default (NS) => {
   if (_class !== null) {
@@ -16,8 +17,8 @@ export default (NS) => {
     PRODUCTION, DEVELOPMENT, CLASS_KEYS, INSTANCE_KEYS,
     _, inflect, assert,
   } = NS.prototype;
-
-  const MetaObject = require('./MetaObject').default(NS);
+  
+  const MetaObject = MetaObjectTF(NS);
 
   const cpoMetaObject = Symbol.for('~metaObject');
   const cplExtensibles = Symbol.for('~isExtensible');
