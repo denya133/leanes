@@ -9,6 +9,8 @@ export default (Module) => {
     Utils: { _ }
   } = Module.NS;
 
+  console.log('hhhh', __filename);
+
 
   @initialize
   @module(Module)

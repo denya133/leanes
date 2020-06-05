@@ -7,10 +7,11 @@ const babel = require("rollup-plugin-babel");
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const json = require('rollup-plugin-json');
+// const globals = require('rollup-plugin-node-globals');
 
 const appRoot = __dirname + '/src';
 
-const extensions = [".ts", ".js"]
+const extensions = [".ts", ".js"];
 
 // Compile JS through rollup
 let js = new Rollup(appRoot, {
@@ -18,12 +19,16 @@ let js = new Rollup(appRoot, {
   annotation: "JS Transformation",
   rollup: {
     input: __dirname + "/src/leanes/index.js",
-    output: {
-      file: __dirname + '/lib/index.js',
-      format: "cjs",
-      sourcemap: true,
-    },
-    external: ['crypto', 'net', 'dns'],
+    external: [
+      'crypto',
+      'net',
+      'dns',
+      'stream',
+      'buffer',
+      'events',
+      'querystring',
+      'url'
+    ],
     plugins: [
       json({
         extensions,
@@ -44,8 +49,9 @@ let js = new Rollup(appRoot, {
       }),
       babel({
         extensions,
+        sourceMap: true,
         babelrcRoots: [
-          "./src/*",
+          "./src/**",
         ],
         exclude: "node_modules/**",
         presets: [
@@ -54,13 +60,34 @@ let js = new Rollup(appRoot, {
         plugins: [
           "@babel/plugin-syntax-flow",
           "flow-runtime",
-          'transform-class-properties',
-          ["@babel/plugin-proposal-decorators", { "legacy": true }],
           "@babel/plugin-transform-flow-strip-types",
-          ["@babel/plugin-proposal-class-properties", {"loose": true}],
+          ["@babel/plugin-proposal-decorators", { "legacy": true }],
+          ["@babel/plugin-proposal-class-properties", { "loose": true }],
+          'transform-class-properties',
+          // "transform-dirname-filename",
+          // ["transform-globals", {
+          //   replace: {__filename: "filename"},
+          // }]
         ],
-      })
+      }),
+      // globals({
+      //   include: __dirname + "/lib/**",
+      //   sourceMap: true,
+      //   process: false,
+      //   buffer: false,
+      //   dirname: true,
+      //   filename: true,
+      //   global: true,
+      //   baseDir: process.cwd()
+      // }),
     ],
+    output: {
+      // name: "LeanES",
+      // format: "umd",
+      dir: __dirname + '/lib',
+      format: "cjs",
+      sourcemap: true,
+    },
   }
 });
 

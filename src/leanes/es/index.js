@@ -94,6 +94,7 @@ import ModuleTF from './Module';
 _ES.prototype.Proto = ProtoTF(_ES);
 _ES.prototype.Module = ModuleTF(_ES);
 
+// console.log('?>?>?> CoreObject', _ES.prototype.CoreObject);
 
 @initialize
 @resolver(require, name => require(name))
@@ -153,6 +154,10 @@ class ES extends _ES.prototype.Module {
   }
 };
 
+// console.log('?>?>?> CoreObject000', ES.prototype);
+// console.log('?>?>?> CoreObject111', ES.prototype.ENV);
+// console.log('?>?>?> CoreObject111', ES.prototype.CoreObject);
+
 ES.prototype.CoreObject.constructor = ES.prototype.Proto;
 ES.prototype.MetaObject.constructor = ES.prototype.Proto;
 
@@ -160,12 +165,24 @@ ES.prototype.Proto.Module = ES;
 ES.prototype.CoreObject.Module = ES;
 ES.prototype.MetaObject.Module = ES;
 
-require('./statemachine/HookedObject').default(ES);
-require('./statemachine/State').default(ES);
-require('./statemachine/Transition').default(ES);
-require('./statemachine/Event').default(ES);
-require('./statemachine/StateMachine').default(ES);
-require('./mixins/StateMachineMixin').default(ES);
+// require('./statemachine/HookedObject').default(ES);
+import HookedObjectTF from './statemachine/HookedObject';
+// require('./statemachine/State').default(ES);
+import StateTF from './statemachine/State';
+// require('./statemachine/Transition').default(ES);
+import TransitionTF from './statemachine/Transition';
+// require('./statemachine/Event').default(ES);
+import EventTF from './statemachine/Event';
+// require('./statemachine/StateMachine').default(ES);
+import StateMachineTF from './statemachine/StateMachine';
+// require('./mixins/StateMachineMixin').default(ES);
+import StateMachineMixinTF from './mixins/StateMachineMixin';
+HookedObjectTF(ES);
+StateTF(ES);
+TransitionTF(ES);
+EventTF(ES);
+StateMachineTF(ES);
+StateMachineMixinTF(ES);
 
 Reflect.defineProperty(ES, 'onMetalize', {
   configurable: true,

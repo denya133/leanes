@@ -117,18 +117,41 @@ class PatternES extends ES {
   // @util statuses = statuses;
 }
 
-require('./observer/Notification').default(PatternES);
-require('./observer/Notifier').default(PatternES);
-require('./observer/Observer').default(PatternES);
-require('./proxy/Proxy').default(PatternES);
-require('./mediator/Mediator').default(PatternES);
-require('./command/SimpleCommand').default(PatternES);
-require('./command/MacroCommand').default(PatternES);
-require('./facade/Facade').default(PatternES);
+// require('./observer/Notification').default(PatternES);
+import NotificationTF from './observer/Notification';
+// require('./observer/Notifier').default(PatternES);
+import NotifierTF from './observer/Notifier';
+// require('./observer/Observer').default(PatternES);
+import ObserverTF from './observer/Observer'
+// require('./proxy/Proxy').default(PatternES);
+import ProxyTF from './proxy/Proxy'
+// require('./mediator/Mediator').default(PatternES);
+import MediatorTF from './mediator/Mediator';
+// require('./command/SimpleCommand').default(PatternES);
+import SimpleCommandTF from './command/SimpleCommand';
+// require('./command/MacroCommand').default(PatternES);
+import MacroCommandTF from './command/MacroCommand';
+// require('./facade/Facade').default(PatternES);
+import FacadeTF from './facade/Facade';
 
-require('./core/View').default(PatternES);
-require('./core/Model').default(PatternES);
-require('./core/Controller').default(PatternES);
+NotificationTF(PatternES);
+NotifierTF(PatternES);
+ObserverTF(PatternES);
+ProxyTF(PatternES);
+MediatorTF(PatternES);
+SimpleCommandTF(PatternES);
+MacroCommandTF(PatternES);
+FacadeTF(PatternES);
+
+// require('./core/View').default(PatternES);
+// require('./core/Model').default(PatternES);
+// require('./core/Controller').default(PatternES);
+import ViewTF from './core/View';
+import ModelTF from './core/Model';
+import ControllerTF from './core/Controller';
+ViewTF(PatternES);
+ModelTF(PatternES);
+ControllerTF(PatternES);
 
 export * from '../es';
 // export type { AttributeConfigT } from './types/AttributeConfigT';
