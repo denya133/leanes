@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
@@ -46,6 +46,7 @@
     "flow-runtime": "^0.17.0",
     "http-errors": "^1.6.3",
     "i": "^0.3.5",
+    "inversify": "^5.0.1",
     "joi-browser": "^13.4.0",
     "json-stable-stringify": "^1.0.1",
     "jsonwebtoken": "^7.4.1",
@@ -59,6 +60,7 @@
     "path": "^0.12.7",
     "path-to-regexp": "^0.1.7",
     "pmvc": "^1.4.0",
+    "reflect-metadata": "^0.1.13",
     "request": "^2.79.0",
     "sinon-chai": "^3.5.0",
     "statuses": "^1.4.0",

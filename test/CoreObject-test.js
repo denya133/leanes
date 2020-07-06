@@ -1,10 +1,7 @@
 const chai = require("chai");
 const sinon = require("sinon-chai");
-
 const expect = chai.expect;
-
 const CoreObject = require("../lib/index.js");
-console.log('?>?.');
 
 describe('CoreObject', () => {
   describe('constructor', () => {
