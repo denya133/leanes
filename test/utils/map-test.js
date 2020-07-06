@@ -1,13 +1,13 @@
-var RC, assert, co, expect, map, sinon;
+var ES, assert, co, expect, map, sinon;
 const assert = require('chai');
-const RC = require.main.require('lib');
-const {co, map} = RC.prototype.Utils;
+ES = require('../../src/leanes/es/index');
+const {co, map} = ES.prototype.Utils;
 
 describe('Utils.map', () => {
   describe('map(array, generator)', () => {
     it('should map list', () => {
       return co(function*() {
-        const array = [RC.prototype.Promise.resolve(1), RC.prototype.Promise.resolve(5), RC.prototype.Promise.resolve(3), RC.prototype.Promise.resolve(7), RC.prototype.Promise.resolve(2)];
+        const array = [ES.prototype.Promise.resolve(1), ES.prototype.Promise.resolve(5), ES.prototype.Promise.resolve(3), ES.prototype.Promise.resolve(7), ES.prototype.Promise.resolve(2)];
         const context = {
           name: 'context'
         };

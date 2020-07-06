@@ -1,6 +1,6 @@
 const assert = require('chai');
-const RC = require.main.require('lib');
-const {jsonStringify, co} = RC.prototype.Utils;
+ES = require('../../src/leanes/es/index');
+const {jsonStringify, co} = ES.prototype.Utils;
 
 describe('Utils.jsonStringify', () => {
    describe('jsonStringify(object, options)', () => {

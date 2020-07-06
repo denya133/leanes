@@ -1,6 +1,6 @@
 const chai = require("chai");
 const sinon = require("sinon");
-RC = require.main.require('lib');
+ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert
   ({ co } = RC.prototype.Utils);

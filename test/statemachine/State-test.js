@@ -1,17 +1,17 @@
 const chai = require("chai");
 const sinon = require("sinon");
-RC = require.main.require('lib');
+ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert
-({ co } = RC.prototype.Utils);
+({ co } = ES.prototype.Utils);
 
 describe('State', () => {
   describe('.new()', () => {
     it('should create new State instance', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const state = RC.prototype.State.new('newState', {}, stateMachine, {});
-        assert.instanceOf(state, RC.prototype.State, 'Cannot instantiate class State');
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const state = ES.prototype.State.new('newState', {}, stateMachine, {});
+        assert.instanceOf(state, ES.prototype.State, 'Cannot instantiate class State');
         assert.equal(state.name, 'newState');
       }).to.not.throw(Error);
     });
@@ -19,11 +19,11 @@ describe('State', () => {
   describe('#defineTransition, #removeTransition', () => {
     it('should successfully define transition and remove it', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const state1 = RC.prototype.State.new('newState1', {}, stateMachine, {});
-        const state2 = RC.prototype.State.new('newState2', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const state1 = ES.prototype.State.new('newState1', {}, stateMachine, {});
+        const state2 = ES.prototype.State.new('newState2', {}, stateMachine, {});
         // transition = {}
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
         state1.defineTransition('test', state2, transition);
         assert.isDefined(state1.getEvent('test'), 'No added transition');
         state1.removeTransition('test');
@@ -48,8 +48,8 @@ describe('State', () => {
         const spyTestBeforeExit = sinon.spy(anchor, 'testBeforeExit');
         const spyTestExit = sinon.spy(anchor, 'testExit');
         const spyTestAfterExit = sinon.spy(anchor, 'testAfterExit');
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const state = RC.prototype.State.new('newTransition', anchor, stateMachine, {
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const state = ES.prototype.State.new('newTransition', anchor, stateMachine, {
           beforeEnter: 'testBeforeEnter',
           afterEnter: 'testAfterEnter',
           exit: 'testExit'

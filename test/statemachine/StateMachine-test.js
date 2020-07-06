@@ -1,16 +1,16 @@
 const chai = require("chai");
 const sinon = require("sinon");
 _ = require('lodash');
-RC = require.main.require('lib');
+ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert;
-({ co } = RC.prototype.Utils);
+({ co } = ES.prototype.Utils);
 
 describe('StateMachine', () => {
   describe('.new()', () => {
     it('should create new StateMachine instance', () => {
-      const stateMachine = RC.prototype.StateMachine.new('default', {});
-      assert.instanceOf(stateMachine, RC.prototype.StateMachine, 'Cannot instantiate class StateMachine');
+      const stateMachine = ES.prototype.StateMachine.new('default', {});
+      assert.instanceOf(stateMachine, ES.prototype.StateMachine, 'Cannot instantiate class StateMachine');
     }).to.not.throw(Error);
   });
 });
@@ -26,7 +26,7 @@ describe('#doBeforeAllEvents, #doAfterAllEvents, #doAfterAllTransitions, #doErro
     const spyTestAfterAllEvents = sinon.spy(anchor, 'testAfterAllEvents');
     const spyTestAfterAllTransitions = sinon.spy(anchor, 'testAfterAllTransitions');
     const spyAfterAllErrors = sinon.spy(anchor, 'testAfterAllErrors');
-    const stateMachine = RC.prototype.StateMachine.new('testSM', anchor, {
+    const stateMachine = ES.prototype.StateMachine.new('testSM', anchor, {
       beforeAllEvents: 'testBeforeAllEvents',
       afterAllEvents: 'testAfterAllEvents',
       afterAllTransitions: 'testAfterAllTransitions',
@@ -54,11 +54,11 @@ describe('#registerState, #removeState', () => {
   it('should register and remove state from SM', () => {
     expect(() => {
       const anchor = {};
-      const stateMachine = RC.prototype.StateMachine.new('testSM', anchor);
+      const stateMachine = ES.prototype.StateMachine.new('testSM', anchor);
       stateMachine.registerState('test');
-      assert.instanceOf(stateMachine.states['test'], RC.prototype.State, 'State did not registered');
+      assert.instanceOf(stateMachine.states['test'], ES.prototype.State, 'State did not registered');
       stateMachine.removeState('test');
-      assert.notInstanceOf(stateMachine.states['test'], RC.prototype.State, 'State did not removed');
+      assert.notInstanceOf(stateMachine.states['test'], ES.prototype.State, 'State did not removed');
     }).to.not.throw(Error);
   });
 });
@@ -66,7 +66,7 @@ describe('#transitionTo, #send', () => {
   it('should intialize SM and make one transition', () => {
     co(function* () {
       const anchor = {};
-      const stateMachine = RC.prototype.StateMachine.new('testSM', anchor);
+      const stateMachine = ES.prototype.StateMachine.new('testSM', anchor);
       stateMachine.registerState('test1', {
         initial: true
       });
@@ -145,7 +145,7 @@ describe('#send, #doXXX', () => {
         withAnchorUpdateState: 'testwithAnchorUpdateState',
         withAnchorSave: 'testwithAnchorSave'
       };
-      sm = RC.prototype.StateMachine.new('testStateMachine', anchor, smConfig);
+      sm = ES.prototype.StateMachine.new('testStateMachine', anchor, smConfig);
       sm.registerState('oldState', oldStateConfig);
       sm.registerState('newState', newStateConfig);
       sm.registerEvent('testEvent', 'oldState', 'newState', eventConfig, transitionConfig);
@@ -250,7 +250,7 @@ describe('#send, #doXXX', () => {
         withAnchorRestoreState: 'testwithAnchorRestoreState',
         withAnchorSave: 'testwithAnchorSave'
       };
-      const sm = RC.prototype.StateMachine.new('testStateMachine', anchor, smConfig);
+      const sm = ES.prototype.StateMachine.new('testStateMachine', anchor, smConfig);
       sm.registerState('oldState', oldStateConfig);
       sm.registerState('restoredState', restoredStateConfig);
       sm.registerState('newState', newStateConfig);

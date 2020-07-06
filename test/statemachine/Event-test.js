@@ -1,19 +1,19 @@
 const chai = require("chai");
 const sinon = require("sinon");
-RC = require.main.require('lib');
+ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert
-  ({ co } = RC.prototype.Utils);
+const { co } = ES.prototype.Utils;
 
 describe('Event', () => {
   describe('.new()', () => {
     it('should create new Event instance', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
-        const event = RC.prototype.Event.new('newEvent', {}, { transition, target });
-        assert.instanceOf(event, RC.prototype.Event, 'Cannot instantiate class Event');
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
+        const event = ES.prototype.Event.new('newEvent', {}, { transition, target });
+        assert.instanceOf(event, ES.prototype.Event, 'Cannot instantiate class Event');
         assert.equal(event.name, 'newEvent');
       }).to.not.throw(Error);
     });
@@ -21,14 +21,14 @@ describe('Event', () => {
   describe('#testGuard', () => {
     it('should get "guard" without rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testGuard: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testGuard');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           guard: 'testGuard'
@@ -40,14 +40,14 @@ describe('Event', () => {
     });
     it('should get "guard" with rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testGuard1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testGuard1');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           guard: 'testGuard'
@@ -65,14 +65,14 @@ describe('Event', () => {
   describe('#testIf', () => {
     it('should get "if" without rejects', () => {
       return expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testIf: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testIf');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           if: 'testIf'
@@ -84,14 +84,14 @@ describe('Event', () => {
     });
     it('should get "if" with rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         anchor = {
           testIf1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testIf1');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           if: 'testIf'
@@ -109,14 +109,14 @@ describe('Event', () => {
   describe('#testUnless', () => {
     it('should get "unless" without rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testUnless: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testUnless');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           unless: 'testUnless'
@@ -128,14 +128,14 @@ describe('Event', () => {
     });
     it('should get "unless" with rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testUnless1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testUnless1');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           unless: 'testUnless'
@@ -153,14 +153,14 @@ describe('Event', () => {
   describe('#doAfter', () => {
     it('should get "after" without rejects', () => {
       return expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testAfter: () => { }
         };
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           after: 'testAfter'
@@ -172,14 +172,14 @@ describe('Event', () => {
     });
     it('should get "after" with rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testAfter1: () => { }
         };
         const spyTestAfter = sinon.spy(anchor, 'testAfter1');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           after: 'testAfter'
@@ -197,14 +197,14 @@ describe('Event', () => {
   describe('#doBefore', () => {
     it('should get "before" without rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testBefore: () => { }
         };
         const spyTestBefore = sinon.spy(anchor, 'testBefore');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           before: 'testBefore'
@@ -216,14 +216,14 @@ describe('Event', () => {
     });
     it('should get "before" with rejects', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testBefore1: () => { }
         };
         const spyTestBefore = sinon.spy(anchor, 'testBefore1');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           before: 'testBefore'
@@ -241,16 +241,16 @@ describe('Event', () => {
   describe('#doBefore, #doAfter', () => {
     it('should run "before" before "after"', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testBefore: () => { },
           testAfter: () => { }
         };
         const spyTestBefore = sinon.spy(anchor, 'testBefore');
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           before: 'testBefore',
@@ -269,9 +269,9 @@ describe('Event', () => {
   describe('#testGuard, #doAfter, #doSuccess, #doError', () => {
     it('should run "after" only if "guard" resolved as true', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         const anchor = {
           test: 'test',
           testGuard: () => {
@@ -284,7 +284,7 @@ describe('Event', () => {
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
         const spyTestSuccess = sinon.spy(anchor, 'testSuccess');
         const spyTestError = sinon.spy(anchor, 'testError');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           guard: 'testGuard',
@@ -312,9 +312,9 @@ describe('Event', () => {
     });
     it('should run "after" only if "unless" resolved as false', () => {
       expect(() => {
-        const stateMachine = RC.prototype.StateMachine.new('default', {});
-        const transition = RC.prototype.Transition.new('newTransition', {}, {});
-        const target = RC.prototype.State.new('newState', {}, stateMachine, {});
+        const stateMachine = ES.prototype.StateMachine.new('default', {});
+        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const target = ES.prototype.State.new('newState', {}, stateMachine, {});
         anchor = {
           test: 'test',
           testUnless: () => {
@@ -327,7 +327,7 @@ describe('Event', () => {
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
         const spyTestSuccess = sinon.spy(anchor, 'testSuccess');
         const spyTestError = sinon.spy(anchor, 'testError');
-        const event = RC.prototype.Event.new('newEvent', anchor, {
+        const event = ES.prototype.Event.new('newEvent', anchor, {
           transition,
           target,
           unless: 'testUnless',

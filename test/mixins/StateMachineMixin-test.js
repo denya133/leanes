@@ -1,17 +1,17 @@
 const chai = require("chai");
 const sinon = require("sinon");
 _ = require('lodash');
-RC = require.main.require('lib');
+ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert;
-({co} = RC.prototype.Utils);
+({co} = ES.prototype.Utils);
 
 describe('StateMachineMixin', () => {
   describe('include StateMachineMixin', () => {
      it('should create new class with state machine and instantiate', () => {
        expect(() => {
         const Test = (() => {
-          class Test extends RC {};
+          class Test extends ES {};
 
           Test.inheritProtected();
 
@@ -21,11 +21,11 @@ describe('StateMachineMixin', () => {
 
         }).call(this);
         const MyClass = (() => {
-          class MyClass extends RC.prototype.CoreObject {};
+          class MyClass extends ES.prototype.CoreObject {};
 
           MyClass.inheritProtected();
 
-          MyClass.include(RC.prototype.StateMachineMixin);
+          MyClass.include(ES.prototype.StateMachineMixin);
 
           MyClass.module(Test);
 
@@ -44,7 +44,7 @@ describe('StateMachineMixin', () => {
       const spySMConfig = sinon.spy(() => {});
        expect(() => {
        const Test = (() => {
-          class Test extends RC {};
+          class Test extends ES {};
 
           Test.inheritProtected();
 
@@ -54,11 +54,11 @@ describe('StateMachineMixin', () => {
 
         }).call(this);
         const MyClass = (() => {
-          class MyClass extends RC.prototype.CoreObject {};
+          class MyClass extends ES.prototype.CoreObject {};
 
           MyClass.inheritProtected();
 
-          MyClass.include(RC.prototype.StateMachineMixin);
+          MyClass.include(ES.prototype.StateMachineMixin);
 
           MyClass.module(Test);
 
@@ -80,7 +80,7 @@ describe('StateMachineMixin', () => {
        co(function*() {
         const MyClass, Test, myInstance;
         Test = (() => {
-          class Test extends RC {};
+          class Test extends ES {};
 
           Test.inheritProtected();
 
@@ -90,11 +90,11 @@ describe('StateMachineMixin', () => {
 
         }).call(this);
         const MyClass = (() => {
-          class MyClass extends RC.prototype.CoreObject {};
+          class MyClass extends ES.prototype.CoreObject {};
 
           MyClass.inheritProtected();
 
-          MyClass.include(RC.prototype.StateMachineMixin);
+          MyClass.include(ES.prototype.StateMachineMixin);
 
           MyClass.module(Test);
 
@@ -162,7 +162,7 @@ describe('StateMachineMixin', () => {
         const myInstance = MyClass.new();
         yield myInstance.resetDefault();
         yield myInstance.testEvent();
-        assert.instanceOf(myInstance.getStateMachine('default'), RC.prototype.StateMachine, 'Cannot create state machine');
+        assert.instanceOf(myInstance.getStateMachine('default'), ES.prototype.StateMachine, 'Cannot create state machine');
         assert.isTrue(myInstance.testBeforeAllEvents.called, 'testBeforeAllEvents did not called');
         assert.isTrue(myInstance.testEventBefore.called, 'testEventBefore did not called');
         assert.isTrue(myInstance.testTransitionGuard.called, 'testTransitionGuard did not called');
@@ -184,7 +184,7 @@ describe('StateMachineMixin', () => {
       return co(function*() {
         const testEmit = sinon.spy(() => {});
         const Test = (() => {
-          class Test extends RC {};
+          class Test extends ES {};
 
           Test.inheritProtected();
 
@@ -193,11 +193,11 @@ describe('StateMachineMixin', () => {
         }).call(this);
         Test.initialize();
         const MyClass = (() => {
-          class MyClass extends RC.prototype.CoreObject {};
+          class MyClass extends ES.prototype.CoreObject {};
 
           MyClass.inheritProtected();
 
-          MyClass.include(RC.prototype.StateMachineMixin);
+          MyClass.include(ES.prototype.StateMachineMixin);
 
           MyClass.module(Test);
 
@@ -251,7 +251,7 @@ describe('StateMachineMixin', () => {
         const myInstance = MyClass.new();
         yield myInstance.resetDefault();
         yield myInstance.testEvent('testArgument1', 'testArgument2');
-        assert.instanceOf(myInstance.getStateMachine('default'), RC.prototype.StateMachine, 'Cannot create state machine');
+        assert.instanceOf(myInstance.getStateMachine('default'), ES.prototype.StateMachine, 'Cannot create state machine');
         assert.isTrue(myInstance.testEventBefore.called, 'testEventBefore did not called');
         assert.isTrue(myInstance.testTransitionGuard.called, 'testTransitionGuard did not called');
         assert.isTrue(myInstance.testTransitionAfter.calledWith('testArgument1', 'testArgument2'), 'testTransitionAfter did not called');

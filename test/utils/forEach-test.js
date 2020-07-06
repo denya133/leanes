@@ -1,12 +1,12 @@
 const assert = require('chai');
-const RC = require.main.require('lib');
-const{co, filter} = RC.prototype.Utils;
+const ES = require.main.require('lib');
+const{co, filter} = ES.prototype.Utils;
 
 describe('Utils.forEach', () => {
    describe('forEach(array, generator)', () => {
      it('should iterate over list', () => {
       return co(function*() {
-        const array = [RC.prototype.Promise.resolve(1), RC.prototype.Promise.resolve(5), RC.prototype.Promise.resolve(3), RC.prototype.Promise.resolve(7), RC.prototype.Promise.resolve(2)];
+        const array = [ES.prototype.Promise.resolve(1), ES.prototype.Promise.resolve(5), ES.prototype.Promise.resolve(3), ES.prototype.Promise.resolve(7), ES.prototype.Promise.resolve(2)];
         const result = [];
         yield forEach(array, function*(item, index) {
           this.push({
