@@ -1,6 +1,6 @@
 var ES, assert, co, expect, map, sinon;
 const assert = require('chai');
-ES = require('../../src/leanes/es/index');
+ES = require('../../../src/leanes/es/index');
 const {co, map} = ES.prototype.Utils;
 
 describe('Utils.map', () => {

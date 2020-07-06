@@ -1,10 +1,12 @@
+const indexOf = [].indexOf;
 const http = require('http');
 const URL = require('url');
 const AWAILIABLE_PATHS = ['/', '/test', '/redirect'];
 
 exports.server = http.createServer(function(req, res) {
+  const ref, ref1, ref2, response;
   res.setHeader('Content-Type', (ref = req.headers['accept']) != null ? ref : 'text/plain');
-  url = URL.parse(req.url);
+  const url = URL.parse(req.url);
   if (ref1 = url.pathname, indexOf.call(AWAILIABLE_PATHS, ref1) >= 0) {
     if (url.pathname === '/redirect') {
       res.statusCode = 302;

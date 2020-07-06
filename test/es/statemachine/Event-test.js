@@ -1,6 +1,6 @@
 const chai = require("chai");
 const sinon = require("sinon");
-ES = require('../../src/leanes/es/index');
+ES = require('../../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert
 const { co } = ES.prototype.Utils;
