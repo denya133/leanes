@@ -5,6 +5,7 @@ const slice = [].slice;
 
 
 export default function nameBy(target, key, descriptor) {
+
   const filename = descriptor.value || descriptor.initializer && descriptor.initializer();
   // console.log('?>?>?> nameBy', target.name, key, filename);
   assert(filename != null, 'Value must be __filename');
