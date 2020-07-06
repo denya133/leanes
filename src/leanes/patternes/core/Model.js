@@ -1,6 +1,6 @@
 import type { ModelInterface } from '../interfaces/ModelInterface';
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
-
+import { injectable, inject, Container } from "inversify";
 
 export default (Module) => {
   const {
@@ -11,26 +11,27 @@ export default (Module) => {
     Utils: { _ }
   } = Module.NS;
 
+  let container = new Container();
 
   @initialize
   @module(Module)
   class Model extends CoreObject implements ModelInterface {
-    @nameBy static  __filename = __filename;
+    @nameBy static __filename = __filename;
     @meta static object = {};
 
     @property static MULTITON_MSG: string = 'Model instance for this multiton key already constructed!';
 
     // iphProxyMap = PointerT(Model.private({
-    @property _proxyMap: {[key: string]: ?ProxyInterface} = null;
+    // @property _proxyMap: {[key: string]: ?ProxyInterface} = null;
 
     // iphMetaProxyMap = PointerT(Model.private({
-    @property _metaProxyMap: {[key: string]: ?{className: ?string, data: ?any}} = null;
+    @property _metaProxyMap: { [key: string]: ?{ className: ?string, data: ?any } } = null;
 
     // ipsMultitonKey = PointerT(Model.protected({
     @property _multitonKey: ?string = null;
 
     // cphInstanceMap = PointerT(Model.private(Model.static({
-    @property static _instanceMap: {[key: string]: ?ModelInterface} = {};
+    @property static _instanceMap: { [key: string]: ?ModelInterface } = {};
 
     // ipcApplicationModule = PointerT(Model.protected({
     @property _ApplicationModule: ?Class<Module> = null;
@@ -80,8 +81,11 @@ export default (Module) => {
     @method static removeModel(asKey: string): void {
       const voModel = Model._instanceMap[asKey];
       if (voModel != null) {
-        for (const asProxyName of Reflect.ownKeys(voModel._proxyMap)) {
-          voModel.removeProxy(asProxyName);
+        // for (const asProxyName of Reflect.ownKeys(voModel._proxyMap)) {
+        //   voModel.removeProxy(asProxyName);
+        // }
+        for (const asProxyName of container._bindingDictionary._map) {
+          voModel.removeProxy(asProxyName[0]);
         }
         Model._instanceMap[asKey] = undefined;
         delete Model._instanceMap[asKey];
@@ -90,7 +94,8 @@ export default (Module) => {
 
     @method registerProxy(aoProxy: ProxyInterface): void {
       aoProxy.initializeNotifier(this._multitonKey);
-      this._proxyMap[aoProxy.getName()] = aoProxy;
+      // this._proxyMap[aoProxy.getName()] = aoProxy;
+      container.bind(aoProxy.getProxyName()).to(aoProxy);
       aoProxy.onRegister();
     }
 
@@ -99,11 +104,12 @@ export default (Module) => {
     }
 
     @method removeProxy(asProxyName: string): ?ProxyInterface {
-      const voProxy = this._proxyMap[asProxyName];
+      // const voProxy = this._proxyMap[asProxyName];
+      const voProxy = container.get(asProxyName);
       if (voProxy) {
-        this._proxyMap[asProxyName] = undefined;
+        // this._proxyMap[asProxyName] = undefined;
         this._metaProxyMap[asProxyName] = undefined;
-        delete this._proxyMap[asProxyName];
+        // delete this._proxyMap[asProxyName];
         delete this._metaProxyMap[asProxyName];
         voProxy.onRemove();
       }
@@ -111,7 +117,8 @@ export default (Module) => {
     }
 
     @method retrieveProxy(asProxyName: string): ?ProxyInterface {
-      if (this._proxyMap[asProxyName] == null) {
+      // if (this._proxyMap[asProxyName] == null) {
+      if (!container.isBoundNamed(asProxyName)) {
         const {
           className, data = {}
         } = this._metaProxyMap[asProxyName] || {};
@@ -120,7 +127,8 @@ export default (Module) => {
           this.registerProxy(voClass.new(asProxyName, data));
         }
       }
-      return this._proxyMap[asProxyName] || null;
+      // return this._proxyMap[asProxyName] || null;
+      return container.get(asProxyName) || null;
     }
 
     @method getProxy(...args) {
@@ -128,7 +136,8 @@ export default (Module) => {
     }
 
     @method hasProxy(asProxyName: string): boolean {
-      return (this._proxyMap[asProxyName] != null) || (this._metaProxyMap[asProxyName] != null);
+      // return (this._proxyMap[asProxyName] != null) || (this._metaProxyMap[asProxyName] != null);
+      return (container.get(asProxyName) != null) || (this._metaProxyMap[asProxyName] != null);
     }
 
     @method lazyRegisterProxy(asProxyName: string, asProxyClassName: ?string, ahData: ?any): void {
@@ -141,11 +150,11 @@ export default (Module) => {
     @method _initializeModel(): void { return; }
 
     constructor(asKey: string) {
-      super(... arguments);
+      super(...arguments);
       assert(Model._instanceMap[asKey] == null, Model.MULTITON_MSG);
       this._multitonKey = asKey;
       Model._instanceMap[asKey] = this;
-      this._proxyMap = {};
+      // this._proxyMap = {};
       this._metaProxyMap = {};
       this._initializeModel();
     }
