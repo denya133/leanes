@@ -5,6 +5,7 @@ import type { ModelInterface } from '../interfaces/ModelInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
 import type { ViewInterface } from '../interfaces/ViewInterface';
+import { injectable, inject, Container } from "inversify";
 
 export default (Module) => {
   const {
@@ -14,11 +15,13 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
+  let container = new Container();
 
+  @injectable
   @initialize
   @module(Module)
   class Facade extends CoreObject implements FacadeInterface {
-    @nameBy static  __filename = __filename;
+    @nameBy static __filename = __filename;
     @meta static object = {};
 
     @property static MULTITON_MSG: "Facade instance for this multiton key already constructed!"
@@ -36,26 +39,39 @@ export default (Module) => {
     @property _multitonKey: ?string = null;
 
     // cphInstanceMap = PointerT(Facade.protected(Facade.static({
-    @property static _instanceMap: {[key: string]: ?FacadeInterface} = {};
+    @property static _instanceMap: { [key: string]: ?FacadeInterface } = {};
 
     // ipmInitializeModel = PointerT(Facade.protected({
     @method _initializeModel(): void {
+      // if (this._model == null) {
+      //   this._model = Module.NS.Model.getInstance(this._multitonKey);
+      // }
+      container.bind("Model").to(Module.NS.Model);
       if (this._model == null) {
-        this._model = Module.NS.Model.getInstance(this._multitonKey);
+        this._model = container.get("Model").getInstance(this._multitonKey);
       }
     }
 
     // ipmInitializeController = PointerT(Facade.protected({
     @method _initializeController(): void {
+      // if (this._controller == null) {
+      //   this._controller = Module.NS.Controller.getInstance(this._multitonKey);
+      // }
+      container.bind("Controller").to(Module.NS.Controller);
       if (this._controller == null) {
-        this._controller = Module.NS.Controller.getInstance(this._multitonKey);
+        this._controller = container.get("Controller").getInstance(this._multitonKey);
       }
+
     }
 
     // ipmInitializeView = PointerT(Facade.protected({
     @method _initializeView(): void {
+      // if (this._view == null) {
+      //   this._view = Module.NS.View.getInstance(this._multitonKey);
+      // }
+      container.bind("View").to(Module.NS.View);
       if (this._view == null) {
-        this._view = Module.NS.View.getInstance(this._multitonKey);
+        this._view = container.get("View").getInstance(this._multitonKey);
       }
     }
 
@@ -74,9 +90,12 @@ export default (Module) => {
     }
 
     @method remove(): void {
-      Module.NS.Model.removeModel(this._multitonKey);
-      Module.NS.Controller.removeController(this._multitonKey);
-      Module.NS.View.removeView(this._multitonKey);
+      // Module.NS.Model.removeModel(this._multitonKey);
+      // Module.NS.Controller.removeController(this._multitonKey);
+      // Module.NS.View.removeView(this._multitonKey);
+      container.get("Model").removeModel(this._multitonKey);
+      container.get("Controller").removeController(this._multitonKey);
+      container.get("View").removeView(this._multitonKey);
       this._model = undefined;
       this._view = undefined;
       this._controller = undefined;
@@ -202,10 +221,12 @@ export default (Module) => {
       if (!Facade._instanceMap[key]) {
         return;
       }
-
-      Module.NS.Model.removeModel(key);
-      Module.NS.View.removeView(key);
-      Module.NS.Controller.removeController(key);
+      // Module.NS.Model.removeModel(key);
+      // Module.NS.View.removeView(key);
+      // Module.NS.Controller.removeController(key);
+      container.get("Model").removeModel(key);
+      container.get("View").removeView(key);
+      container.get("Controller").removeController(key);
       delete Facade._instanceMap[key];
     }
 
@@ -230,7 +251,7 @@ export default (Module) => {
     }
 
     constructor(asKey: string) {
-      super(... arguments);
+      super(...arguments);
       console.log('>?>?>? Facade', asKey);
       assert(Facade._instanceMap[asKey] == null, Facade.MULTITON_MSG);
       console.log('>?>?>? Facade before initializeNotifier');

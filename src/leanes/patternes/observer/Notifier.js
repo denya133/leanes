@@ -1,7 +1,9 @@
 import type { FacadeInterface } from '../interfaces/FacadeInterface';
 import type { NotifierInterface } from '../interfaces/NotifierInterface';
+import { injectable, inject} from "inversify";
 
 export default (Module) => {
+
   const {
     APPLICATION_MEDIATOR,
     CoreObject,
@@ -9,7 +11,7 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-
+  @injectable
   @initialize
   @module(Module)
   class Notifier extends CoreObject implements NotifierInterface {

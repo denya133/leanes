@@ -1,14 +1,18 @@
 import type { ObserverInterface } from '../interfaces/ObserverInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
+import { injectable, inject} from "inversify";
+// import container from '../inversify.config';
+// import container from '../index';
 
 export default (Module) => {
+
   const {
     CoreObject,
     assert,
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-
+  @injectable
   @initialize
   @module(Module)
   class Observer extends CoreObject implements ObserverInterface {
@@ -64,3 +68,4 @@ export default (Module) => {
     }
   }
 }
+

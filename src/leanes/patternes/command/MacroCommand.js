@@ -1,5 +1,6 @@
 import type { CommandInterface } from '../interfaces/CommandInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
+import { injectable, inject} from "inversify";
 
 export default (Module) => {
   const {
@@ -8,7 +9,7 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-
+  @injectable
   @initialize
   @module(Module)
   class MacroCommand extends Notifier implements CommandInterface {

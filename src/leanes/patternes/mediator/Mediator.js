@@ -1,6 +1,8 @@
 import type { MediatorInterface } from '../interfaces/MediatorInterface';
+import { injectable, inject} from "inversify";
 
 export default (Module) => {
+
   const {
     APPLICATION_MEDIATOR,
     Notifier,
