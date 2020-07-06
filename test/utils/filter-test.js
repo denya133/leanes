@@ -1,6 +1,6 @@
 const assert = require('chai');
 const RC = require.main.require('lib');
-const{co, filter} = RC.prototype.Utils;
+const {co, filter} = RC.prototype.Utils;
 
 describe('Utils.filter', () => {
    describe('filter(array, generator)', () => {
@@ -9,7 +9,7 @@ describe('Utils.filter', () => {
         const array = [RC.prototype.Promise.resolve(1), RC.prototype.Promise.resolve(5), RC.prototype.Promise.resolve(3), RC.prototype.Promise.resolve(7), RC.prototype.Promise.resolve(2)];
         const context = {
           condition: function*(value) {
-            const ref;
+            let ref;
             return (3 < (ref = (yield value)) && ref < 7);
           }
         };
