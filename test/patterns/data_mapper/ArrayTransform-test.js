@@ -20,7 +20,7 @@ describe('ArrayTransform', () => {
         true,
         'three',
         {
-          four: "2018-06-05T12:52:43.160Z"
+          four: "2020-07-06T12:52:43.160Z"
         }
       ], ArrayTransform.schema)).deep.equal({
         error: null,
@@ -29,7 +29,7 @@ describe('ArrayTransform', () => {
           true,
           'three',
           {
-            four: "2018-06-05T12:52:43.160Z"
+            four: "2020-07-06T12:52:43.160Z"
           }
         ]
       });
@@ -48,30 +48,22 @@ describe('ArrayTransform', () => {
     });
     it('should normalize simple array', () => {
       return co(function* () {
-        assert.deepEqual((yield ArrayTransform.normalize([1, true, 'three', "2018-06-05T12:52:43.160Z"])), [1, true, 'three', new Date("2018-06-05T12:52:43.160Z")]);
+        assert.deepEqual((yield ArrayTransform.normalize([1, true, 'three', "2020-07-06T12:52:43.160Z"])), [1, true, 'three', new Date("2020-07-06T12:52:43.160Z")]);
       });
     });
     it('should normalize complex array', () => {
       return co(function* () {
-        assert.deepEqual((yield ArrayTransform.normalize([
-          1,
-          {
-            two: {
-              three: 'three'
-            }
-          },
-          [1,
-            2]
-        ])), [
-          1,
-          {
-            two: {
-              three: 'three'
-            }
-          },
-          [1,
-            2]
-        ]);
+        assert.deepEqual((yield ArrayTransform.normalize(
+          [
+            1,
+            { two: { three: 'three' } },
+            [1, 2]
+          ])),
+          [
+            1,
+            { two: { three: 'three' } },
+            [1, 2]
+          ]);
       });
     });
   });
@@ -93,25 +85,19 @@ describe('ArrayTransform', () => {
     });
     it('should serialize complex array', () => {
       return co(function* () {
-        assert.deepEqual((yield ArrayTransform.serialize([
-          1,
-          {
-            two: {
-              three: 'three'
-            }
-          },
-          [1,
-            2]
-        ])), [
-          1,
-          {
-            two: {
-              three: 'three'
-            }
-          },
-          [1,
-            2]
-        ]);
+        assert.deepEqual((yield ArrayTransform.serialize(
+          [
+            1,
+            { two: { three: 'three' } },
+            [1, 2]
+          ])
+        ),
+          [
+            1,
+            { two: { three: 'three' } },
+            [1, 2]
+          ]
+        );
       });
     });
   });
@@ -126,25 +112,18 @@ describe('ArrayTransform', () => {
       expect(ArrayTransform.objectize([1, true, 'three', new Date("2018-06-05T12:52:43.160Z")])).deep.equal([1, true, 'three', "2018-06-05T12:52:43.160Z"]);
     });
     it('should objectize complex array', () => {
-      expect(ArrayTransform.objectize([
-        1,
-        {
-          two: {
-            three: 'three'
-          }
-        },
-        [1,
-          2]
-      ])).deep.equal([
-        1,
-        {
-          two: {
-            three: 'three'
-          }
-        },
-        [1,
-          2]
-      ]);
+      expect(ArrayTransform.objectize(
+        [
+          1,
+          { two: { three: 'three' } },
+          [1, 2]
+        ])).deep.equal(
+          [
+            1,
+            { two: { three: 'three' } },
+            [1, 2]
+          ]
+        );
     });
   });
 });
