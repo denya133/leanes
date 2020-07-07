@@ -1,11 +1,11 @@
 const assert = require('chai');
 ES = require('../../src/leanes/es/index');
-const {jsonStringify, co} = ES.prototype.Utils;
+const {jsonStringify, co} = ES.NS.Utils;
 
 describe('Utils.jsonStringify', () => {
    describe('jsonStringify(object, options)', () => {
     it('should stringify flat object', () => {
-      return co(function*() {
+      co(function*() {
         let object = {};
         object.x = 'test';
         object.a = 42;
@@ -15,7 +15,7 @@ describe('Utils.jsonStringify', () => {
       });
     });
      it('should stringify nested object', () => {
-      return co(function*() {
+      co(function*() {
         let object = {};
         object.x = 'test';
         object.a = 42;

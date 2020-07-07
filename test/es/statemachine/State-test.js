@@ -3,27 +3,27 @@ const sinon = require("sinon");
 ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert
-({ co } = ES.prototype.Utils);
+({ co } = ES.NS.Utils);
 
 describe('State', () => {
   describe('.new()', () => {
     it('should create new State instance', () => {
       expect(() => {
-        const stateMachine = ES.prototype.StateMachine.new('default', {});
-        const state = ES.prototype.State.new('newState', {}, stateMachine, {});
-        assert.instanceOf(state, ES.prototype.State, 'Cannot instantiate class State');
+        const stateMachine = ES.NS.StateMachine.new('default', {});
+        const state = ES.NS.State.new('newState', {}, stateMachine, {});
+        assert.instanceOf(state, ES.NS.State, 'Cannot instantiate class State');
         assert.equal(state.name, 'newState');
       }).to.not.throw(Error);
     });
   });
-  describe('#defineTransition, #removeTransition', () => {
+  describe('defineTransition, removeTransition', () => {
     it('should successfully define transition and remove it', () => {
       expect(() => {
-        const stateMachine = ES.prototype.StateMachine.new('default', {});
-        const state1 = ES.prototype.State.new('newState1', {}, stateMachine, {});
-        const state2 = ES.prototype.State.new('newState2', {}, stateMachine, {});
+        const stateMachine = ES.NS.StateMachine.new('default', {});
+        const state1 = ES.NS.State.new('newState1', {}, stateMachine, {});
+        const state2 = ES.NS.State.new('newState2', {}, stateMachine, {});
         // transition = {}
-        const transition = ES.prototype.Transition.new('newTransition', {}, {});
+        const transition = ES.NS.Transition.new('newTransition', {}, {});
         state1.defineTransition('test', state2, transition);
         assert.isDefined(state1.getEvent('test'), 'No added transition');
         state1.removeTransition('test');
@@ -31,9 +31,9 @@ describe('State', () => {
       }).to.not.throw(Error);
     });
   });
-  describe('#doBeforeEnter, #doEnter, #doAfterEnter, #doBeforeExit, #doExit, #doAfterExit', () => {
+  describe('doBeforeEnter, doEnter, doAfterEnter, doBeforeExit, doExit, doAfterExit', () => {
     it('should run hooks by order if present', () => {
-      return co(function* () {
+      co(function* () {
         const anchor = {
           testBeforeEnter: () => { },
           testEnter: () => { },
@@ -48,8 +48,8 @@ describe('State', () => {
         const spyTestBeforeExit = sinon.spy(anchor, 'testBeforeExit');
         const spyTestExit = sinon.spy(anchor, 'testExit');
         const spyTestAfterExit = sinon.spy(anchor, 'testAfterExit');
-        const stateMachine = ES.prototype.StateMachine.new('default', {});
-        const state = ES.prototype.State.new('newTransition', anchor, stateMachine, {
+        const stateMachine = ES.NS.StateMachine.new('default', {});
+        const state = ES.NS.State.new('newTransition', anchor, stateMachine, {
           beforeEnter: 'testBeforeEnter',
           afterEnter: 'testAfterEnter',
           exit: 'testExit'

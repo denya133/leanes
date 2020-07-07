@@ -4,17 +4,17 @@ _ = require('lodash');
 ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert;
-({ co } = ES.prototype.Utils);
+({ co } = ES.NS.Utils);
 
 describe('StateMachine', () => {
   describe('.new()', () => {
     it('should create new StateMachine instance', () => {
-      const stateMachine = ES.prototype.StateMachine.new('default', {});
-      assert.instanceOf(stateMachine, ES.prototype.StateMachine, 'Cannot instantiate class StateMachine');
+      const stateMachine = ES.NS.StateMachine.new('default', {});
+      assert.instanceOf(stateMachine, ES.NS.StateMachine, 'Cannot instantiate class StateMachine');
     }).to.not.throw(Error);
   });
 });
-describe('#doBeforeAllEvents, #doAfterAllEvents, #doAfterAllTransitions, #doErrorOnAllEvents', () => {
+describe('doBeforeAllEvents, doAfterAllEvents, doAfterAllTransitions, doErrorOnAllEvents', () => {
   it('should run all regitstered hooks', () => {
     const anchor = {
       testBeforeAllEvents: () => { },
@@ -26,13 +26,13 @@ describe('#doBeforeAllEvents, #doAfterAllEvents, #doAfterAllTransitions, #doErro
     const spyTestAfterAllEvents = sinon.spy(anchor, 'testAfterAllEvents');
     const spyTestAfterAllTransitions = sinon.spy(anchor, 'testAfterAllTransitions');
     const spyAfterAllErrors = sinon.spy(anchor, 'testAfterAllErrors');
-    const stateMachine = ES.prototype.StateMachine.new('testSM', anchor, {
+    const stateMachine = ES.NS.StateMachine.new('testSM', anchor, {
       beforeAllEvents: 'testBeforeAllEvents',
       afterAllEvents: 'testAfterAllEvents',
       afterAllTransitions: 'testAfterAllTransitions',
       errorOnAllEvents: 'testAfterAllErrors'
     });
-    return co(function* () {
+    co(function* () {
       try {
         yield stateMachine.doBeforeAllEvents();
         yield stateMachine.doAfterAllEvents();
@@ -40,7 +40,7 @@ describe('#doBeforeAllEvents, #doAfterAllEvents, #doAfterAllTransitions, #doErro
         throw new Error('test');
       } catch (error1) {
         const error = error1;
-        return (yield stateMachine.doErrorOnAllEvents());
+        (yield stateMachine.doErrorOnAllEvents());
       }
     }).then(() => {
       assert.isTrue(spyTestBeforeAllEvents.called, '"beforeAllEvents" method not called');
@@ -50,23 +50,23 @@ describe('#doBeforeAllEvents, #doAfterAllEvents, #doAfterAllTransitions, #doErro
     });
   });
 });
-describe('#registerState, #removeState', () => {
+describe('registerState, removeState', () => {
   it('should register and remove state from SM', () => {
     expect(() => {
       const anchor = {};
-      const stateMachine = ES.prototype.StateMachine.new('testSM', anchor);
+      const stateMachine = ES.NS.StateMachine.new('testSM', anchor);
       stateMachine.registerState('test');
-      assert.instanceOf(stateMachine.states['test'], ES.prototype.State, 'State did not registered');
+      assert.instanceOf(stateMachine.states['test'], ES.NS.State, 'State did not registered');
       stateMachine.removeState('test');
-      assert.notInstanceOf(stateMachine.states['test'], ES.prototype.State, 'State did not removed');
+      assert.notInstanceOf(stateMachine.states['test'], ES.NS.State, 'State did not removed');
     }).to.not.throw(Error);
   });
 });
-describe('#transitionTo, #send', () => {
+describe('transitionTo, send', () => {
   it('should intialize SM and make one transition', () => {
     co(function* () {
       const anchor = {};
-      const stateMachine = ES.prototype.StateMachine.new('testSM', anchor);
+      const stateMachine = ES.NS.StateMachine.new('testSM', anchor);
       stateMachine.registerState('test1', {
         initial: true
       });
@@ -79,18 +79,18 @@ describe('#transitionTo, #send', () => {
     });
   });
 });
-describe('#send, #doXXX', () => {
+describe('send, doXXX', () => {
   it('should intialize SM and hooks and make one transition', () => {
-    return co(function* () {
+    co(function* () {
       const anchor = {
         testValue: 'test',
         testBeforeAllEvents: sinon.spy(() => { }),
         testEventBefore: sinon.spy(() => { }),
         testEventGuard: sinon.spy(() => {
-          return this.testValue === 'test';
+          this.testValue === 'test';
         }),
         testTransitionGuard: sinon.spy(() => {
-          return this.testValue === 'test';
+          this.testValue === 'test';
         }),
         testOldStateBeforeExit: sinon.spy(() => { }),
         testOldStateExit: sinon.spy(() => { }),
@@ -145,7 +145,7 @@ describe('#send, #doXXX', () => {
         withAnchorUpdateState: 'testwithAnchorUpdateState',
         withAnchorSave: 'testwithAnchorSave'
       };
-      sm = ES.prototype.StateMachine.new('testStateMachine', anchor, smConfig);
+      sm = ES.NS.StateMachine.new('testStateMachine', anchor, smConfig);
       sm.registerState('oldState', oldStateConfig);
       sm.registerState('newState', newStateConfig);
       sm.registerEvent('testEvent', 'oldState', 'newState', eventConfig, transitionConfig);
@@ -169,21 +169,20 @@ describe('#send, #doXXX', () => {
           }
         }
       }
-      return results;
     });
   });
   it('should intialize SM and hooks, restore state and make one transition', () => {
-    return co(function* () {
+    co(function* () {
       const anchor = {
         state: 'restoredState',
         testValue: 'test',
         testBeforeAllEvents: sinon.spy(() => { }),
         testEventBefore: sinon.spy(() => { }),
         testEventGuard: sinon.spy(() => {
-          return this.testValue === 'test';
+          this.testValue === 'test';
         }),
         testTransitionGuard: sinon.spy(() => {
-          return this.testValue === 'test';
+          this.testValue === 'test';
         }),
         testOldStateBeforeExit: sinon.spy(() => { }),
         testOldStateExit: sinon.spy(() => { }),
@@ -202,10 +201,10 @@ describe('#send, #doXXX', () => {
         testBeforeReset: sinon.spy(() => { }),
         testAfterReset: sinon.spy(() => { }),
         testwithAnchorUpdateState: sinon.spy(function (stateName) {
-          return this.state = stateName;
+          this.state = stateName;
         }),
         testwithAnchorRestoreState: sinon.spy(() => {
-          return this.state;
+          this.state;
         }),
         testwithAnchorSave: sinon.spy(() => { })
       };
@@ -250,7 +249,7 @@ describe('#send, #doXXX', () => {
         withAnchorRestoreState: 'testwithAnchorRestoreState',
         withAnchorSave: 'testwithAnchorSave'
       };
-      const sm = ES.prototype.StateMachine.new('testStateMachine', anchor, smConfig);
+      const sm = ES.NS.StateMachine.new('testStateMachine', anchor, smConfig);
       sm.registerState('oldState', oldStateConfig);
       sm.registerState('restoredState', restoredStateConfig);
       sm.registerState('newState', newStateConfig);
@@ -275,7 +274,6 @@ describe('#send, #doXXX', () => {
           }
         }
       }
-      return results;
     });
   });
 });
