@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
-const LeanES = require.main.require('lib');
-const { co, joi } = LeanES.prototype.Utils;
-const DateTransform = LeanES.prototype.DateTransform;
+const LeanES = require('../../../src/leanes/leanes/index');
+const { co, joi } = LeanES.NS.Utils;
+const DateTransform = LeanES.NS.DateTransform;
 
 describe('DateTransform', () => {
   describe('.schema', () => {
@@ -11,56 +11,56 @@ describe('DateTransform', () => {
   });
   describe('.normalize', () => {
     it('should deserialize null value', () => {
-      return co(function* () {
+      co(function* () {
         assert.equal((yield DateTransform.normalize(null)), null);
       });
     });
     it('should deserialize date value', () => {
-      return co(function* () {
+      co(function* () {
         const date = new Date();
         assert.deepEqual((yield DateTransform.normalize(date.toISOString())), date);
       });
     });
     it('should deserialize boolean value', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield DateTransform.normalize(true)), new Date(1));
       });
     });
     it('should deserialize string value', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield DateTransform.normalize('True')), new Date(''));
       });
     });
     it('should deserialize number value', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield DateTransform.normalize(1)), new Date(1));
       });
     });
   });
   describe('.serialize', () => {
     it('should serialize null value', () => {
-      return co(function* () {
+      co(function* () {
         assert.equal((yield DateTransform.serialize(null)), null);
       });
     });
     it('should serialize date value', () => {
-      return co(function* () {
+      co(function* () {
         const date = new Date();
         assert.equal((yield DateTransform.serialize(date)), date.toISOString());
       });
     });
     it('should serialize boolean value', () => {
-      return co(function* () {
+      co(function* () {
         assert.equal((yield DateTransform.serialize(true)), null);
       });
     });
     it('should serialize string value', () => {
-      return co(function* () {
+      co(function* () {
         assert.equal((yield DateTransform.serialize('True')), null);
       });
     });
     it('should serialize number value', () => {
-      return co(function* () {
+      co(function* () {
         assert.equal((yield DateTransform.serialize(1)), null);
       });
     });

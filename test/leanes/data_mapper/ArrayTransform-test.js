@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
-const LeanES = require.main.require('lib');
-const { co, joi } = LeanES.prototype.Utils;
-const ArrayTransform = LeanES.prototype.ArrayTransform;
+const LeanES = require('../../../src/leanes/leanes/index');
+const { co, joi } = LeanES.NS.Utils;
+const ArrayTransform = LeanES.NS.ArrayTransform;
 
 describe('ArrayTransform', () => {
   describe('.schema', () => {
@@ -37,22 +37,22 @@ describe('ArrayTransform', () => {
   });
   describe('.normalize', () => {
     it('should normalize null value', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.normalize(null)), []);
       });
     });
     it('should normalize empty array', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.normalize([])), []);
       });
     });
     it('should normalize simple array', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.normalize([1, true, 'three', "2020-07-06T12:52:43.160Z"])), [1, true, 'three', new Date("2020-07-06T12:52:43.160Z")]);
       });
     });
     it('should normalize complex array', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.normalize(
           [
             1,
@@ -69,22 +69,22 @@ describe('ArrayTransform', () => {
   });
   describe('.serialize', () => {
     it('should serialize null value', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.serialize(null)), []);
       });
     });
     it('should serialize empty array', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.serialize([])), []);
       });
     });
     it('should serialize simple array', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.serialize([1, true, 'three', new Date("2018-06-05T12:52:43.160Z")])), [1, true, 'three', "2018-06-05T12:52:43.160Z"]);
       });
     });
     it('should serialize complex array', () => {
-      return co(function* () {
+      co(function* () {
         assert.deepEqual((yield ArrayTransform.serialize(
           [
             1,

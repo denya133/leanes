@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
-const LeanES = require.main.require('lib');
-const { co, joi } = LeanES.prototype.Utils;
-const BooleanTransform = LeanES.prototype.BooleanTransform;
+const LeanES = require('../../../src/leanes/leanes/index');
+const { co, joi } = LeanES.NS.Utils;
+const BooleanTransform = LeanES.NS.BooleanTransform;
 
 describe('BooleanTransform', () => {
   describe('.schema', () => {
@@ -11,44 +11,44 @@ describe('BooleanTransform', () => {
   });
   describe('.normalize', () => {
     it('should deserialize null value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isFalse((yield BooleanTransform.normalize(null)));
       });
     });
     it('should deserialize boolean value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isTrue((yield BooleanTransform.normalize(true)));
       });
     });
     it('should deserialize string value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isTrue((yield BooleanTransform.normalize('True')));
       });
     });
     it('should deserialize number value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isTrue((yield BooleanTransform.normalize(1)));
       });
     });
   });
   describe('.serialize', () => {
     it('should serialize null value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isFalse((yield BooleanTransform.serialize(null)));
       });
     });
     it('should serialize boolean value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isTrue((yield BooleanTransform.serialize(true)));
       });
     });
     it('should serialize string value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isTrue((yield BooleanTransform.serialize('True')));
       });
     });
     it('should serialize number value', () => {
-      return co(function* () {
+      co(function* () {
         assert.isTrue((yield BooleanTransform.serialize(1)));
       });
     });
