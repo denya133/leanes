@@ -1,18 +1,15 @@
 const { expect, assert } = require('chai');
-const LeanES = require.main.require('lib');
+const LeanES = require('../../../src/leanes/leanes/index');
 
 const {
-  FuncG,
-  SubsetG,
-  RecordInterface,
   Objectizer,
   Utils: { co }
-} = LeanES.prototype;
+} = LeanES.NS;
 
 describe('Objectizer', () => {
-  describe('#recoverize', () => {
+  describe('recoverize', () => {
     it("should recoverize object value", () => {
-      return co(function* () {
+      co(function* () {
         const Test = (() => {
           class Test extends LeanES { };
 
@@ -22,7 +19,7 @@ describe('Objectizer', () => {
           return Test;
         }).call(this);
         const TestsCollection = (() => {
-          class TestsCollection extends LeanES.prototype.Collection { };
+          class TestsCollection extends LeanES.NS.Collection { };
 
           TestsCollection.inheritProtected();
           TestsCollection.module(Test);
@@ -32,45 +29,17 @@ describe('Objectizer', () => {
 
         }).call(this);
 
-        Test.prototype.TestRecord = (() => {
-          class TestRecord extends LeanES.prototype.Record {};
-
-          TestRecord.inheritProtected();
-          TestRecord.module(Test);
-          TestRecord.public(TestRecord.static({
-            findRecordByName: FuncG(String, SubsetG(RecordInterface))
-          }, {
-            default: function (asType) {
-              return Test.prototype.TestRecord;
-            }
-          }));
-
-          TestRecord.attribute({
-            string: String
-          });
-          TestRecord.attribute({
-            number: Number
-          });
-          TestRecord.attribute({
-            boolean: Boolean
-          });
-          TestRecord.initialize();
-
-          return TestRecord;
-
-        }).call(this);
-
-        const objectizer= Objectizer.new(TestsCollection.new('Tests', {
+        const objectizer = Objectizer.new(TestsCollection.new('Tests', {
           delegate: 'TestRecord'
         }));
-        const record = (yield objectizer.recoverize(Test.prototype.TestRecord, {
+        const record = (yield objectizer.recoverize(Test.NS.TestRecord, {
           type: 'Test::TestRecord',
           string: 'string',
           number: 123,
           boolean: true
         }));
 
-        assert.instanceOf(record, Test.prototype.TestRecord, 'Recoverize is incorrect');
+        assert.instanceOf(record, Test.NS.TestRecord, 'Recoverize is incorrect');
         assert.equal(record.type, 'Test::TestRecord', '`type` is incorrect');
         assert.equal(record.string, 'string', '`string` is incorrect');
         assert.equal(record.number, 123, '`number` is incorrect');
@@ -78,9 +47,9 @@ describe('Objectizer', () => {
       });
     });
   });
-  describe('#objectize', () => {
-    it("should objectize Record.prototype value", () => {
-      return co(function* () {
+  describe('objectize', () => {
+    it("should objectize Record.NS value", () => {
+      co(function* () {
         const Test = (() => {
           class Test extends LeanES { };
 
@@ -91,39 +60,13 @@ describe('Objectizer', () => {
 
         }).call(this);
         const TestsCollection = (() => {
-          class TestsCollection extends LeanES.prototype.Collection { };
+          class TestsCollection extends LeanES.NS.Collection { };
 
           TestsCollection.inheritProtected();
           TestsCollection.module(Test);
           TestsCollection.initialize();
 
           return TestsCollection;
-
-        }).call(this);
-        Test.prototype.TestRecord = (() => {
-          class TestRecord extends LeanES.prototype.Record { };
-
-          TestRecord.inheritProtected();
-          TestRecord.module(Test);
-          TestRecord.public(TestRecord.static({
-            findRecordByName: FuncG(String, SubsetG(RecordInterface))
-          }, {
-            default: function (asType) {
-              return Test.prototype.TestRecord;
-            }
-          }));
-          TestRecord.attribute({
-            string: String
-          });
-          TestRecord.attribute({
-            number: Number
-          });
-          TestRecord.attribute({
-            boolean: Boolean
-          });
-          TestRecord.initialize();
-
-          return TestRecord;
 
         }).call(this);
 
@@ -132,7 +75,7 @@ describe('Objectizer', () => {
         });
 
         const objectizer = Objectizer.new(col);
-        const data = (yield objectizer.objectize(Test.prototype.TestRecord.new({
+        const data = (yield objectizer.objectize(Test.NS.TestRecord.new({
           type: 'Test::TestRecord',
           string: 'string',
           number: 123,
@@ -150,12 +93,9 @@ describe('Objectizer', () => {
   describe('.replicateObject', () => {
     const facade = null;
     const KEY = 'TEST_SERIALIZER_001';
-    after(() => {
-      return facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
-    });
     it('should create replica for objectizer', () => {
-      return co(function* () {
-        facade = LeanES.prototype.Facade.getInstance(KEY);
+      co(function* () {
+        facade = LeanES.NS.Facade.getInstance(KEY);
         const Test = (() => {
           class Test extends LeanES { };
 
@@ -166,11 +106,11 @@ describe('Objectizer', () => {
         }).call(this);
         Test.initialize();
         const MyCollection = (() => {
-          class MyCollection extends LeanES.prototype.Collection { };
+          class MyCollection extends LeanES.NS.Collection { };
 
           MyCollection.inheritProtected();
-          MyCollection.include(LeanES.prototype.MemoryCollectionMixin);
-          MyCollection.include(LeanES.prototype.GenerateUuidIdMixin);
+          MyCollection.include(LeanES.NS.MemoryCollectionMixin);
+          MyCollection.include(LeanES.NS.GenerateUuidIdMixin);
           MyCollection.module(Test);
 
           return MyCollection;
@@ -178,7 +118,7 @@ describe('Objectizer', () => {
         }).call(this);
         MyCollection.initialize();
         const MyObjectizer = (() => {
-          class MyObjectizer extends LeanES.prototype.Objectizer { };
+          class MyObjectizer extends LeanES.NS.Objectizer { };
 
           MyObjectizer.inheritProtected();
           MyObjectizer.module(Test);
@@ -189,7 +129,7 @@ describe('Objectizer', () => {
         MyObjectizer.initialize();
         const COLLECTION = 'COLLECTION';
         const collection = facade.registerProxy(MyCollection.new(COLLECTION, {
-          delegate: Test.prototype.Record,
+          delegate: Test.NS.Record,
           objectizer: MyObjectizer
         }));
         collection = facade.retrieveProxy(COLLECTION);
@@ -206,12 +146,9 @@ describe('Objectizer', () => {
   describe('.restoreObject', () => {
     const facade = null;
     const KEY = 'TEST_SERIALIZER_002';
-    after(() => {
-      return facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
-    });
     it('should restore objectizer from replica', () => {
-      return co(function* () {
-        facade = LeanES.prototype.Facade.getInstance(KEY);
+      co(function* () {
+        facade = LeanES.NS.Facade.getInstance(KEY);
         const Test = (() => {
           class Test extends LeanES { };
 
@@ -222,11 +159,11 @@ describe('Objectizer', () => {
         }).call(this);
         Test.initialize();
         const MyCollection = (() => {
-          class MyCollection extends LeanES.prototype.Collection { };
+          class MyCollection extends LeanES.NS.Collection { };
 
           MyCollection.inheritProtected();
-          MyCollection.include(LeanES.prototype.MemoryCollectionMixin);
-          MyCollection.include(LeanES.prototype.GenerateUuidIdMixin);
+          MyCollection.include(LeanES.NS.MemoryCollectionMixin);
+          MyCollection.include(LeanES.NS.GenerateUuidIdMixin);
           MyCollection.module(Test);
 
           return MyCollection;
@@ -234,7 +171,7 @@ describe('Objectizer', () => {
         }).call(this);
         MyCollection.initialize();
         const MyObjectizer = (() => {
-          class MyObjectizer extends LeanES.prototype.Objectizer { };
+          class MyObjectizer extends LeanES.NS.Objectizer { };
 
           MyObjectizer.inheritProtected();
           MyObjectizer.module(Test);
@@ -245,7 +182,7 @@ describe('Objectizer', () => {
         MyObjectizer.initialize();
         const COLLECTION = 'COLLECTION';
         const collection = facade.registerProxy(MyCollection.new(COLLECTION, {
-          delegate: Test.prototype.Record,
+          delegate: Test.NS.Record,
           objectizer: MyObjectizer
         }));
         collection = facade.retrieveProxy(COLLECTION);
