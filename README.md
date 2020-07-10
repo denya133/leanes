@@ -5,4 +5,6 @@
 - OS macOS: /Users/[work-domain]-[nick]
 
 
-Repository path: ~/Profiles/Ecma-JS/Projects/leanes/Repositories/leanes
+### Tasks
+
+https://trello.com/b/zUraHz54/leanes
