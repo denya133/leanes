@@ -1,6 +1,8 @@
 import PatternES from '../patternes';
 import Pipes from '../pipes';
+console.log('?>?>?>11');
 import joi from 'joi-browser';
+console.log('?>?>?>22');
 import moment from 'moment';
 import statuses from 'statuses';
 
@@ -19,6 +21,7 @@ import relatedTo from './decorators/relatedTo';
 const {
   initialize, meta, nameBy, constant, resolver, util, freeze, decorator
 } = PatternES.NS;
+console.log('?>?>?>33');
 
 
 @initialize

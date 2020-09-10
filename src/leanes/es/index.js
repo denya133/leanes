@@ -183,6 +183,7 @@ TransitionTF(ES);
 EventTF(ES);
 StateMachineTF(ES);
 StateMachineMixinTF(ES);
+console.log('?>?>?>00');
 
 Reflect.defineProperty(ES, 'onMetalize', {
   configurable: true,

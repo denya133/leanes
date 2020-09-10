@@ -1,13 +1,29 @@
 {
   "name": "leanes",
   "version": "1.0.0",
-  "description": "",
+  "description": "LeanES is a MVC framework for creating graceful applications",
   "main": "lib/index.js",
+  "license": "LGPL-3.0",
   "scripts": {
+    "build": "broccoli build",
+    "serve": "broccoli serve",
     "test": "mocha"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Denis Trayzhon",
+    "email": "d.g.trayzhon@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Irina Markevich"
+    }
+  ],
+  "keywords": [
+    "MVC",
+    "PureMVC",
+    "SOLID",
+    "Clean Architecture"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.9.6",
@@ -20,6 +36,7 @@
     "babel-plugin-import": "^1.13.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "broccoli": "^3.4.2",
+    "broccoli-cli": "1.0.0",
     "broccoli-funnel": "^3.0.3",
     "broccoli-merge-trees": "^4.2.0",
     "broccoli-rollup": "^4.1.1",

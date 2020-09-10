@@ -3,7 +3,7 @@ const sinon = require("sinon-chai");
 
 const expect = chai.expect;
 
-const MetaObject = require("../../lib/index.js");
+const { MetaObject } = require("../../lib/index.js");
 describe('CoreObject', () => {
   describe('constructor', () => {
     it('should be created ', () => {
