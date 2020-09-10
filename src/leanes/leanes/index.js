@@ -1,4 +1,6 @@
+console.log('?>?>?>11--1');
 import PatternES from '../patternes';
+console.log('?>?>?>11--2');
 import Pipes from '../pipes';
 console.log('?>?>?>11');
 import joi from 'joi-browser';
@@ -246,7 +248,7 @@ import MigrationTF from './patterns/data_mapper/Migration';
 MigrationTF(LeanES);
 console.log('>>?MMMMM LeanES after 444');
 
-require('./patterns/query_object/Query').default(LeanES);
+// require('./patterns/query_object/Query').default(LeanES);
 import QueryTF from './patterns/query_object/Query';
 QueueTF(LeanES);
 console.log('>>?MMMMM LeanES after 555');

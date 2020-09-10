@@ -1,118 +1,93 @@
 const chai = require("chai");
-const sinon = require("sinon-chai");
-
+const sinon = require("sinon");
+const sinonChai = require("sinon-chai");
 const expect = chai.expect;
+const assert = chai.assert;
+chai.use(sinonChai);
+const LeanES = require("../../lib/index.js").default;
+const { MetaObject } = LeanES.NS;
 
-const { MetaObject } = require("../../lib/index.js");
-describe('CoreObject', () => {
-  describe('constructor', () => {
-    it('should be created ', () => {
-      expect(new MetaObject()).to.be.an.instanceof(MetaObject);
+
+describe('MetaObject', () => {
+  describe('.new', () => {
+    it('should create new meta-object', () => {
+      expect(() => {
+        const target = {};
+        const myInstance = new MetaObject(target);
+        assert.instanceOf(myInstance, MetaObject, 'Cannot instantiate class MetaObject')
+      }).to.not.throw()
     })
   });
-  describe('add metadata', () => {
-    const sandbox = sinon.createSandbox();
-
-    beforeEach(function () {
-      sandbox.spy(MetaObject.addMetadata);
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(MetaObject.addMetadata).to.not.throw();
+  describe('.addMetaData', () => {
+    it('should add key with data', () => {
+      expect(() => {
+        const target = {};
+        const myInstance = new MetaObject(target);
+        myInstance.addMetaData('testGroup', 'testProp', {'test': 'test1'})
+        assert.deepEqual(myInstance.data.testGroup.testProp, {'test': 'test1'}, 'Data not removed')
+      }).to.not.throw()
     })
   });
-  describe('merge metadata', () => {
-    const sandbox = sinon.createSandbox();
-
-    beforeEach(function () {
-      sandbox.spy(MetaObject.mergeMetaData);
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(MetaObject.mergeMetaData).to.not.throw();
+  describe('.removeMetaData', () => {
+    it('should remove key with data', () => {
+      expect(() => {
+        const target = {};
+        const myInstance = new MetaObject(target);
+        myInstance.addMetaData('testGroup', 'testProp', {'test': 'test1'});
+        myInstance.removeMetaData('testGroup', 'testProp')
+        assert.isUndefined(myInstance.data.testGroup.testProp, 'Data not removed')
+      }).to.not.throw()
     })
   });
-  describe('append metadata', () => {
-    const sandbox = sinon.createSandbox();
-
-    beforeEach(function () {
-      sandbox.spy(MetaObject.appendMetaData);
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(MetaObject.appendMetaData).to.not.throw();
+  describe('parent', () => {
+    it('should create meta-data with parent', () => {
+      expect(() => {
+        const target = {};
+        const target2 = {};
+        const myParentInstance = new MetaObject(target);
+        const myInstance = new MetaObject(target2, myParentInstance);
+        assert.equal(myInstance.parent, myParentInstance, 'Parent is incorrect')
+      }).to.not.throw()
     })
   });
-  describe('remove metadata', () => {
-    const sandbox = sinon.createSandbox();
-
-    beforeEach(function () {
-      sandbox.spy(MetaObject.removeMetaData);
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(MetaObject.removeMetaData).to.not.throw();
+  describe('.getGroup', () => {
+    it('should retrieve data group from meta-object', () => {
+      expect(() => {
+        const target = {};
+        const myInstance = new MetaObject(target);
+        myInstance.addMetaData('testGroup', 'testProp1', {'test': 'test1'});
+        myInstance.addMetaData('testGroup', 'testProp2', {'test': 'test2'});
+        assert.deepEqual(myInstance.getGroup('testGroup'), {
+          'testProp1': {
+            'test': 'test1'
+          },
+          'testProp2': {
+            'test': 'test2'
+          }
+        }, 'Group is incorrect')
+      }).to.not.throw()
     })
-  });
-  describe('collect group', () => {
-    const sandbox = sinon.createSandbox();
-
-    beforeEach(function () {
-      sandbox.spy(MetaObject.collectGroup);
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(MetaObject.collectGroup).to.not.throw();
-    })
-  });
-  describe('get group', () => {
-    const sandbox = sinon.createSandbox();
-
-    beforeEach(function () {
-      sandbox.spy(MetaObject.getGroup);
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(MetaObject.getGroup).to.not.throw();
-    })
-  });
-  describe('get own group', () => {
-    const sandbox = sinon.createSandbox();
-
-    beforeEach(function () {
-      sandbox.spy(MetaObject.getOwnGroup);
-    });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(MetaObject.getOwnGroup).to.not.throw();
+    it('should retrieve data group from meta-object with parent', () => {
+      expect(() => {
+        const target = {};
+        const target2 = {};
+        const myParentInstance = new MetaObject(target);
+        myParentInstance.addMetaData('testGroup', 'testProp0', {'test': 'test0'});
+        const myInstance = new MetaObject(target2, myParentInstance);
+        myInstance.addMetaData('testGroup', 'testProp1', {'test': 'test1'});
+        myInstance.addMetaData('testGroup', 'testProp2', {'test': 'test2'});
+        assert.deepEqual(myInstance.getGroup('testGroup'), {
+          'testProp0': {
+            'test': 'test0'
+          },
+          'testProp1': {
+            'test': 'test1'
+          },
+          'testProp2': {
+            'test': 'test2'
+          }
+        }, 'Group is incorrect')
+      }).to.not.throw()
     })
   });
 })

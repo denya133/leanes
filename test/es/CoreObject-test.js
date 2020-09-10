@@ -1,29 +1,48 @@
 const chai = require("chai");
-const sinon = require("sinon-chai");
+const sinon = require("sinon");
+const sinonChai = require("sinon-chai");
 const expect = chai.expect;
-const { CoreObject } = require("./lib/index.js.js");
+const assert = chai.assert;
+chai.use(sinonChai);
+const LeanES = require("../../lib/index.js").default;
+const { CoreObject, Proto, initialize, module:moduleD, nameBy, meta } = LeanES.NS;
 
 describe('CoreObject', () => {
   describe('constructor', () => {
-    it('should be created ', () => {
+    it('should be created (via `.new` operator)', () => {
       expect(new CoreObject()).to.be.an.instanceof(CoreObject);
-    })
+    });
+    it('should be created (Test Module)', () => {
+      expect(() => {
+        @initialize
+        class Test extends LeanES {
+          @nameBy static  __filename = 'Test';
+          @meta static object = {};
+        }
+
+        @initialize
+        @moduleD(Test)
+        class SubTest extends CoreObject {
+        }
+        const subTest = new SubTest()
+      }).to.not.throw()
+    });
   });
 
-  describe('get Module name', () => {
-    const sandbox = sinon.createSandbox();
+  describe('.new', () => {
+    it('should be created (via `.new` method)', () => {
+        @initialize
+        class Test extends LeanES {
+          @nameBy static  __filename = 'Test';
+          @meta static object = {};
+        }
 
-    beforeEach(function () {
-      sandbox.spy(CoreObject.moduleName);
+        @initialize
+        @moduleD(Test)
+        class SubTest extends CoreObject {
+        }
+        expect(SubTest.new()).to.be.an.instanceof(SubTest);
     });
-
-    afterEach(function () {
-      sandbox.restore();
-    });
-
-    it('', () => {
-      expect(CoreObject.moduleName).to.not.throw();
-    })
   });
 
   describe('call method class', () => {
@@ -37,8 +56,102 @@ describe('CoreObject', () => {
       sandbox.restore();
     });
 
-    it('', () => {
-      expect(CoreObject.class).to.not.throw();
+    it('should have class (static)', () => {
+      expect(CoreObject.class()).to.equal(Proto);
+    })
+
+    it('should have class (Test Module)', async () => {
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class SubTest extends CoreObject {
+      }
+
+      expect(SubTest.class()).to.equal(Proto);
+    })
+  });
+
+  describe('call method class (instance)', () => {
+    const sandbox = sinon.createSandbox();
+
+    beforeEach(function () {
+      sandbox.spy(CoreObject.new);
+    });
+
+    afterEach(function () {
+      sandbox.restore();
+    });
+
+    it('should have class (instance)', () => {
+      expect(CoreObject.new().class()).to.equal(CoreObject);
+    });
+
+    it('should have class (Test Module)', () => {
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class SubTest extends CoreObject {
+      }
+
+      expect(SubTest.new().class()).to.equal(SubTest)
+    });
+  });
+
+  describe('.replicateObject', () => {
+    it('should replicate specified class', async () => {
+      const instance = CoreObject.new();
+      const replica = await CoreObject.replicateObject(instance);
+      assert.equal(replica.type, 'instance', 'Replica type isn`t instance')
+      assert.equal(replica.class, 'CoreObject', 'Class name is different')
+    })
+    it('should replicate specified class (Test Module)', async () => {
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class MyClass extends Test.NS.CoreObject {
+      }
+
+      const instance = MyClass.new();
+      const replica = await MyClass.replicateObject(instance);
+      assert.equal(replica.type, 'instance', 'Replica type isn`t instance')
+      assert.equal(replica.class, 'MyClass', 'Class name is different')
+    })
+  });
+
+  describe('.restoreObject', () => {
+    it('should restore specified class by replica', async () => {
+      const voRestored = await LeanES.restoreObject(LeanES, {type: 'instance', class: 'CoreObject'})
+      assert.equal(voRestored.constructor, CoreObject, 'Restored instance constructor is not CoreObject')
+    })
+    it('should restore specified class by replica (Test Module)', async () => {
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class MyClass extends Test.NS.CoreObject {
+      }
+
+      const voRestored = await Test.restoreObject(Test, {type: 'instance', class: 'MyClass'})
+      assert.equal(voRestored.constructor, MyClass, 'Restored instance constructor is not MyClass')
     })
   });
 
@@ -53,8 +166,29 @@ describe('CoreObject', () => {
       sandbox.restore();
     });
 
-    it('', () => {
-      expect(CoreObject.wrap).to.not.throw();
+    it('should have wrap', () => {
+      expect(CoreObject.wrap.bind(CoreObject, [() => {}])).to.not.throw();
     })
   })
+
+  describe('.superclass', () => {
+    it('should have superclass', async () => {
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @moduleD(Test)
+      class SubTest extends CoreObject {
+      }
+
+      @moduleD(Test)
+      class SubSubTest extends SubTest {
+      }
+
+      assert(SubSubTest.superclass() === SubTest, 'SubSubTest inheritance broken');
+      assert(SubTest.superclass() === CoreObject, 'SubTest inheritance broken');
+    })
+  });
 });

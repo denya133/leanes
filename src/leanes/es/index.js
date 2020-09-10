@@ -183,7 +183,6 @@ TransitionTF(ES);
 EventTF(ES);
 StateMachineTF(ES);
 StateMachineMixinTF(ES);
-console.log('?>?>?>00');
 
 Reflect.defineProperty(ES, 'onMetalize', {
   configurable: true,
@@ -211,4 +210,5 @@ export type {StateInterface} from './interfaces/StateInterface';
 export type {StateMachineInterface} from './interfaces/StateMachineInterface';
 export type {RecoverableStaticInterface} from './interfaces/RecoverableStaticInterface';
 
+console.log('?>?>?>00');
 export default ES;

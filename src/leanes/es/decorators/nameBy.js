@@ -10,7 +10,7 @@ export default function nameBy(target, key, descriptor) {
   // console.log('?>?>?> nameBy', target.name, key, filename);
   assert(filename != null, 'Value must be __filename');
   assert(target[cpoMetaObject] != null, 'Target for `nameBy` decorator must be a Class');
-  // const [ classname ] = slice.call(filename.split('/'), -1)[0].split('.');
-  // Reflect.defineProperty(target, 'name', {get: () => classname});
+  const [ classname ] = slice.call(filename.split('/'), -1)[0].split('.');
+  Reflect.defineProperty(target, 'name', {get: () => classname});
   return descriptor;
 };

@@ -1,5 +1,5 @@
-import { EventInterface } from './EventInterface';
-import { TransitionInterface } from './TransitionInterface';
+import type { EventInterface } from './EventInterface';
+import type { TransitionInterface } from './TransitionInterface';
 
 
 export interface StateInterface {

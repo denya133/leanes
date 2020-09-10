@@ -5,6 +5,7 @@ import ES from '../es';
 const { initialize, meta, nameBy, constant, resolver, util } = ES.NS;
 
 
+console.log('?>?>?>00--111');
 @initialize
 @resolver(require, name => require(name))
 class PatternES extends ES {
@@ -214,4 +215,5 @@ export type { ProxyInterface } from './interfaces/ProxyInterface';
 // export type { TransformStaticInterface } from './interfaces/TransformStaticInterface';
 export type { ViewInterface } from './interfaces/ViewInterface';
 
+console.log('?>?>?>00--222');
 export default PatternES;

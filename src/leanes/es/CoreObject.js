@@ -17,7 +17,7 @@ export default (NS) => {
     PRODUCTION, DEVELOPMENT, CLASS_KEYS, INSTANCE_KEYS,
     _, inflect, assert,
   } = NS.prototype;
-  
+
   const MetaObject = MetaObjectTF(NS);
 
   const cpoMetaObject = Symbol.for('~metaObject');

@@ -1,0 +1,9 @@
+check-leaks: true
+file:
+  - './test/es/CoreObject-test.js'
+  - './test/es/MetaObject-test.js'
+full-trace: true
+growl: true
+recursive: false
+reporter: 'spec'
+require: '@babel/register'
