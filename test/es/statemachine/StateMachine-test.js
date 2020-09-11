@@ -1,96 +1,87 @@
 const chai = require("chai");
 const sinon = require("sinon");
-_ = require('lodash');
-ES = require('../../src/leanes/es/index');
 const expect = chai.expect;
 const assert = chai.assert;
-({ co } = ES.NS.Utils);
+const _ = require('lodash');
+const LeanES = require("../../../lib/index.js").default;
 
 describe('StateMachine', () => {
   describe('.new()', () => {
     it('should create new StateMachine instance', () => {
-      const stateMachine = ES.NS.StateMachine.new('default', {});
-      assert.instanceOf(stateMachine, ES.NS.StateMachine, 'Cannot instantiate class StateMachine');
-    }).to.not.throw(Error);
-  });
-});
-describe('doBeforeAllEvents, doAfterAllEvents, doAfterAllTransitions, doErrorOnAllEvents', () => {
-  it('should run all regitstered hooks', () => {
-    const anchor = {
-      testBeforeAllEvents: () => { },
-      testAfterAllEvents: () => { },
-      testAfterAllTransitions: () => { },
-      testAfterAllErrors: () => { }
-    };
-    const spyTestBeforeAllEvents = sinon.spy(anchor, 'testBeforeAllEvents');
-    const spyTestAfterAllEvents = sinon.spy(anchor, 'testAfterAllEvents');
-    const spyTestAfterAllTransitions = sinon.spy(anchor, 'testAfterAllTransitions');
-    const spyAfterAllErrors = sinon.spy(anchor, 'testAfterAllErrors');
-    const stateMachine = ES.NS.StateMachine.new('testSM', anchor, {
-      beforeAllEvents: 'testBeforeAllEvents',
-      afterAllEvents: 'testAfterAllEvents',
-      afterAllTransitions: 'testAfterAllTransitions',
-      errorOnAllEvents: 'testAfterAllErrors'
+      const stateMachine = LeanES.NS.StateMachine.new('default', {});
+      assert.instanceOf(stateMachine, LeanES.NS.StateMachine, 'Cannot instantiate class StateMachine');
     });
-    co(function* () {
+  });
+  describe('doBeforeAllEvents, doAfterAllEvents, doAfterAllTransitions, doErrorOnAllEvents', () => {
+    it('should run all regitstered hooks', async () => {
+      const anchor = {
+        testBeforeAllEvents: () => { },
+        testAfterAllEvents: () => { },
+        testAfterAllTransitions: () => { },
+        testAfterAllErrors: () => { }
+      };
+      const spyTestBeforeAllEvents = sinon.spy(anchor, 'testBeforeAllEvents');
+      const spyTestAfterAllEvents = sinon.spy(anchor, 'testAfterAllEvents');
+      const spyTestAfterAllTransitions = sinon.spy(anchor, 'testAfterAllTransitions');
+      const spyAfterAllErrors = sinon.spy(anchor, 'testAfterAllErrors');
+      const stateMachine = LeanES.NS.StateMachine.new('testSM', anchor, {
+        beforeAllEvents: 'testBeforeAllEvents',
+        afterAllEvents: 'testAfterAllEvents',
+        afterAllTransitions: 'testAfterAllTransitions',
+        errorOnAllEvents: 'testAfterAllErrors'
+      });
+
       try {
-        yield stateMachine.doBeforeAllEvents();
-        yield stateMachine.doAfterAllEvents();
-        yield stateMachine.doAfterAllTransitions();
+        await stateMachine.doBeforeAllEvents();
+        await stateMachine.doAfterAllEvents();
+        await stateMachine.doAfterAllTransitions();
         throw new Error('test');
       } catch (error1) {
         const error = error1;
-        (yield stateMachine.doErrorOnAllEvents());
+        await stateMachine.doErrorOnAllEvents();
       }
-    }).then(() => {
       assert.isTrue(spyTestBeforeAllEvents.called, '"beforeAllEvents" method not called');
       assert.isTrue(spyTestAfterAllEvents.called, '"afterAllEvents" method not called');
       assert.isTrue(spyTestAfterAllTransitions.called, '"afterAllTransitions" method not called');
       assert.isTrue(spyAfterAllErrors.called, '"errorOnAllEvents" method not called');
     });
   });
-});
-describe('registerState, removeState', () => {
-  it('should register and remove state from SM', () => {
-    expect(() => {
+  describe('registerState, removeState', () => {
+    it('should register and remove state from SM', () => {
       const anchor = {};
-      const stateMachine = ES.NS.StateMachine.new('testSM', anchor);
+      const stateMachine = LeanES.NS.StateMachine.new('testSM', anchor);
       stateMachine.registerState('test');
-      assert.instanceOf(stateMachine.states['test'], ES.NS.State, 'State did not registered');
+      assert.instanceOf(stateMachine.states['test'], LeanES.NS.State, 'State did not registered');
       stateMachine.removeState('test');
-      assert.notInstanceOf(stateMachine.states['test'], ES.NS.State, 'State did not removed');
-    }).to.not.throw(Error);
+      assert.notInstanceOf(stateMachine.states['test'], LeanES.NS.State, 'State did not removed');
+    });
   });
-});
-describe('transitionTo, send', () => {
-  it('should intialize SM and make one transition', () => {
-    co(function* () {
+  describe('transitionTo, send', () => {
+    it('should intialize SM and make one transition', async () => {
       const anchor = {};
-      const stateMachine = ES.NS.StateMachine.new('testSM', anchor);
+      const stateMachine = LeanES.NS.StateMachine.new('testSM', anchor);
       stateMachine.registerState('test1', {
         initial: true
       });
       stateMachine.registerState('test2');
       stateMachine.registerEvent('testEvent', 'test1', 'test2');
-      yield stateMachine.reset();
+      await stateMachine.reset();
       assert.equal(stateMachine.currentState.name, 'test1', 'SM did not initialized');
-      yield stateMachine.send('testEvent');
+      await stateMachine.send('testEvent');
       assert.equal(stateMachine.currentState.name, 'test2', 'State did not changed');
     });
   });
-});
-describe('send, doXXX', () => {
-  it('should intialize SM and hooks and make one transition', () => {
-    co(function* () {
+  describe('send, doXXX', () => {
+    it('should intialize SM and hooks and make one transition', async () => {
       const anchor = {
         testValue: 'test',
         testBeforeAllEvents: sinon.spy(() => { }),
         testEventBefore: sinon.spy(() => { }),
-        testEventGuard: sinon.spy(() => {
-          this.testValue === 'test';
+        testEventGuard: sinon.spy(function () {
+          return this.testValue === 'test';
         }),
-        testTransitionGuard: sinon.spy(() => {
-          this.testValue === 'test';
+        testTransitionGuard: sinon.spy(function () {
+          return this.testValue === 'test';
         }),
         testOldStateBeforeExit: sinon.spy(() => { }),
         testOldStateExit: sinon.spy(() => { }),
@@ -145,44 +136,42 @@ describe('send, doXXX', () => {
         withAnchorUpdateState: 'testwithAnchorUpdateState',
         withAnchorSave: 'testwithAnchorSave'
       };
-      sm = ES.NS.StateMachine.new('testStateMachine', anchor, smConfig);
+      const sm = LeanES.NS.StateMachine.new('testStateMachine', anchor, smConfig);
       sm.registerState('oldState', oldStateConfig);
       sm.registerState('newState', newStateConfig);
       sm.registerEvent('testEvent', 'oldState', 'newState', eventConfig, transitionConfig);
-      yield sm.reset();
+      await sm.reset();
       assert.equal(sm.currentState.name, 'oldState', 'SM did not initialized');
-      yield sm.send('testEvent', 'testArgument1', 'testArgument2');
+      await sm.send('testEvent', 'testArgument1', 'testArgument2');
       assert.equal(sm.currentState.name, 'newState', 'State did not changed');
-      results = [];
-      for (key in anchor) {
+      const hasProp = {}.hasOwnProperty;
+      for (const key in anchor) {
         if (!hasProp.call(anchor, key)) continue;
-        property = anchor[key];
+        const property = anchor[key];
         if (_.isFunction(property)) {
           if (/error/i.test(key)) {
-            results.push(assert.isFalse(property.called, `anchor.${key} called`));
+            assert.isFalse(property.called, `anchor.${key} called`);
           } else {
             if (/reset|with/i.test(key)) {
-              results.push(assert.isTrue(property.called, `anchor.${key} did not called (1)`));
+              assert.isTrue(property.called, `anchor.${key} did not called (1)`);
             } else {
-              results.push(assert.isTrue(property.calledWith('testArgument1', 'testArgument2'), `anchor.${key} did not called (2)`));
+              assert.isTrue(property.calledWith('testArgument1', 'testArgument2'), `anchor.${key} did not called (2)`);
             }
           }
         }
       }
     });
-  });
-  it('should intialize SM and hooks, restore state and make one transition', () => {
-    co(function* () {
+    it('should intialize SM and hooks, restore state and make one transition', async () => {
       const anchor = {
         state: 'restoredState',
         testValue: 'test',
         testBeforeAllEvents: sinon.spy(() => { }),
         testEventBefore: sinon.spy(() => { }),
-        testEventGuard: sinon.spy(() => {
-          this.testValue === 'test';
+        testEventGuard: sinon.spy(function ()  {
+          return this.testValue === 'test';
         }),
-        testTransitionGuard: sinon.spy(() => {
-          this.testValue === 'test';
+        testTransitionGuard: sinon.spy(function ()  {
+          return this.testValue === 'test';
         }),
         testOldStateBeforeExit: sinon.spy(() => { }),
         testOldStateExit: sinon.spy(() => { }),
@@ -201,10 +190,10 @@ describe('send, doXXX', () => {
         testBeforeReset: sinon.spy(() => { }),
         testAfterReset: sinon.spy(() => { }),
         testwithAnchorUpdateState: sinon.spy(function (stateName) {
-          this.state = stateName;
+          return this.state = stateName;
         }),
-        testwithAnchorRestoreState: sinon.spy(() => {
-          this.state;
+        testwithAnchorRestoreState: sinon.spy(function () {
+          return this.state;
         }),
         testwithAnchorSave: sinon.spy(() => { })
       };
@@ -249,27 +238,27 @@ describe('send, doXXX', () => {
         withAnchorRestoreState: 'testwithAnchorRestoreState',
         withAnchorSave: 'testwithAnchorSave'
       };
-      const sm = ES.NS.StateMachine.new('testStateMachine', anchor, smConfig);
+      const sm = LeanES.NS.StateMachine.new('testStateMachine', anchor, smConfig);
       sm.registerState('oldState', oldStateConfig);
       sm.registerState('restoredState', restoredStateConfig);
       sm.registerState('newState', newStateConfig);
       sm.registerEvent('testEvent', ['oldState', 'restoredState'], 'newState', eventConfig, transitionConfig);
-      yield sm.reset();
+      await sm.reset();
       assert.equal(sm.currentState.name, 'restoredState', 'SM did not initialized');
-      yield sm.send('testEvent', 'testArgument1', 'testArgument2');
+      await sm.send('testEvent', 'testArgument1', 'testArgument2');
       assert.equal(sm.currentState.name, 'newState', 'State did not changed');
-      results = [];
-      for (key in anchor) {
+      const hasProp = {}.hasOwnProperty;
+      for (const key in anchor) {
         if (!hasProp.call(anchor, key)) continue;
-        property = anchor[key];
+        const property = anchor[key];
         if (_.isFunction(property)) {
           if (/error/i.test(key)) {
-            results.push(assert.isFalse(property.called, `anchor.${key} called`));
+            assert.isFalse(property.called, `anchor.${key} called`);
           } else {
             if (/reset|with/i.test(key)) {
-              results.push(assert.isTrue(property.called, `anchor.${key} did not called (1)`));
+              assert.isTrue(property.called, `anchor.${key} did not called (1)`);
             } else {
-              results.push(assert.isTrue(property.calledWith('testArgument1', 'testArgument2'), `anchor.${key} did not called (2)`));
+              assert.isTrue(property.calledWith('testArgument1', 'testArgument2'), `anchor.${key} did not called (2)`);
             }
           }
         }

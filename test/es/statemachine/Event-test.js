@@ -3,7 +3,6 @@ const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../../lib/index.js").default;
-const { CoreObject, initialize, module:moduleD, nameBy, meta, mixin, machine } = LeanES.NS;
 
 describe('Event', () => {
   describe('.new()', () => {

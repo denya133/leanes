@@ -4,6 +4,8 @@ file:
   - './test/es/MetaObject-test.js'
   - './test/es/mixins/StateMachineMixin-test.js'
   - './test/es/statemachine/Event-test.js'
+  - './test/es/statemachine/State-test.js'
+  - './test/es/statemachine/StateMachine-test.js'
 full-trace: true
 growl: true
 recursive: false
