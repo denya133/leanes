@@ -1,19 +1,19 @@
 const chai = require("chai");
 const sinon = require("sinon");
-ES = require('../../../src/leanes/es/index');
 const expect = chai.expect;
-const assert = chai.assert
-const { co } = ES.NS.Utils;
+const assert = chai.assert;
+const LeanES = require("../../../lib/index.js").default;
+const { CoreObject, initialize, module:moduleD, nameBy, meta, mixin, machine } = LeanES.NS;
 
 describe('Event', () => {
   describe('.new()', () => {
     it('should create new Event instance', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
-        const event = ES.NS.Event.new('newEvent', {}, { transition, target });
-        assert.instanceOf(event, ES.NS.Event, 'Cannot instantiate class Event');
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
+        const event = LeanES.NS.Event.new('newEvent', {}, { transition, target });
+        assert.instanceOf(event, LeanES.NS.Event, 'Cannot instantiate class Event');
         assert.equal(event.name, 'newEvent');
       }).to.not.throw(Error);
     });
@@ -21,14 +21,14 @@ describe('Event', () => {
   describe('testGuard', () => {
     it('should get "guard" without rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testGuard: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testGuard');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           guard: 'testGuard'
@@ -40,14 +40,14 @@ describe('Event', () => {
     });
     it('should get "guard" with rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testGuard1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testGuard1');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           guard: 'testGuard'
@@ -65,14 +65,14 @@ describe('Event', () => {
   describe('testIf', () => {
     it('should get "if" without rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testIf: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testIf');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           if: 'testIf'
@@ -84,14 +84,14 @@ describe('Event', () => {
     });
     it('should get "if" with rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
-        anchor = {
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
+        const anchor = {
           testIf1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testIf1');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           if: 'testIf'
@@ -109,14 +109,14 @@ describe('Event', () => {
   describe('testUnless', () => {
     it('should get "unless" without rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testUnless: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testUnless');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           unless: 'testUnless'
@@ -128,14 +128,14 @@ describe('Event', () => {
     });
     it('should get "unless" with rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testUnless1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testUnless1');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           unless: 'testUnless'
@@ -153,14 +153,14 @@ describe('Event', () => {
   describe('doAfter', () => {
     it('should get "after" without rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testAfter: () => { }
         };
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           after: 'testAfter'
@@ -172,14 +172,14 @@ describe('Event', () => {
     });
     it('should get "after" with rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testAfter1: () => { }
         };
         const spyTestAfter = sinon.spy(anchor, 'testAfter1');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           after: 'testAfter'
@@ -197,14 +197,14 @@ describe('Event', () => {
   describe('doBefore', () => {
     it('should get "before" without rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testBefore: () => { }
         };
         const spyTestBefore = sinon.spy(anchor, 'testBefore');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           before: 'testBefore'
@@ -216,14 +216,14 @@ describe('Event', () => {
     });
     it('should get "before" with rejects', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testBefore1: () => { }
         };
         const spyTestBefore = sinon.spy(anchor, 'testBefore1');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           before: 'testBefore'
@@ -241,41 +241,41 @@ describe('Event', () => {
   describe('doBefore, doAfter', () => {
     it('should run "before" before "after"', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           testBefore: () => { },
           testAfter: () => { }
         };
         const spyTestBefore = sinon.spy(anchor, 'testBefore');
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           before: 'testBefore',
           after: 'testAfter'
         });
-        co(function* () {
-          yield event.doBefore();
-          (yield event.doAfter());
-        }).then(() => {
+        (async () => {
+          await event.doBefore();
+          await event.doAfter();
           assert.isTrue(spyTestBefore.called, '"before" method not called');
           assert.isTrue(spyTestAfter.calledAfter(spyTestBefore), '"after" not called after "before"');
-        });
+        })()
+
       }).to.not.throw(Error);
     });
   });
   describe('testGuard, doAfter, doSuccess, doError', () => {
     it('should run "after" only if "guard" resolved as true', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
         const anchor = {
           test: 'test',
-          testGuard: () => {
-            this.test === 'test';
+          testGuard: function () {
+            return this.test === 'test';
           },
           testAfter: () => { },
           testSuccess: () => { },
@@ -284,7 +284,7 @@ describe('Event', () => {
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
         const spyTestSuccess = sinon.spy(anchor, 'testSuccess');
         const spyTestError = sinon.spy(anchor, 'testError');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           guard: 'testGuard',
@@ -292,33 +292,32 @@ describe('Event', () => {
           success: 'testSuccess',
           error: 'testError'
         });
-        co(function* () {
+        (async () => {
           try {
-            if ((yield event.testGuard())) {
-              yield event.doSuccess();
-              yield event.doAfter();
+            if (await event.testGuard()) {
+              await event.doSuccess();
+              await event.doAfter();
             }
             throw new Error('test');
           } catch (error) {
             const e = error;
-            (yield event.doError(e));
+            await event.doError(e);
           }
-        }).then(() => {
           assert.isTrue(spyTestAfter.called, '"after" method not called');
           assert.isTrue(spyTestSuccess.called, '"success" method not called');
           assert.isTrue(spyTestError.called, '"error" method not called');
-        });
+        })()
       }).to.not.throw(Error);
     });
     it('should run "after" only if "unless" resolved as false', () => {
       expect(() => {
-        const stateMachine = ES.NS.StateMachine.new('default', {});
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        const target = ES.NS.State.new('newState', {}, stateMachine, {});
-        anchor = {
+        const stateMachine = LeanES.NS.StateMachine.new('default', {});
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        const target = LeanES.NS.State.new('newState', {}, stateMachine, {});
+        const anchor = {
           test: 'test',
-          testUnless: () => {
-            this.test !== 'test';
+          testUnless: function () {
+            return this.test === 'not-test';
           },
           testAfter: () => { },
           testSuccess: () => { },
@@ -327,7 +326,7 @@ describe('Event', () => {
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
         const spyTestSuccess = sinon.spy(anchor, 'testSuccess');
         const spyTestError = sinon.spy(anchor, 'testError');
-        const event = ES.NS.Event.new('newEvent', anchor, {
+        const event = LeanES.NS.Event.new('newEvent', anchor, {
           transition,
           target,
           unless: 'testUnless',
@@ -335,22 +334,21 @@ describe('Event', () => {
           success: 'testSuccess',
           error: 'testError'
         });
-        co(function* () {
+        (async () => {
           try {
-            if (!(yield event.testUnless())) {
-              yield event.doSuccess();
-              yield event.doAfter();
+            if (!(await event.testUnless())) {
+              await event.doSuccess();
+              await event.doAfter();
             }
             throw new Error('test');
           } catch (error) {
             const e = error;
-            (yield event.doError(e));
+            await event.doError(e);
           }
-        }).then(() => {
           assert.isTrue(spyTestAfter.called, '"after" method not called');
           assert.isTrue(spyTestSuccess.called, '"success" method not called');
           assert.isTrue(spyTestError.called, '"error" method not called');
-        });
+        })()
       }).to.not.throw(Error);
     });
   });
