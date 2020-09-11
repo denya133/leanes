@@ -2,6 +2,7 @@ check-leaks: true
 file:
   - './test/es/CoreObject-test.js'
   - './test/es/MetaObject-test.js'
+  - './test/es/mixins/StateMachineMixin-test.js'
 full-trace: true
 growl: true
 recursive: false

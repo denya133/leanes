@@ -1,9 +1,7 @@
 const chai = require("chai");
 const sinon = require("sinon");
-const sinonChai = require("sinon-chai");
 const expect = chai.expect;
 const assert = chai.assert;
-chai.use(sinonChai);
 const LeanES = require("../../lib/index.js").default;
 const { CoreObject, Proto, initialize, module:moduleD, nameBy, meta } = LeanES.NS;
 
