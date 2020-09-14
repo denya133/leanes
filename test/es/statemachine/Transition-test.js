@@ -1,16 +1,15 @@
 const chai = require("chai");
 const sinon = require("sinon");
-ES = require('../../ES/leanes/es/index');
 const expect = chai.expect;
-const assert = chai.assert
-  ({ co } = ES.NS.Utils);
+const assert = chai.assert;
+const LeanES = require("../../../lib/index.js").default;
 
 describe('Transition', () => {
   describe('.new()', () => {
     it('should create new Transition instance', () => {
       expect(() => {
-        const transition = ES.NS.Transition.new('newTransition', {}, {});
-        assert.instanceOf(transition, ES.NS.Transition, 'Cannot instantiate class Transition');
+        const transition = LeanES.NS.Transition.new('newTransition', {}, {});
+        assert.instanceOf(transition, LeanES.NS.Transition, 'Cannot instantiate class Transition');
         assert.equal(transition.name, 'newTransition');
       }).to.not.throw(Error);
     });
@@ -22,7 +21,7 @@ describe('Transition', () => {
           testGuard: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testGuard');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           guard: 'testGuard'
         });
         transition.testGuard().then(() => {
@@ -36,7 +35,7 @@ describe('Transition', () => {
           testGuard1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testGuard1');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           guard: 'testGuard'
         });
         transition.testGuard().then(() => {
@@ -56,7 +55,7 @@ describe('Transition', () => {
           testIf: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testIf');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           if: 'testIf'
         });
         transition.testIf().then(() => {
@@ -70,7 +69,7 @@ describe('Transition', () => {
           testIf1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testIf1');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           if: 'testIf'
         });
         transition.testIf().then(() => {
@@ -90,7 +89,7 @@ describe('Transition', () => {
           testUnless: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testUnless');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           unless: 'testUnless'
         });
         transition.testUnless().then(() => {
@@ -104,7 +103,7 @@ describe('Transition', () => {
           testUnless1: () => { }
         };
         const spyTestGuard = sinon.spy(anchor, 'testUnless1');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           unless: 'testUnless'
         });
         transition.testUnless().then(() => {
@@ -124,7 +123,7 @@ describe('Transition', () => {
           testAfter: () => { }
         };
         const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           after: 'testAfter'
         });
         transition.doAfter().then(() => {
@@ -138,7 +137,7 @@ describe('Transition', () => {
           testAfter1: () => { }
         };
         const spyTestAfter = sinon.spy(anchor, 'testAfter1');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           after: 'testAfter'
         });
         transition.doAfter().then(() => {
@@ -158,7 +157,7 @@ describe('Transition', () => {
           testSuccess: () => { }
         };
         const spyTestSuccess = sinon.spy(anchor, 'testSuccess');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           success: 'testSuccess'
         });
         transition.doSuccess().then(() => {
@@ -172,7 +171,7 @@ describe('Transition', () => {
           testSuccess1: () => { }
         };
         const spyTestSuccess = sinon.spy(anchor, 'testSuccess1');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
+        const transition = LeanES.NS.Transition.new('newTransition', anchor, {
           success: 'testSuccess'
         });
         transition.doSuccess().then(() => {
@@ -186,74 +185,59 @@ describe('Transition', () => {
     });
   });
   describe('doAfter, doSuccess', () => {
-    it('should run "after" before "success"', () => {
-      expect(() => {
-        const anchor = {
-          testAfter: () => { },
-          testSuccess: () => { }
-        };
-        const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const spyTestSuccess = sinon.spy(anchor, 'testSuccess');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
-          after: 'testAfter',
-          success: 'testSuccess'
-        });
-        co(function* () {
-          yield transition.doAfter();
-          (yield transition.doSuccess());
-        }).then(() => {
-          assert.isTrue(spyTestAfter.called, '"after" method not called');
-          assert.isTrue(spyTestSuccess.calledAfter(spyTestAfter), '"success" not called after "after"');
-        });
-      }).to.not.throw(Error);
+    it('should run "after" before "success"', async () => {
+      const anchor = {
+        testAfter: () => { },
+        testSuccess: () => { }
+      };
+      const spyTestAfter = sinon.spy(anchor, 'testAfter');
+      const spyTestSuccess = sinon.spy(anchor, 'testSuccess');
+      const transition = LeanES.NS.Transition.new('newTransition', anchor, {
+        after: 'testAfter',
+        success: 'testSuccess'
+      });
+      await transition.doAfter();
+      await transition.doSuccess();
+      assert.isTrue(spyTestAfter.called, '"after" method not called');
+      assert.isTrue(spyTestSuccess.calledAfter(spyTestAfter), '"success" not called after "after"');
     });
   });
   describe('testGuard, doAfter', () => {
-    it('should run "after" only if "guard" resolved as true', () => {
-      expect(() => {
-        const anchor = {
-          test: 'test',
-          testGuard: () => {
-            this.test === 'test';
-          },
-          testAfter: () => { }
-        };
-        const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
-          guard: 'testGuard',
-          after: 'testAfter'
-        });
-        co(function* () {
-          if ((yield transition.testGuard())) {
-            (yield transition.doAfter());
-          }
-        }).then(() => {
-          assert.isTrue(spyTestAfter.called, '"after" method not called');
-        });
-      }).to.not.throw(Error);
+    it('should run "after" only if "guard" resolved as true', async () => {
+      const anchor = {
+        test: 'test',
+        testGuard: function () {
+          return this.test === 'test';
+        },
+        testAfter: () => { }
+      };
+      const spyTestAfter = sinon.spy(anchor, 'testAfter');
+      const transition = LeanES.NS.Transition.new('newTransition', anchor, {
+        guard: 'testGuard',
+        after: 'testAfter'
+      });
+      if ((await transition.testGuard())) {
+        await transition.doAfter();
+      }
+      assert.isTrue(spyTestAfter.called, '"after" method not called');
     });
-    it('should run "after" only if "unless" resolved as false', () => {
-      expect(() => {
-        const anchor = {
-          test: 'test',
-          testUnless: () => {
-            this.test !== 'test';
-          },
-          testAfter: () => { }
-        };
-        const spyTestAfter = sinon.spy(anchor, 'testAfter');
-        const transition = ES.NS.Transition.new('newTransition', anchor, {
-          unless: 'testUnless',
-          after: 'testAfter'
-        });
-        co(function* () {
-          if (!(yield transition.testUnless())) {
-            (yield transition.doAfter());
-          }
-        }).then(() => {
-          assert.isTrue(spyTestAfter.called, '"after" method not called');
-        });
-      }).to.not.throw(Error);
+    it('should run "after" only if "unless" resolved as false', async () => {
+      const anchor = {
+        test: 'test',
+        testUnless: function () {
+          return this.test !== 'test';
+        },
+        testAfter: () => { }
+      };
+      const spyTestAfter = sinon.spy(anchor, 'testAfter');
+      const transition = LeanES.NS.Transition.new('newTransition', anchor, {
+        unless: 'testUnless',
+        after: 'testAfter'
+      });
+      if (!(await transition.testUnless())) {
+        await transition.doAfter();
+      }
+      assert.isTrue(spyTestAfter.called, '"after" method not called');
     });
   });
 });
