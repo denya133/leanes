@@ -6,6 +6,11 @@ file:
   - './test/es/statemachine/Event-test.js'
   - './test/es/statemachine/State-test.js'
   - './test/es/statemachine/StateMachine-test.js'
+  - './test/es/statemachine/Transition-test.js'
+  - './test/es/utils/filter-test.js'
+  - './test/es/utils/forEach-test.js'
+  - './test/es/utils/jsonStringify-test.js'
+  - './test/es/utils/map-test.js'
 full-trace: true
 growl: true
 recursive: false
