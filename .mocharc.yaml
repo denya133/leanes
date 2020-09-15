@@ -11,6 +11,16 @@ file:
   - './test/es/utils/forEach-test.js'
   - './test/es/utils/jsonStringify-test.js'
   - './test/es/utils/map-test.js'
+  - './test/leanes/data_mapper/ArrayTransform-test.js'
+  - './test/leanes/data_mapper/BooleanTransform-test.js'
+  - './test/leanes/data_mapper/DateTransform-test.js'
+  - './test/leanes/data_mapper/NumberTransform-test.js'
+  - './test/leanes/data_mapper/Objectizer-test.js'
+  - './test/leanes/data_mapper/ObjectTransform-test.js'
+  - './test/leanes/data_mapper/StringTransform-test.js'
+  - './test/leanes/data_mapper/Transform-test.js'
+  - './test/patternes/command/SimpleCommand-test.js'
+  - './test/patternes/command/MacroCommand-test.js'
 full-trace: true
 growl: true
 recursive: false
