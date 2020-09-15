@@ -3,7 +3,7 @@ import type { MediatorInterface } from '../interfaces/MediatorInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
 import type { ObserverInterface } from '../interfaces/ObserverInterface';
 import type { ViewInterface } from '../interfaces/ViewInterface';
-import { injectable, inject, Container } from "inversify";
+// import { injectable, inject, Container } from "inversify";
 
 export default (Module) => {
   const {
@@ -14,7 +14,7 @@ export default (Module) => {
     Utils: { _ }
   } = Module.NS;
 
-  let container = new Container();
+  // let container = new Container();
 
   @initialize
   @module(Module)
@@ -25,7 +25,7 @@ export default (Module) => {
     static MULTITON_MSG: "View instance for this multiton key already constructed!"
 
     // iphMediatorMap = PointerT(View.protected({
-    // @property _mediatorMap: {[key: string]: ?MediatorInterface} = null;
+    @property _mediatorMap: {[key: string]: ?MediatorInterface} = null;
 
     // iphObserverMap = PointerT(View.protected({
     @property _observerMap: { [key: string]: ?Array<ObserverInterface> } = null;
@@ -79,12 +79,12 @@ export default (Module) => {
     @method static removeView(asKey: string): void {
       const voView = View._instanceMap[asKey];
       if (voView != null) {
-        // for (const asMediatorName of Reflect.ownKeys(voView._mediatorMap)) {
-        //   voView.removeMediator(asMediatorName);
-        // }
-        for (const asMediatorName of container._bindingDictionary._map) {
-          voView.removeMediator(asMediatorName[0]);
+        for (const asMediatorName of Reflect.ownKeys(voView._mediatorMap)) {
+          voView.removeMediator(asMediatorName);
         }
+        // for (const asMediatorName of container._bindingDictionary._map) {
+        //   voView.removeMediator(asMediatorName[0]);
+        // }
         View._instanceMap[asKey] = undefined;
         delete View._instanceMap[asKey];
       }
@@ -128,13 +128,13 @@ export default (Module) => {
     @method registerMediator(aoMediator: MediatorInterface): void {
       const vsName = aoMediator.getMediatorName();
       // Do not allow re-registration (you must removeMediator first).
-      // if (this._mediatorMap[vsName] != null) {
-      //   return;
-      // }
+      if (this._mediatorMap[vsName] != null) {
+        return;
+      }
       aoMediator.initializeNotifier(this._multitonKey);
       // Register the Mediator for retrieval by name.
-      // this._mediatorMap[vsName] = aoMediator;
-      container.bind(vsName).to(aoMediator);
+      this._mediatorMap[vsName] = aoMediator;
+      // container.bind(vsName).to(aoMediator);
       // Get Notification interests, if any.
       const vlInterests = aoMediator.listNotificationInterests() || [];
       if (vlInterests.length > 0) {
@@ -157,8 +157,8 @@ export default (Module) => {
     }
 
     @method retrieveMediator(asMediatorName: string): ?MediatorInterface {
-      // return this._mediatorMap[asMediatorName] || null;
-      return container.get(asMediatorName) || null;
+      return this._mediatorMap[asMediatorName] || null;
+      // return container.get(asMediatorName) || null;
     }
 
     @method getMediator(...args) {
@@ -166,8 +166,8 @@ export default (Module) => {
     }
 
     @method removeMediator(asMediatorName: string): ?MediatorInterface {
-      // const voMediator = this._mediatorMap[asMediatorName];
-      const voMediator = container.get(asMediatorName);
+      const voMediator = this._mediatorMap[asMediatorName];
+      // const voMediator = container.get(asMediatorName);
       if (voMediator == null) {
         return null;
       }
@@ -180,16 +180,16 @@ export default (Module) => {
         // })(vsInterest);
       }
       // remove the mediator from the map
-      // this._mediatorMap[asMediatorName] = undefined;
-      // delete this._mediatorMap[asMediatorName];
+      this._mediatorMap[asMediatorName] = undefined;
+      delete this._mediatorMap[asMediatorName];
       // Alert the mediator that it has been removed
       voMediator.onRemove();
       return voMediator;
     }
 
     @method hasMediator(asMediatorName: string): boolean {
-      // return this._mediatorMap[asMediatorName] != null;
-      return container.get(asMediatorName) != null;
+      return this._mediatorMap[asMediatorName] != null;
+      // return container.get(asMediatorName) != null;
     }
 
     @method _initializeView(): void { return; }
@@ -199,7 +199,7 @@ export default (Module) => {
       assert(View._instanceMap[asKey] == null, View.MULTITON_MSG);
       this._multitonKey = asKey;
       View._instanceMap[asKey] = this;
-      // this._mediatorMap = {};
+      this._mediatorMap = {};
       this._observerMap = {};
       this._initializeView();
     }

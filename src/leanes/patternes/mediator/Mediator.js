@@ -1,5 +1,5 @@
 import type { MediatorInterface } from '../interfaces/MediatorInterface';
-import { injectable, inject} from "inversify";
+// import { injectable, inject} from "inversify";
 
 export default (Module) => {
 

@@ -1,5 +1,5 @@
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
-import { injectable, inject} from "inversify";
+// import { injectable, inject} from "inversify";
 
 export default (Module) => {
   const {
@@ -8,7 +8,7 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-  @injectable
+  // @injectable
   @initialize
   @module(Module)
   class Proxy extends Notifier implements ProxyInterface {

@@ -1,5 +1,5 @@
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
-import { injectable, inject} from "inversify";
+// import { injectable, inject} from "inversify";
 
 export default (Module) => {
 
@@ -9,7 +9,7 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-  @injectable
+  // @injectable
   @initialize
   @module(Module)
   class Notification extends CoreObject implements NotificationInterface {
