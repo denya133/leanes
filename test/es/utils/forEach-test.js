@@ -1,6 +1,6 @@
 const chai = require("chai");
 const assert = chai.assert;
-const LeanES = require("../../../lib/index.js").default;
+const LeanES = require("../../../src/leanes/index.js").default;
 const { forEach } = LeanES.NS.Utils;
 
 describe('Utils.forEach', () => {

@@ -3,7 +3,7 @@ const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
 const _ = require('lodash');
-const LeanES = require("../../../lib/index.js").default;
+const LeanES = require("../../../src/leanes/index.js").default;
 
 describe('StateMachine', () => {
   describe('.new()', () => {

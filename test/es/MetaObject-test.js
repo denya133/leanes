@@ -4,7 +4,7 @@ const sinonChai = require("sinon-chai");
 const expect = chai.expect;
 const assert = chai.assert;
 chai.use(sinonChai);
-const LeanES = require("../../lib/index.js").default;
+const LeanES = require("../../src/leanes/index.js").default;
 const { MetaObject } = LeanES.NS;
 
 

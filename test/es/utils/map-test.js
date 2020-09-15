@@ -1,7 +1,7 @@
 const chai = require("chai");
 const assert = chai.assert;
 const expect = chai.expect;
-const LeanES = require("../../../lib/index.js").default;
+const LeanES = require("../../../src/leanes/index.js").default;
 const { map } = LeanES.NS.Utils;
 
 describe('Utils.map', () => {

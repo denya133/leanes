@@ -4,7 +4,7 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, method, nameBy,
+    initialize, module, meta, method, nameBy, property,
     Utils: { joi }
   } = Module.NS;
 
@@ -15,7 +15,7 @@ export default (Module) => {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @method static schema(): JoiT {
+    @property static get schema(): JoiT {
       return joi.any().allow(null).optional();
     }
 

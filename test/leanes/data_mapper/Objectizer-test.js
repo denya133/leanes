@@ -1,199 +1,197 @@
-const { expect, assert } = require('chai');
-const LeanES = require('../../../src/leanes/leanes/index');
-
-const {
-  Objectizer,
-  Utils: { co }
-} = LeanES.NS;
+const chai = require("chai");
+const expect = chai.expect;
+const assert = chai.assert;
+// const LeanES = require("../../../src/leanes/index.js").default;
+const LeanES = require("../../../src/leanes/index.js").default;
+const { joi } = LeanES.NS.Utils;
+const { Objectizer, Collection, Record, initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin } = LeanES.NS;
 
 describe('Objectizer', () => {
   describe('recoverize', () => {
-    it("should recoverize object value", () => {
-      co(function* () {
-        const Test = (() => {
-          class Test extends LeanES { };
+    it("should recoverize object value", async () => {
 
-          Test.inheritProtected();
-          Test.initialize();
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
 
-          return Test;
-        }).call(this);
-        const TestsCollection = (() => {
-          class TestsCollection extends LeanES.NS.Collection { };
+      @initialize
+      @moduleD(Test)
+      class TestsCollection extends LeanES.NS.Collection {
+        @nameBy static  __filename = 'TestsCollection';
+        @meta static object = {};
+      }
 
-          TestsCollection.inheritProtected();
-          TestsCollection.module(Test);
-          TestsCollection.initialize();
+      @initialize
+      @moduleD(Test)
+      class TestRecord extends LeanES.NS.Record {
+        @nameBy static  __filename = 'TestRecord';
+        @meta static object = {};
+        static findRecordByName() {
+          return Test.NS.TestRecord
+        }
+        @attribute({type: 'string'}) string
+        @attribute({type: 'number'}) number
+        @attribute({type: 'boolean'}) boolean
+      }
 
-          return TestsCollection;
-
-        }).call(this);
-
-        const objectizer = Objectizer.new(TestsCollection.new('Tests', {
-          delegate: 'TestRecord'
-        }));
-        const record = (yield objectizer.recoverize(Test.NS.TestRecord, {
-          type: 'Test::TestRecord',
-          string: 'string',
-          number: 123,
-          boolean: true
-        }));
-
-        assert.instanceOf(record, Test.NS.TestRecord, 'Recoverize is incorrect');
-        assert.equal(record.type, 'Test::TestRecord', '`type` is incorrect');
-        assert.equal(record.string, 'string', '`string` is incorrect');
-        assert.equal(record.number, 123, '`number` is incorrect');
-        assert.equal(record.boolean, true, '`boolean` is incorrect');
+      const objectizer = Objectizer.new(TestsCollection.new('Tests', {
+        delegate: 'TestRecord'
+      }));
+      const record = await objectizer.recoverize(Test.NS.TestRecord, {
+        type: 'Test::TestRecord',
+        string: 'string',
+        number: 123,
+        boolean: true
       });
+
+      assert.instanceOf(record, Test.NS.TestRecord, 'Recoverize is incorrect');
+      assert.equal(record.type, 'Test::TestRecord', '`type` is incorrect');
+      assert.equal(record.string, 'string', '`string` is incorrect');
+      assert.equal(record.number, 123, '`number` is incorrect');
+      assert.equal(record.boolean, true, '`boolean` is incorrect');
     });
   });
   describe('objectize', () => {
-    it("should objectize Record.NS value", () => {
-      co(function* () {
-        const Test = (() => {
-          class Test extends LeanES { };
+    it("should objectize Record.NS value", async () => {
 
-          Test.inheritProtected();
-          Test.initialize();
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
 
-          return Test;
+      @initialize
+      @moduleD(Test)
+      class TestsCollection extends LeanES.NS.Collection {
+        @nameBy static  __filename = 'TestsCollection';
+        @meta static object = {};
+      }
 
-        }).call(this);
-        const TestsCollection = (() => {
-          class TestsCollection extends LeanES.NS.Collection { };
+      @initialize
+      @moduleD(Test)
+      class TestRecord extends LeanES.NS.Record {
+        @nameBy static  __filename = 'TestRecord';
+        @meta static object = {};
+        static findRecordByName() {
+          return Test.NS.TestRecord
+        }
+        @attribute({type: 'string'}) string
+        @attribute({type: 'number'}) number
+        @attribute({type: 'boolean'}) boolean
+      }
 
-          TestsCollection.inheritProtected();
-          TestsCollection.module(Test);
-          TestsCollection.initialize();
-
-          return TestsCollection;
-
-        }).call(this);
-
-        const col = TestCollection.new('Tests', {
-          delegate: 'TestRecord'
-        });
-
-        const objectizer = Objectizer.new(col);
-        const data = (yield objectizer.objectize(Test.NS.TestRecord.new({
-          type: 'Test::TestRecord',
-          string: 'string',
-          number: 123,
-          boolean: true
-        }, col)));
-
-        assert.instanceOf(data, Object, 'Objectize is incorrect');
-        assert.equal(data.type, 'Test::TestRecord', '`type` is incorrect');
-        assert.equal(data.string, 'string', '`string` is incorrect');
-        assert.equal(data.number, 123, '`Number` is incorrect');
-        assert.equal(data.boolean, true, '`Boolean` is incorrect');
+      const col = TestsCollection.new('Tests', {
+        delegate: 'TestRecord'
       });
+
+      const objectizer = Objectizer.new(col);
+      const data = await objectizer.objectize(Test.NS.TestRecord.new({
+        type: 'Test::TestRecord',
+        string: 'string',
+        number: 123,
+        boolean: true
+      }, col));
+
+      assert.instanceOf(data, Object, 'Objectize is incorrect');
+      assert.equal(data.type, 'Test::TestRecord', '`type` is incorrect');
+      assert.equal(data.string, 'string', '`string` is incorrect');
+      assert.equal(data.number, 123, '`Number` is incorrect');
+      assert.equal(data.boolean, true, '`Boolean` is incorrect');
     });
   });
   describe('.replicateObject', () => {
-    const facade = null;
+    let facade = null;
     const KEY = 'TEST_SERIALIZER_001';
-    it('should create replica for objectizer', () => {
-      co(function* () {
-        facade = LeanES.NS.Facade.getInstance(KEY);
-        const Test = (() => {
-          class Test extends LeanES { };
+    after(function () {
+      typeof facade != "undefined" && facade !== null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    })
+    it('should create replica for objectizer', async () => {
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
-          Test.inheritProtected();
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
 
-          return Test;
+      @initialize
+      @moduleD(Test)
+      @mixin(LeanES.NS.MemoryCollectionMixin)
+      @mixin(LeanES.NS.GenerateUuidIdMixin)
+      class MyCollection extends LeanES.NS.Collection {
+        @nameBy static  __filename = 'MyCollection';
+        @meta static object = {};
+      }
 
-        }).call(this);
-        Test.initialize();
-        const MyCollection = (() => {
-          class MyCollection extends LeanES.NS.Collection { };
+      @initialize
+      @moduleD(Test)
+      class MyObjectizer extends LeanES.NS.Objectizer {
+        @nameBy static  __filename = 'MyObjectizer';
+        @meta static object = {};
+      }
 
-          MyCollection.inheritProtected();
-          MyCollection.include(LeanES.NS.MemoryCollectionMixin);
-          MyCollection.include(LeanES.NS.GenerateUuidIdMixin);
-          MyCollection.module(Test);
-
-          return MyCollection;
-
-        }).call(this);
-        MyCollection.initialize();
-        const MyObjectizer = (() => {
-          class MyObjectizer extends LeanES.NS.Objectizer { };
-
-          MyObjectizer.inheritProtected();
-          MyObjectizer.module(Test);
-
-          return MyObjectizer;
-
-        }).call(this);
-        MyObjectizer.initialize();
-        const COLLECTION = 'COLLECTION';
-        const collection = facade.registerProxy(MyCollection.new(COLLECTION, {
-          delegate: Test.NS.Record,
-          objectizer: MyObjectizer
-        }));
-        collection = facade.retrieveProxy(COLLECTION);
-        const replica = (yield MyObjectizer.replicateObject(collection.objectizer));
-        assert.deepEqual(replica, {
-          type: 'instance',
-          class: 'MyObjectizer',
-          multitonKey: KEY,
-          collectionName: COLLECTION
-        });
+      const COLLECTION = 'COLLECTION';
+      let collection = facade.registerProxy(MyCollection.new(COLLECTION, {
+        delegate: Test.NS.Record,
+        objectizer: MyObjectizer
+      }));
+      collection = facade.retrieveProxy(COLLECTION);
+      const replica = await MyObjectizer.replicateObject(collection.objectizer);
+      assert.deepEqual(replica, {
+        type: 'instance',
+        class: 'MyObjectizer',
+        multitonKey: KEY,
+        collectionName: COLLECTION
       });
     });
   });
   describe('.restoreObject', () => {
-    const facade = null;
+    let facade = null;
     const KEY = 'TEST_SERIALIZER_002';
-    it('should restore objectizer from replica', () => {
-      co(function* () {
-        facade = LeanES.NS.Facade.getInstance(KEY);
-        const Test = (() => {
-          class Test extends LeanES { };
+    after(function () {
+      typeof facade != "undefined" && facade !== null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    })
+    it('should restore objectizer from replica', async () => {
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
-          Test.inheritProtected();
+      @initialize
+      @resolver(require, name => require(name))
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
 
-          return Test;
+      @initialize
+      @moduleD(Test)
+      @mixin(LeanES.NS.MemoryCollectionMixin)
+      @mixin(LeanES.NS.GenerateUuidIdMixin)
+      class MyCollection extends LeanES.NS.Collection {
+        @nameBy static  __filename = 'MyCollection';
+        @meta static object = {};
+      }
 
-        }).call(this);
-        Test.initialize();
-        const MyCollection = (() => {
-          class MyCollection extends LeanES.NS.Collection { };
+      @initialize
+      @moduleD(Test)
+      class MyObjectizer extends LeanES.NS.Objectizer {
+        @nameBy static  __filename = 'MyObjectizer';
+        @meta static object = {};
+      }
 
-          MyCollection.inheritProtected();
-          MyCollection.include(LeanES.NS.MemoryCollectionMixin);
-          MyCollection.include(LeanES.NS.GenerateUuidIdMixin);
-          MyCollection.module(Test);
-
-          return MyCollection;
-
-        }).call(this);
-        MyCollection.initialize();
-        const MyObjectizer = (() => {
-          class MyObjectizer extends LeanES.NS.Objectizer { };
-
-          MyObjectizer.inheritProtected();
-          MyObjectizer.module(Test);
-
-          return MyObjectizer;
-
-        }).call(this);
-        MyObjectizer.initialize();
-        const COLLECTION = 'COLLECTION';
-        const collection = facade.registerProxy(MyCollection.new(COLLECTION, {
-          delegate: Test.NS.Record,
-          objectizer: MyObjectizer
-        }));
-        collection = facade.retrieveProxy(COLLECTION);
-        const restoredRecord = (yield MyObjectizer.restoreObject(Test, {
-          type: 'instance',
-          class: 'MyObjectizer',
-          multitonKey: KEY,
-          collectionName: COLLECTION
-        }));
-        assert.deepEqual(collection.objectizer, restoredRecord);
+      const COLLECTION = 'COLLECTION';
+      let collection = facade.registerProxy(MyCollection.new(COLLECTION, {
+        delegate: Test.NS.Record,
+        objectizer: MyObjectizer
+      }));
+      collection = facade.retrieveProxy(COLLECTION);
+      const restoredRecord = await MyObjectizer.restoreObject(Test, {
+        type: 'instance',
+        class: 'MyObjectizer',
+        multitonKey: KEY,
+        collectionName: COLLECTION
       });
+      assert.deepEqual(collection.objectizer, restoredRecord);
     });
   });
 });
