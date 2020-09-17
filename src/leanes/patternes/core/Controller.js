@@ -70,7 +70,8 @@ export default (Module) => {
         return null;
       }
       if (Controller._instanceMap[asKey] == null) {
-        Controller._instanceMap[asKey] = Controller.new(asKey);
+        Controller._instanceMap[asKey] = this.new(asKey);
+        // Controller._instanceMap[asKey] = Controller.new(asKey);
       }
       return Controller._instanceMap[asKey];
     }
