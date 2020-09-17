@@ -4,7 +4,10 @@ const assert = chai.assert;
 // const LeanES = require("../../../src/leanes/index.js").default;
 const LeanES = require("../../../src/leanes/index.js").default;
 const { joi } = LeanES.NS.Utils;
-const { Objectizer, Collection, Record, initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin } = LeanES.NS;
+const {
+  Objectizer, Collection, Record,
+  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin
+} = LeanES.NS;
 
 describe('Objectizer', () => {
   describe('recoverize', () => {

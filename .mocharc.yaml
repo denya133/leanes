@@ -19,14 +19,15 @@ file:
   - './test/leanes/data_mapper/ObjectTransform-test.js'
   - './test/leanes/data_mapper/StringTransform-test.js'
   - './test/leanes/data_mapper/Transform-test.js'
+  - './test/leanes/facade/Application-test.js'
   - './test/patternes/command/SimpleCommand-test.js'
   - './test/patternes/command/MacroCommand-test.js'
   - './test/patternes/facade/Facade-test.js'
-  - './test/leanes/facade/Application-test.js'
   - './test/patternes/core/Controller-test.js'
   - './test/patternes/core/Model-test.js'
   - './test/patternes/core/View-test.js'
   - './test/patternes/mediator/Mediator-test.js'
+  - './test/patternes/proxy/Proxy-test.js'
 full-trace: true
 growl: true
 recursive: false
