@@ -433,7 +433,6 @@ describe('Facade', () => {
       expect(() => {
         const KEY = 'TEST16';
         const facade = LeanES.NS.Facade.getInstance(KEY);
-        // const instanceMapSymbol = Symbol.for('~instanceMap');
         assert.equal(facade, LeanES.NS.Facade._instanceMap[KEY]);
         facade.remove();
         assert.isUndefined(LeanES.NS.Facade._instanceMap[KEY]);
