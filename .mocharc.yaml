@@ -21,6 +21,7 @@ file:
   - './test/leanes/data_mapper/Transform-test.js'
   - './test/patternes/command/SimpleCommand-test.js'
   - './test/patternes/command/MacroCommand-test.js'
+  - './test/patternes/facade/Facade-test.js'
 full-trace: true
 growl: true
 recursive: false

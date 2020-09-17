@@ -81,9 +81,9 @@ export default (Module) => {
       this._initializeView();
     }
 
-    @method static getInstance(asKey: string): Facade {
+    @method static getInstance(asKey: string): FacadeInterface {
       if (Facade._instanceMap[asKey] == null) {
-        Facade._instanceMap[asKey] = Facade.new(asKey);
+        Facade._instanceMap[asKey] = this.new(asKey);
       }
       return Facade._instanceMap[asKey];
     }

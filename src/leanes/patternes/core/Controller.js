@@ -96,7 +96,7 @@ export default (Module) => {
       let vCommand;
       const vsName = aoNotification.getName();
       vCommand = this._commandMap[vsName];
-      vCommand = container.get(vsName);
+      // vCommand = container.get(vsName);
       if (vCommand == null) {
         const vsClassName = this._classNames[vsName];
         if (!_.isEmpty(vsClassName)) {
