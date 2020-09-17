@@ -71,7 +71,8 @@ export default (Module) => {
         return null;
       }
       if (View._instanceMap[asKey] == null) {
-        View._instanceMap[asKey] = View.new(asKey);
+        View._instanceMap[asKey] = this.new(asKey);
+        // View._instanceMap[asKey] = View.new(asKey);
       }
       return View._instanceMap[asKey];
     }

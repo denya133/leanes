@@ -6,7 +6,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const {
   APPLICATION_MEDIATOR,
   Proxy, Model,
-  initialize, module:moduleD, nameBy, meta, method, property, resolver
+  initialize, module:moduleD, nameBy, meta, method, property
 } = LeanES.NS;
 
 describe('Model', () => {
