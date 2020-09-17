@@ -69,7 +69,8 @@ export default (Module) => {
       }
       // console.log('>>>>???/ Model.getInstance 111', asKey, Model._instanceMap[asKey]);
       if (Model._instanceMap[asKey] == null) {
-        Model._instanceMap[asKey] = Model.new(asKey);
+        Model._instanceMap[asKey] = this.new(asKey);
+        // Model._instanceMap[asKey] = Model.new(asKey);
       }
       // const mmm = Model._instanceMap[asKey];
       // console.log('>>>>???/ Model.getInstance 222', asKey, mmm);
