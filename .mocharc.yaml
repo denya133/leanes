@@ -30,6 +30,7 @@ file:
   - './test/patternes/proxy/Proxy-test.js'
   - './test/patternes/observer/Notification-test.js'
   - './test/pipes/Filter-test.js'
+  - './test/pipes/FilterControlMessage-test.js'
 full-trace: true
 growl: true
 recursive: false
