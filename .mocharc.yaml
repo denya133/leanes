@@ -28,6 +28,8 @@ file:
   - './test/patternes/core/View-test.js'
   - './test/patternes/mediator/Mediator-test.js'
   - './test/patternes/proxy/Proxy-test.js'
+  - './test/patternes/observer/Notification-test.js'
+  - './test/pipes/Filter-test.js'
 full-trace: true
 growl: true
 recursive: false
