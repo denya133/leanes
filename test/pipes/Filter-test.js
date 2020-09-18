@@ -3,10 +3,7 @@ const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../src/leanes/index.js").default;
-const {
-  Pipes,
-  initialize, module:moduleD, nameBy, meta, method, property, resolver
-} = LeanES.NS;
+const { Pipes } = LeanES.NS;
 const {
   Filter, Pipe, FilterControlMessage, PipeMessage
 } = Pipes.NS;
