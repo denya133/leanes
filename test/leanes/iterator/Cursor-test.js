@@ -1,12 +1,15 @@
 const { expect, assert } = require('chai');
 const sinon = require('sinon');
-const LeanES = require('../../../src/leanes/index');
-const ES = require('../../../src/leanes/es/index');
+const LeanES = require("../../../src/leanes/index.js").default;
 const Cursor = LeanES.NS.Cursor;
-const { co } = ES.NS.Utils;
+const {
+  Record,
+  initialize, module:moduleD, nameBy, meta, method, property
+} = LeanES.NS;
+
 
 describe('Cursor', () => {
-  describe('setCollection', () => {
+  describe('.setCollection', () => {
     it('should setup record', () => {
       expect(() => {
         const Test = (() => {

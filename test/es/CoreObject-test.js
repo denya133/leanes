@@ -3,7 +3,10 @@ const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../src/leanes/index.js").default;
-const { CoreObject, Proto, initialize, module:moduleD, nameBy, meta } = LeanES.NS;
+const {
+  CoreObject, Proto,
+  initialize, module:moduleD, nameBy, meta
+} = LeanES.NS;
 
 describe('CoreObject', () => {
   describe('constructor', () => {

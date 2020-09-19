@@ -77,6 +77,7 @@ export default (Module) => {
               return [];
           }
         }).call(this);
+        let j;
         for (let i = j = 0, len = pipesList.length; j < len; i = ++j) {
           const pipe = pipesList[i];
           if (pipe === name) {

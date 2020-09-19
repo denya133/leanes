@@ -4,7 +4,10 @@ const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const MacroCommand = LeanES.NS.MacroCommand;
-const { NotificationInterface, Notification, SimpleCommand, initialize, nameBy, meta, method } = LeanES.NS;
+const {
+  NotificationInterface, Notification, SimpleCommand,
+  initialize, nameBy, meta, method
+} = LeanES.NS;
 
 describe('MacroCommand', () => {
   describe('constructor', () => {
