@@ -3,10 +3,7 @@ const sinon = require("sinon");
 const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
-const {
-  Notifier, Facade,
-  initialize, module:moduleD, nameBy, meta, method, property, resolver
-} = LeanES.NS;
+const { Notifier, Facade } = LeanES.NS;
 
 const NOTIFICATION_NAME = 'TEST_NOTIFICATION';
 const NOTIFICATION_BODY = { body: 'body' };

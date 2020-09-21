@@ -2,10 +2,7 @@ const chai = require("chai");
 const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
-const {
-  Notification,
-  initialize, module:moduleD, nameBy, meta, method, property, resolver
-} = LeanES.NS;
+const { Notification } = LeanES.NS;
 
 const NOTIFICATION_NAME = 'TEST_NOTIFICATION';
 const NOTIFICATION_BODY = { body: 'body' };
