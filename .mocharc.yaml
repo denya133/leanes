@@ -36,6 +36,7 @@ file:
   - './test/pipes/Junction-test.js'
   - './test/pipes/JunctionMediator-test.js'
   - './test/pipes/LineControlMessage-test.js'
+  - './test/pipes/Line-test.js'
 full-trace: true
 growl: true
 recursive: false
