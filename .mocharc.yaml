@@ -29,11 +29,12 @@ file:
   - './test/patternes/mediator/Mediator-test.js'
   - './test/patternes/proxy/Proxy-test.js'
   - './test/patternes/observer/Notification-test.js'
+  - './test/patternes/observer/Notifier-test.js'
   - './test/pipes/Filter-test.js'
   - './test/pipes/FilterControlMessage-test.js'
   - './test/pipes/Junction-test.js'
   - './test/pipes/JunctionMediator-test.js'
-full-trace: true
+# full-trace: true
 growl: true
 recursive: false
 reporter: 'spec'
