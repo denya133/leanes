@@ -40,7 +40,7 @@ describe('PipeAwareModule', () => {
         pipeAwareModule.acceptOutputPipe('PIPE_2', pipe);
         assert.isTrue(spyFunction.calledWith(JunctionMediator.ACCEPT_OUTPUT_PIPE, pipe, 'PIPE_1'), 'Notification not sent');
         facade.remove();
-      })
-    })
-  })
+      }).to.not.throw(Error);
+    });
+  });
 });
