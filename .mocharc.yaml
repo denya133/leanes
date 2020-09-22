@@ -40,6 +40,7 @@ file:
   - './test/pipes/LogFilterMessage-test.js'
   - './test/pipes/LogMessage-test.js'
   - './test/pipes/Pipe-test.js'
+  - './test/pipes/PipeAwareModule-test.js'
 full-trace: true
 growl: true
 recursive: false
