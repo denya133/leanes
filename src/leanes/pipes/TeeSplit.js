@@ -42,6 +42,7 @@ export default (Module) => {
         this._outputs = [];
       }
       const alOutputs = this._outputs;
+      let j;
       for (let i = j = 0, len = alOutputs.length; j < len; i = ++j) {
         const aoOutput = alOutputs[i];
         if (aoOutput === aoTarget) {

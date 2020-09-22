@@ -44,6 +44,7 @@ file:
   - './test/pipes/PipeListener-test.js'
   - './test/pipes/PipeMessage-test.js'
   - './test/pipes/TeeMerge-test.js'
+  - './test/pipes/TeeSplit-test.js'
 full-trace: true
 growl: true
 recursive: false
