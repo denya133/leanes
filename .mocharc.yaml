@@ -41,7 +41,8 @@ file:
   # - './test/pipes/LogMessage-test.js'
   # - './test/pipes/Pipe-test.js'
   # - './test/pipes/PipeAwareModule-test.js'
-  - './test/pipes/PipeListener-test.js'
+  # - './test/pipes/PipeListener-test.js'
+  - './test/pipes/PipeMessage-test.js'
 full-trace: true
 growl: true
 recursive: false
