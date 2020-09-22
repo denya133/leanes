@@ -39,6 +39,7 @@ file:
   - './test/pipes/Line-test.js'
   - './test/pipes/LogFilterMessage-test.js'
   - './test/pipes/LogMessage-test.js'
+  - './test/pipes/Pipe-test.js'
 full-trace: true
 growl: true
 recursive: false
