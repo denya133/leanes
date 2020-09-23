@@ -1,60 +1,51 @@
-const {assert} = require('chai');
-ES = require('../../src/leanes/es/index');
-const LeanES = require('../../../src/leanes/leanes/index');
-const {co} = ES.NS.Utils;
+const { expect, assert } = require('chai');
+const sinon = require('sinon');
+const _ = require('lodash');
+const LeanES = require("../../../src/leanes/index.js").default;
+const {
+  initialize, module:moduleD, nameBy, meta, method, property, mixin, attribute, constant
+} = LeanES.NS;
 
 describe('ConfigurableMixin', () => {
    describe('configs', () => {
      it('should create configuration instance', () => {
-       co(function*() {
-        const KEY = 'TEST_CONFIG_MIXIN_001';
-        const facade = LeanES.NS.Facade.getInstance(KEY);
-        const Test = (() => {
-          class Test extends LeanES {};
+      const KEY = 'TEST_CONFIG_MIXIN_001';
+      const facade = LeanES.NS.Facade.getInstance(KEY);
 
-          Test.inheritProtected();
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/config/root`;
+      }
 
-          Test.root(`${__dirname}/config/root`);
+      @initialize
+      @moduleD(Test)
+      class TestConfiguration extends LeanES.NS.Configuration {
+        @nameBy static  __filename = 'TestConfiguration';
+        @meta static object = {};
+      }
 
-          Test.initialize();
+      // console.log('LeanES.NS.CONFIGURATION', LeanES.NS.CONFIGURATION);
+      // console.log('TestConfiguration', TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
 
-          return Test;
+      facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
 
-        }).call(this);
-        const TestConfiguration = (() => {
-          class TestConfiguration extends LeanES.NS.Configuration {};
-
-          TestConfiguration.inheritProtected();
-
-          TestConfiguration.module(Test);
-
-          TestConfiguration.initialize();
-
-          return TestConfiguration;
-
-        }).call(this);
-        facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
-        const TestConfigurable = (() => {
-          class TestConfigurable extends LeanES.NS.Proxy {};
-
-          TestConfigurable.inheritProtected();
-
-          TestConfigurable.include(LeanES.NS.ConfigurableMixin);
-
-          TestConfigurable.module(Test);
-
-          TestConfigurable.initialize();
-
-          return TestConfigurable;
-
-        }).call(this);
-        facade.registerProxy(object = TestConfigurable.new('TEST'));
-        assert.deepPropertyVal(object, 'configs.test1', 'default');
-        assert.deepPropertyVal(object, 'configs.test2', 42);
-        assert.deepPropertyVal(object, 'configs.test3', true);
-        assert.deepPropertyVal(object, 'configs.test4', 'test');
-        facade.remove();
-      });
+      @initialize
+      @mixin(LeanES.NS.ConfigurableMixin)
+      @moduleD(Test)
+      class TestConfigurable extends LeanES.NS.Proxy {
+        @nameBy static  __filename = 'TestConfigurable';
+        @meta static object = {};
+      }
+      const object = TestConfigurable.new('TEST');
+      console.log('object', object);
+      facade.registerProxy(object);
+      assert.deepPropertyVal(object, 'configs.test1', 'default');
+      assert.deepPropertyVal(object, 'configs.test2', 42);
+      assert.deepPropertyVal(object, 'configs.test3', true);
+      assert.deepPropertyVal(object, 'configs.test4', 'test');
+      facade.remove();
     });
   });
 });

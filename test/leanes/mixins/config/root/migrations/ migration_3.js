@@ -1,15 +1,13 @@
-LeanES = require('lib');
+const LeanES = require("../../../src/leanes/index.js").default;
+const {
+  initialize, module:moduleD, nameBy, meta
+} = LeanES.NS;
 
 module.exports = function (Module) {
-  const Migration3 = (function () {
-    class Migration3 extends LeanES.NS.Migration { };
-
-    Migration3.inheritProtected();
-
-    Migration3.module(Module);
-
-    return Migration3;
-
-  }).call(this);
-  Migration3.initialize();
+  @initialize
+  @moduleD(Module)
+  class Migration3 extends LeanES.NS.Migration {
+    @nameBy static  __filename = 'Migration3';
+    @meta static object = {};
+  }
 };
