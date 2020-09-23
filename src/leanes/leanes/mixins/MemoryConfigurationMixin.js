@@ -18,9 +18,9 @@ export default (Module) => {
       }
 
       @method defineConfigProperties() {
-        // const manifestPath = `${this.ROOT}/../manifest.json`;
+        const manifestPath = `${this.ROOT}/../manifest.json`;
         // const manifest = require(manifestPath);
-        const manifestPath = './manifest.json';
+        // const manifestPath = './manifest.json';
         const manifest = this.ApplicationModule.require(manifestPath);
         console.log('>?>?>??? MemoryConfigurationMixin manifest', manifestPath, manifest);
         this._name = manifest.name;

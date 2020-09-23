@@ -17,6 +17,23 @@
       "type": "boolean",
       "default": true
     },
+    "test4": {
+      "description": "test4 description",
+      "type": "integer",
+      "default": 42
+    },
+    "test5": {
+      "description": "test5 description",
+      "type": "json",
+      "default": {
+        "test": "test"
+      }
+    },
+    "test6": {
+      "description": "test6 description",
+      "type": "password",
+      "default": "testpassword"
+    },
     "sessionCookie": {
       "description": "Session cookie name.",
       "type": "string",

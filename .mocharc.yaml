@@ -47,6 +47,7 @@ file:
   - './test/leanes/facade/Application-test.js'
   - './test/leanes/iterator/Cursor-test.js'
   - './test/leanes/mixins/GenerateUuidMixin-test.js'
+  - './test/leanes/mixins/MemoryConfigurationMixin-test.js'
 full-trace: true
 growl: true
 recursive: false
