@@ -66,6 +66,7 @@ export default (Module) => {
     }
 
     @method async close(): Promise<void> {
+      let j;
       for (let i = j = 0, len = this._array.length; j < len; i = ++j) {
         delete this._array[i];
       }
