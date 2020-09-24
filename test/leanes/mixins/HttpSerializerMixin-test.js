@@ -18,6 +18,7 @@ describe('HttpSerializerMixin', () => {
     it("should normalize object value", async () => {
       const KEY = 'TEST_HTTP_SERIALIZER_001';
       facade = LeanES.NS.Facade.getInstance(KEY);
+      @initialize
       class Test extends LeanES {
         @nameBy static  __filename = 'Test';
         @meta static object = {};
@@ -80,6 +81,7 @@ describe('HttpSerializerMixin', () => {
     it("should serialize Record.NS value", async () => {
       const KEY = 'TEST_HTTP_SERIALIZER_002';
       facade = LeanES.NS.Facade.getInstance(KEY);
+      @initialize
       class Test extends LeanES {
         @nameBy static  __filename = 'Test';
         @meta static object = {};
