@@ -50,6 +50,8 @@ file:
   - './test/leanes/mixins/MemoryConfigurationMixin-test.js'
   - './test/leanes/mixins/LoggingJunctionMixin-test.js'
   - './test/leanes/mixins/DelayableMixin-test.js'
+  - './test/leanes/mixins/SchemaModuleMixin-test.js'
+  - './test/leanes/mixins/HttpSerializerMixin-test.js'
 full-trace: true
 growl: true
 recursive: false

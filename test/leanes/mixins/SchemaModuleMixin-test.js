@@ -1,31 +1,42 @@
-const {expect, assert} = require('chai');
-const LeanES = require('../../../src/leanes/leanes/index');
-const {co} = LeanES.NS.Utils;
-
+const chai = require("chai");
+const expect = chai.expect;
+const assert = chai.assert;
+const sinon = require('sinon');
+const LeanES = require("../../../src/leanes/index.js").default;
+const {
+  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant
+} = LeanES.NS;
 describe('SchemaModuleMixin', () => {
    describe('.defineMigrations', () => {
      it('should create configuration instance', () => {
-       co(function*() {
-        const Test = (() => {
-          class Test extends LeanES {};
 
-          Test.inheritProtected();
-
-          Test.include(LeanES.NS.SchemaModuleMixin);
-
-          Test.root(`${__dirname}/config/root`);
-
-          Test.defineMigrations();
-
-          return Test;
-
-        }).call(this);
-        Test.initialize();
-        assert.deepEqual(Test.NS.MIGRATION_NAMES, ['migration_1', 'migration_2', 'migration_3']);
-        assert.instanceOf(Test.NS.Migration1.NS, LeanES.NS.Migration);
-        assert.instanceOf(Test.NS.Migration2.NS, LeanES.NS.Migration);
-        assert.instanceOf(Test.NS.Migration3.NS, LeanES.NS.Migration);
-      });
+     @initialize
+     @mixin(LeanES.NS.SchemaModuleMixin)
+     class Test extends LeanES {
+       @nameBy static  __filename = 'Test';
+       @meta static object = {};
+       @constant ROOT = `${__dirname}/config/root`;
+     }
+      // const Test = (() => {
+      //   class Test extends LeanES {};
+      //
+      //   Test.inheritProtected();
+      //
+      //   Test.include(LeanES.NS.SchemaModuleMixin);
+      //
+      //   Test.root(`${__dirname}/config/root`);
+      //
+      //   Test.defineMigrations();
+      //
+      //   return Test;
+      //
+      // }).call(this);
+      // Test.initialize();
+      console.log('MIGRATION_NAMES', Test.NS.MIGRATION_NAMES);
+      assert.deepEqual(Test.NS.MIGRATION_NAMES, ['migration_1', 'migration_2', 'migration_3']);
+      assert.instanceOf(Test.NS.Migration1.NS, LeanES.NS.Migration);
+      assert.instanceOf(Test.NS.Migration2.NS, LeanES.NS.Migration);
+      assert.instanceOf(Test.NS.Migration3.NS, LeanES.NS.Migration);
     });
   });
 });
