@@ -12,7 +12,6 @@ describe('Query', () => {
   describe('.new', () => {
     it('should create new query', () => {
       expect(() => {
-        console.log(',,,,,');
         const query = Query.new();
       }).to.not.throw(Error);
     });

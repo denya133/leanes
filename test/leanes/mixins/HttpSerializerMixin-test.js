@@ -63,7 +63,6 @@ describe('HttpSerializerMixin', () => {
         number: 123,
         boolean: true
       });
-      console.log('record>>>>>>>>', record instanceof TestRecord);
       // assert.instanceOf(record, TestRecord, 'Normalize is incorrect');
       assert.include(record, {
         type: 'TestRecord',

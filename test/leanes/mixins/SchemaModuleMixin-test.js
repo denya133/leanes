@@ -17,22 +17,6 @@ describe('SchemaModuleMixin', () => {
        @meta static object = {};
        @constant ROOT = `${__dirname}/config/root`;
      }
-      // const Test = (() => {
-      //   class Test extends LeanES {};
-      //
-      //   Test.inheritProtected();
-      //
-      //   Test.include(LeanES.NS.SchemaModuleMixin);
-      //
-      //   Test.root(`${__dirname}/config/root`);
-      //
-      //   Test.defineMigrations();
-      //
-      //   return Test;
-      //
-      // }).call(this);
-      // Test.initialize();
-      console.log('MIGRATION_NAMES', Test.NS.MIGRATION_NAMES);
       assert.deepEqual(Test.NS.MIGRATION_NAMES, ['migration_1', 'migration_2', 'migration_3']);
       assert.instanceOf(Test.NS.Migration1.NS, LeanES.NS.Migration);
       assert.instanceOf(Test.NS.Migration2.NS, LeanES.NS.Migration);

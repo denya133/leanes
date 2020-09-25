@@ -1,9 +1,7 @@
 const { expect, assert } = require('chai');
-const sinon = require('sinon');
-const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, method, property, mixin, attribute, constant
+  initialize, module: moduleD, nameBy, meta, constant
 } = LeanES.NS;
 
 describe('Configuration', () => {
@@ -13,6 +11,7 @@ describe('Configuration', () => {
       class Test extends LeanES {
         @nameBy static  __filename = 'Test';
         @meta static object = {};
+        @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -20,7 +19,6 @@ describe('Configuration', () => {
       class Configuration extends LeanES.NS.Configuration {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/config/`;
       }
 
       const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);

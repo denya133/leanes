@@ -25,10 +25,6 @@ describe('ConfigurableMixin', () => {
         @nameBy static  __filename = 'TestConfiguration';
         @meta static object = {};
       }
-
-      // console.log('LeanES.NS.CONFIGURATION', LeanES.NS.CONFIGURATION);
-      // console.log('TestConfiguration', TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
-
       facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
 
       @initialize
@@ -39,7 +35,6 @@ describe('ConfigurableMixin', () => {
         @meta static object = {};
       }
       const object = TestConfigurable.new('TEST');
-      console.log('object', object);
       facade.registerProxy(object);
       assert.deepPropertyVal(object, 'configs.test1', 'default');
       assert.deepPropertyVal(object, 'configs.test2', 42);
