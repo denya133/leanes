@@ -4,7 +4,7 @@ const hasProp = {}.hasOwnProperty;
 
 export default (Module) => {
   const {
-    PRODUCTION, DEVELOPMENT,
+    PRODUCTION, DEVELOPMENT, ENV,
     Proxy,
     assert,
     initialize, module, meta, property, method, nameBy,
@@ -62,9 +62,9 @@ export default (Module) => {
     }
 
     @method defineConfigProperties() {
-      // const manifestPath = `${this.ROOT}/manifest.json`;
+      const manifestPath = `${this.ROOT}/manifest.json`;
       // const manifest = require(manifestPath);
-      const manifestPath = './manifest.json';
+      // const manifestPath = './manifest.json';
       const manifest = this.ApplicationModule.require(manifestPath);
       console.log('>?>?>??? manifest', manifestPath, manifest);
       this._name = manifest.name;
@@ -73,10 +73,10 @@ export default (Module) => {
       this._version = manifest.version;
       this._keywords = manifest.keywords;
       const configFromManifest = manifest.configuration;
-      // const filePath = `${this.ROOT}/configs/${this.environment}`;
+      const filePath = `${this.ROOT}/configs/${this.environment}`;
       // const configFromFile = require(filePath).default;
-      const filePath = `./configs/${this.environment}`;
-      const configFromFile = this.ApplicationModule.require(filePath).default;
+      // const filePath = `./configs/${this.environment}`;
+      const configFromFile = this.ApplicationModule.require(filePath);
       console.log('>?>???? config', filePath, configFromFile);
       const configs = assign({}, configFromManifest, configFromFile);
       for (const key in configs) {
