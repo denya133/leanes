@@ -60,6 +60,7 @@ file:
   - './test/leanes/proxy/Configuration-test.js'
   # - './test/leanes/proxy/Router-test.js'
   - './test/leanes/proxy/Collection-test.js'
+  - './test/leanes/proxy/ResourceRenderer-test.js'
 full-trace: true
 growl: true
 recursive: false
