@@ -220,57 +220,57 @@ describe('Cursor', () => {
       }
     });
   });
-  // describe('close', () => {
-  //   it('should remove records from cursor', async () => {
-  //     @initialize
-  //     class Test extends LeanES {
-  //       @nameBy static  __filename = 'Test';
-  //       @meta static object = {};
-  //     }
-  //
-  //     @initialize
-  //     @moduleD(Test)
-  //     class TestRecord extends LeanES.NS.Record {
-  //       @nameBy static  __filename = 'TestRecord';
-  //       @meta static object = {};
-  //       @attribute({type: 'string'}) data = '';
-  //     }
-  //
-  //     @initialize
-  //     @mixin(LeanES.NS.MemoryCollectionMixin)
-  //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
-  //     class MemoryCollection extends LeanES.NS.Collection {
-  //       @nameBy static  __filename = 'MemoryCollection';
-  //       @meta static object = {};
-  //     }
-  //     const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
-  //       delegate: TestRecord
-  //     });
-  //     const array = [
-  //       {
-  //         data: 'three',
-  //         type: 'TestRecord'
-  //       },
-  //       {
-  //         data: 'men',
-  //         type: 'TestRecord'
-  //       },
-  //       {
-  //         data: 'in',
-  //         type: 'TestRecord'
-  //       },
-  //       {
-  //         data: 'a boat',
-  //         type: 'TestRecord'
-  //       }
-  //     ];
-  //     const cursor = Cursor.new(voMemoryCollection, array);
-  //     assert.isTrue(await cursor.hasNext(), 'There is no next value');
-  //     await cursor.close();
-  //     assert.isFalse(await cursor.hasNext(), 'There is something else');
-  //   });
-  // });
+  describe('close', () => {
+    it('should remove records from cursor', async () => {
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRecord extends LeanES.NS.Record {
+        @nameBy static  __filename = 'TestRecord';
+        @meta static object = {};
+        @attribute({type: 'string'}) data = '';
+      }
+
+      @initialize
+      @mixin(LeanES.NS.MemoryCollectionMixin)
+      @mixin(LeanES.NS.GenerateUuidIdMixin)
+      @moduleD(Test)
+      class MemoryCollection extends LeanES.NS.Collection {
+        @nameBy static  __filename = 'MemoryCollection';
+        @meta static object = {};
+      }
+      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        delegate: TestRecord
+      });
+      const array = [
+        {
+          data: 'three',
+          type: 'TestRecord'
+        },
+        {
+          data: 'men',
+          type: 'TestRecord'
+        },
+        {
+          data: 'in',
+          type: 'TestRecord'
+        },
+        {
+          data: 'a boat',
+          type: 'TestRecord'
+        }
+      ];
+      const cursor = Cursor.new(voMemoryCollection, array);
+      assert.isTrue(await cursor.hasNext(), 'There is no next value');
+      await cursor.close();
+      assert.isFalse(await cursor.hasNext(), 'There is something else');
+    });
+  });
   describe('count', () => {
     it('should count records in cursor', async () => {
       @initialize

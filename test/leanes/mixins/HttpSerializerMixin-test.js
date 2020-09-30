@@ -38,7 +38,7 @@ describe('HttpSerializerMixin', () => {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @method static findRecordByName(asType) {
-          return TestRecord;
+          return this;
         }
         @attribute({type: 'string'}) string;
         @attribute({type: 'number'}) number;
@@ -63,7 +63,7 @@ describe('HttpSerializerMixin', () => {
         number: 123,
         boolean: true
       });
-      // assert.instanceOf(record, TestRecord, 'Normalize is incorrect');
+      assert.instanceOf(record, TestRecord, 'Normalize is incorrect');
       assert.include(record, {
         type: 'TestRecord',
         string: 'string',

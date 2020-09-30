@@ -36,10 +36,11 @@ describe('ConfigurableMixin', () => {
       }
       const object = TestConfigurable.new('TEST');
       facade.registerProxy(object);
-      assert.deepPropertyVal(object, 'configs.test1', 'default');
-      assert.deepPropertyVal(object, 'configs.test2', 42);
-      assert.deepPropertyVal(object, 'configs.test3', true);
-      assert.deepPropertyVal(object, 'configs.test4', 'test');
+      const configs = object.configs;
+      assert.deepPropertyVal(configs, 'test1', 'default');
+      assert.deepPropertyVal(configs, 'test2', 42);
+      assert.deepPropertyVal(configs, 'test3', true);
+      assert.deepPropertyVal(configs, 'test4', 'test');
       facade.remove();
     });
   });

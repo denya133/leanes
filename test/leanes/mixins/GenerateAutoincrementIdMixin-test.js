@@ -48,7 +48,7 @@ describe('GenerateAutoincrementIdMixin', () => {
         }
         @method async executeQuery(aoParsedQuery) {
           const data = [];
-          const isCustomReturn = false;
+          let isCustomReturn = false;
           let property = aoParsedQuery['$max'];
           if (property != null) {
             isCustomReturn = true;

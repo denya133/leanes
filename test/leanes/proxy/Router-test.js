@@ -14,7 +14,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -23,15 +22,16 @@ describe('Router', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
         @method map() {
-          this.resource('test2', () => {
+          this.resource('test2', function () {
             this.resource('test2');
           });
-          this.namespace('sub2', () => {
+          this.namespace('sub2', function () {
             this.resource('subtest2');
           });
         }
       }
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.lengthOf(router.routes, 15, 'Routes did not initialized');
     });
   });
@@ -41,7 +41,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -63,8 +62,9 @@ describe('Router', () => {
         }
       }
 
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.equal(spyDefineMethod.callCount, 3, 'Methods did not defined');
     });
     it('should define `get` method for router', () => {
@@ -72,7 +72,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -81,15 +80,16 @@ describe('Router', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
         @method map() {
-          this.resource('test2', () => { });
+          this.resource('test2');
           this.get('test3', {
             resource: 'test2'
           });
         }
       }
 
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.equal(spyDefineMethod.callCount, 1, 'Methods did not defined');
     });
   });
@@ -99,7 +99,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -108,14 +107,15 @@ describe('Router', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
         @method map() {
-          this.resource('test2', () => { });
+          this.resource('test2');
           this.get('test3', {
             resource: 'test2'
           });
         }
       }
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.equal(spyDefineMethod.callCount, 1, 'Methods did not defined');
     });
   });
@@ -125,7 +125,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -134,14 +133,15 @@ describe('Router', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
         @method map() {
-          this.resource('test2', () => { });
+          this.resource('test2');
           this.get('test3', {
             resource: 'test2'
           });
         }
       }
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.equal(spyDefineMethod.callCount, 1, 'Methods did not defined');
     });
   });
@@ -151,7 +151,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -160,14 +159,15 @@ describe('Router', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
         @method map() {
-          this.resource('test2', () => { });
+          this.resource('test2');
           this.get('test3', {
             resource: 'test2'
           });
         }
       }
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.equal(spyDefineMethod.callCount, 1, 'Methods did not defined');
     });
   });
@@ -177,7 +177,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -186,14 +185,15 @@ describe('Router', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
         @method map() {
-          this.resource('test2', () => { });
+          this.resource('test2');
           this.get('test3', {
             resource: 'test2'
           });
         }
       }
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.equal(spyDefineMethod.callCount, 1, 'Methods did not defined');
     });
   });
@@ -203,7 +203,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -214,16 +213,17 @@ describe('Router', () => {
         @method map() {
           this.resource('test2', {
             except: 'patch'
-          }, () => {
-            this.member(() => {
+          }, function () {
+            this.member(function () {
               this.post('test4');
               this.get('test5');
             });
           });
         }
       }
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.lengthOf(router.routes, 7, 'Methods did not defined');
     });
   });
@@ -233,7 +233,6 @@ describe('Router', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        // @constant ROOT = `${__dirname}/config/`;
       }
 
       @initialize
@@ -244,16 +243,17 @@ describe('Router', () => {
         @method map() {
           this.resource('test2', {
             except: 'patch'
-          }, () => {
-            this.member(() => {
+          }, function () {
+            this.member(function () {
               this.post('test4');
               this.get('test5');
             });
           });
         }
       }
-      const spyDefineMethod = sinon.spy(Test.NS.TestRouter, 'defineMethod');
-      const router = Test.NS.TestRouter.new('TEST_ROUTER');
+      const spyDefineMethod = sinon.spy(TestRouter.prototype, 'defineMethod');
+      const router = TestRouter.new('TEST_ROUTER');
+      router.onRegister();
       assert.lengthOf(router.routes, 7, 'Methods did not defined');
     });
   });

@@ -25,9 +25,7 @@
     "test5": {
       "description": "test5 description",
       "type": "json",
-      "default": {
-        "test": "test"
-      }
+      "default": "{\"test\": \"test\"}"
     },
     "test6": {
       "description": "test6 description",

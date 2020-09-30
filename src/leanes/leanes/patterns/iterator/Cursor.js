@@ -62,6 +62,7 @@ export default (Module) => {
     }
 
     @method async hasNext(): Promise<boolean> {
+      if (_.isNil(this._array)) return false;
       return (await (!_.isNil(this._array[this._currentIndex])));
     }
 
