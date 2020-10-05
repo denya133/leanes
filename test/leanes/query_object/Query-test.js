@@ -1,8 +1,12 @@
 const { expect, assert } = require('chai');
 const sinon = require('sinon');
-const LeanES = require('../../../src/leanes/leanes/index');
-const Query = LeanES.NS.Query;
-const { co } = LeanES.NS.Utils;
+const _ = require('lodash');
+const LeanES = require("../../../src/leanes/index.js").default;
+const {
+  Query,
+  initialize, module: moduleD, nameBy, meta, method, property, mixin, attribute, constant
+} = LeanES.NS;
+
 
 describe('Query', () => {
   describe('.new', () => {
@@ -72,7 +76,7 @@ describe('Query', () => {
     });
   });
   describe('let', () => {
-     it('should add let equivalent statement', () => {
+    it('should add let equivalent statement', () => {
       const query = Query.new().let({
         '@user_cucumbers': {
           $forIn: {
@@ -161,7 +165,7 @@ describe('Query', () => {
         query.sort({
           '@doc.firstName': 'DESC'
         });
-         assert.deepEqual(query.$sort, [
+        assert.deepEqual(query.$sort, [
           {
             '@doc.firstName': 'DESC'
           }
@@ -242,107 +246,35 @@ describe('Query', () => {
     });
   });
   describe('.replicateObject', () => {
-     it('should create replica for query', () => {
-       co(function* () {
-        const query = Query.new().forIn({
-          '@doc': 'users'
-        }).filter({
-          '@doc.active': {
-            $eq: true
-          }
-        }).collect({
-          '@country': '@doc.country',
-          '@city': '@doc.city'
-        }).into({
-          '@groups': {
-            name: '@doc.name',
-            isActive: '@doc.active'
-          }
-        }).having({
-          '@country': {
-            $nin: ['Australia', 'Ukraine']
-          }
-        }).return({
-          country: '@country',
-          city: '@city',
-          usersInCity: '@groups'
-        });
-        const replica = (yield LeanES.NS.Query.replicateObject(query));
-        assert.deepEqual(replica, {
-          type: 'instance',
-          class: 'Query',
-          query: {
-            '$forIn': {
-              '@doc': 'users'
-            },
-            '$filter': {
-              '@doc.active': {
-                '$eq': true
-              }
-            },
-            '$collect': {
-              '@country': '@doc.country',
-              '@city': '@doc.city'
-            },
-            '$into': {
-              '@groups': {
-                name: '@doc.name',
-                isActive: '@doc.active'
-              }
-            },
-            '$having': {
-              '@country': {
-                '$nin': ['Australia', 'Ukraine']
-              }
-            },
-            '$return': {
-              country: '@country',
-              city: '@city',
-              usersInCity: '@groups'
-            }
-          }
-        });
+    it('should create replica for query', async () => {
+      const query = Query.new().forIn({
+        '@doc': 'users'
+      }).filter({
+        '@doc.active': {
+          $eq: true
+        }
+      }).collect({
+        '@country': '@doc.country',
+        '@city': '@doc.city'
+      }).into({
+        '@groups': {
+          name: '@doc.name',
+          isActive: '@doc.active'
+        }
+      }).having({
+        '@country': {
+          $nin: ['Australia', 'Ukraine']
+        }
+      }).return({
+        country: '@country',
+        city: '@city',
+        usersInCity: '@groups'
       });
-    });
-  });
-   describe('.restoreObject', () => {
-     it('should restore query from replica', () => {
-       co(function* () {
-        const query = (yield LeanES.NS.Query.restoreObject(LeanES, {
-          type: 'instance',
-          class: 'Query',
-          query: {
-            '$forIn': {
-              '@doc': 'users'
-            },
-            '$filter': {
-              '@doc.active': {
-                '$eq': true
-              }
-            },
-            '$collect': {
-              '@country': '@doc.country',
-              '@city': '@doc.city'
-            },
-            '$into': {
-              '@groups': {
-                name: '@doc.name',
-                isActive: '@doc.active'
-              }
-            },
-            '$having': {
-              '@country': {
-                '$nin': ['Australia', 'Ukraine']
-              }
-            },
-            '$return': {
-              country: '@country',
-              city: '@city',
-              usersInCity: '@groups'
-            }
-          }
-        }));
-        assert.deepEqual(query.toJSON(), {
+      const replica = await LeanES.NS.Query.replicateObject(query);
+      assert.deepEqual(replica, {
+        type: 'instance',
+        class: 'Query',
+        query: {
           '$forIn': {
             '@doc': 'users'
           },
@@ -371,7 +303,75 @@ describe('Query', () => {
             city: '@city',
             usersInCity: '@groups'
           }
-        });
+        }
+      });
+    });
+  });
+  describe('.restoreObject', () => {
+    it('should restore query from replica', async () => {
+      const query = await LeanES.NS.Query.restoreObject(LeanES, {
+        type: 'instance',
+        class: 'Query',
+        query: {
+          '$forIn': {
+            '@doc': 'users'
+          },
+          '$filter': {
+            '@doc.active': {
+              '$eq': true
+            }
+          },
+          '$collect': {
+            '@country': '@doc.country',
+            '@city': '@doc.city'
+          },
+          '$into': {
+            '@groups': {
+              name: '@doc.name',
+              isActive: '@doc.active'
+            }
+          },
+          '$having': {
+            '@country': {
+              '$nin': ['Australia', 'Ukraine']
+            }
+          },
+          '$return': {
+            country: '@country',
+            city: '@city',
+            usersInCity: '@groups'
+          }
+        }
+      });
+      assert.deepEqual(query.toJSON(), {
+        '$forIn': {
+          '@doc': 'users'
+        },
+        '$filter': {
+          '@doc.active': {
+            '$eq': true
+          }
+        },
+        '$collect': {
+          '@country': '@doc.country',
+          '@city': '@doc.city'
+        },
+        '$into': {
+          '@groups': {
+            name: '@doc.name',
+            isActive: '@doc.active'
+          }
+        },
+        '$having': {
+          '@country': {
+            '$nin': ['Australia', 'Ukraine']
+          }
+        },
+        '$return': {
+          country: '@country',
+          city: '@city',
+          usersInCity: '@groups'
+        }
       });
     });
   });

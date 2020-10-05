@@ -250,7 +250,7 @@ console.log('>>?MMMMM LeanES after 444');
 
 // require('./patterns/query_object/Query').default(LeanES);
 import QueryTF from './patterns/query_object/Query';
-QueueTF(LeanES);
+QueryTF(LeanES);
 console.log('>>?MMMMM LeanES after 555');
 
 // require('./patterns/proxy/Collection').default(LeanES);

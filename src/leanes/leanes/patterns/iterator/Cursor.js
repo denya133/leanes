@@ -62,10 +62,12 @@ export default (Module) => {
     }
 
     @method async hasNext(): Promise<boolean> {
+      if (_.isNil(this._array)) return false;
       return (await (!_.isNil(this._array[this._currentIndex])));
     }
 
     @method async close(): Promise<void> {
+      let j;
       for (let i = j = 0, len = this._array.length; j < len; i = ++j) {
         delete this._array[i];
       }
