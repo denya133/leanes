@@ -118,6 +118,13 @@ class PatternES extends ES {
   // @util statuses = statuses;
 }
 
+// require('./clean/Adapter').default(PatternES);
+import AdapterTF from './clean/Adapter';
+// require('./clean/Case').default(PatternES);
+import CaseTF from './clean/Case';
+// require('./clean/Suite').default(PatternES);
+import SuiteTF from './clean/Suite';
+
 // require('./observer/Notification').default(PatternES);
 import NotificationTF from './observer/Notification';
 // require('./observer/Notifier').default(PatternES);
@@ -134,6 +141,10 @@ import SimpleCommandTF from './command/SimpleCommand';
 import MacroCommandTF from './command/MacroCommand';
 // require('./facade/Facade').default(PatternES);
 import FacadeTF from './facade/Facade';
+
+AdapterTF(PatternES);
+CaseTF(PatternES);
+SuiteTF(PatternES);
 
 NotificationTF(PatternES);
 NotifierTF(PatternES);
@@ -178,6 +189,10 @@ export * from '../es';
 
 // export type { ApplicationInterface } from './interfaces/ApplicationInterface';
 // export type { CollectionInterface } from './interfaces/CollectionInterface';
+export type { AdapterInterface } from './interfaces/AdapterInterface';
+export type { CaseInterface } from './interfaces/CaseInterface';
+export type { SuiteInterface } from './interfaces/SuiteInterface';
+
 export type { CommandInterface } from './interfaces/CommandInterface';
 export type { ControllerInterface } from './interfaces/ControllerInterface';
 // export type { ConfigurationInterface } from './interfaces/ConfigurationInterface';
