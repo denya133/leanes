@@ -5,7 +5,8 @@ import type { NotificationInterface } from '../../../patternes';
 export default (Module) => {
   const {
     APPLICATION_MEDIATOR, STOPPED_ROLLBACK, MIGRATIONS,
-    SimpleCommand,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
     initialize, module, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
@@ -17,7 +18,8 @@ export default (Module) => {
   @mixin(ConfigurableMixin)
   class RollbackCommand<
     D = RecordInterface
-  > extends SimpleCommand {
+  > extends Command {
+  // > extends SimpleCommand {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 

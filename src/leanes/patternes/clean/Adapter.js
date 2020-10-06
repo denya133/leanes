@@ -1,5 +1,5 @@
 import type { AdapterInterface } from '../interfaces/AdapterInterface';
-// import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 
 export default (Module) => {
@@ -10,8 +10,8 @@ export default (Module) => {
     initialize, module, meta, method, property, nameBy
   } = Module.NS;
 
-  // @injectable
   @initialize
+  @injectable()
   @module(Module)
   class Adapter extends CoreObject implements AdapterInterface {
     @nameBy static  __filename = __filename;

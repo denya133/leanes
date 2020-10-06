@@ -33,7 +33,7 @@ describe('Facade', () => {
         const facade = LeanES.NS.Facade.getInstance('TEST3');
 
         @initialize
-        class TestCommand extends LeanES.NS.SimpleCommand {
+        class TestCommand extends LeanES.NS.Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
         }
@@ -62,7 +62,7 @@ describe('Facade', () => {
 
       @initialize
       @moduleD(Test)
-      class TestCommand extends LeanES.NS.SimpleCommand {
+      class TestCommand extends LeanES.NS.Command {
         @nameBy static  __filename = 'TestCommand';
         @meta static object = {};
 
@@ -93,7 +93,7 @@ describe('Facade', () => {
         const facade = LeanES.NS.Facade.getInstance('TEST4');
 
         @initialize
-        class TestCommand extends LeanES.NS.SimpleCommand {
+        class TestCommand extends LeanES.NS.Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
         }
@@ -111,7 +111,7 @@ describe('Facade', () => {
         const facade = LeanES.NS.Facade.getInstance('TEST5');
 
         @initialize
-        class TestCommand extends LeanES.NS.SimpleCommand {
+        class TestCommand extends LeanES.NS.Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
         }
@@ -497,7 +497,7 @@ describe('Facade', () => {
 
       @initialize
       @moduleD(Test)
-      class PrepareViewCommand extends LeanES.NS.SimpleCommand {
+      class PrepareViewCommand extends LeanES.NS.Command {
         @nameBy static  __filename = 'PrepareViewCommand';
         @meta static object = {};
         @method execute(aoNotification) {
@@ -572,7 +572,7 @@ describe('Facade', () => {
 
       @initialize
       @moduleD(Test)
-      class PrepareViewCommand extends LeanES.NS.SimpleCommand {
+      class PrepareViewCommand extends LeanES.NS.Command {
         @nameBy static  __filename = 'PrepareViewCommand';
         @meta static object = {};
         @method execute(aoNotification) {

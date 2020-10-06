@@ -429,7 +429,12 @@ describe('Resque', () => {
           });
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       facade.registerProxy(resque);

@@ -1,6 +1,6 @@
 import type { CommandInterface } from '../interfaces/CommandInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
-// import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 
 export default (Module) => {
@@ -11,14 +11,14 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-  // @injectable
   @initialize
+  @injectable()
   @module(Module)
   class SimpleCommand extends Notifier implements CommandInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @method execute(voNotification: NotificationInterface): void {}
+    @method execute(aoNotification: NotificationInterface): void {}
 
     @method static async restoreObject() {
       assert.fail(`restoreObject method not supported for ${this.name}`);

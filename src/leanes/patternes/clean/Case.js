@@ -1,19 +1,19 @@
 import type { CaseInterface } from '../interfaces/CaseInterface';
-// import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 
 export default (Module) => {
 
   const {
-    CoreObject,
+    Notifier,
     assert,
     initialize, module, meta, method, property, nameBy
   } = Module.NS;
 
-  // @injectable
   @initialize
+  @injectable()
   @module(Module)
-  class Case extends CoreObject implements CaseInterface {
+  class Case extends Notifier implements CaseInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 

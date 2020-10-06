@@ -5,7 +5,7 @@ const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   APPLICATION_MEDIATOR,
-  NotificationInterface, Controller, SimpleCommand, Notification,
+  NotificationInterface, Controller, Command, Notification,
   initialize, module:moduleD, nameBy, meta, method, property
 } = LeanES.NS;
 
@@ -37,7 +37,7 @@ describe('Controller', () => {
       expect(() => {
         const controller = Controller.getInstance('TEST3');
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
           @method execute() {}
@@ -65,7 +65,7 @@ describe('Controller', () => {
       }
       @initialize
       @moduleD(Test)
-      class TestCommand extends SimpleCommand {
+      class TestCommand extends Command {
         @nameBy static  __filename = 'TestCommand';
         @meta static object = {};
 
@@ -102,7 +102,7 @@ describe('Controller', () => {
         const spy = sinon.spy();
         spy.resetHistory();
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
           @method execute() {
@@ -121,7 +121,7 @@ describe('Controller', () => {
       expect(() => {
         const controller = Controller.getInstance('TEST5');
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
           @method execute() {}
@@ -138,7 +138,7 @@ describe('Controller', () => {
       expect(() => {
         const controller = Controller.getInstance('TEST6');
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
         }

@@ -1,5 +1,7 @@
 import type { ModelInterface } from '../interfaces/ModelInterface';
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
+import type { AdapterInterface } from '../interfaces/AdapterInterface';
+import { Container } from "inversify";
 // import { injectable, inject, Container } from "inversify";
 
 export default (Module) => {
@@ -26,9 +28,12 @@ export default (Module) => {
 
     // iphMetaProxyMap = PointerT(Model.private({
     @property _metaProxyMap: { [key: string]: ?{ className: ?string, data: ?any } } = null;
+    @property _classNames: {[key: string]: ?string} = null;
 
     // ipsMultitonKey = PointerT(Model.protected({
     @property _multitonKey: ?string = null;
+
+    @property _container: Container = null;
 
     // cphInstanceMap = PointerT(Model.private(Model.static({
     @property static _instanceMap: { [key: string]: ?ModelInterface } = {};
@@ -63,13 +68,13 @@ export default (Module) => {
       }
     }
 
-    @method static getInstance(asKey: string): Model {
+    @method static getInstance(asKey: string, container: Container): Model {
       if (!asKey) {
         return null;
       }
       // console.log('>>>>???/ Model.getInstance 111', asKey, Model._instanceMap[asKey]);
       if (Model._instanceMap[asKey] == null) {
-        Model._instanceMap[asKey] = this.new(asKey);
+        Model._instanceMap[asKey] = this.new(asKey, container);
         // Model._instanceMap[asKey] = Model.new(asKey);
       }
       // const mmm = Model._instanceMap[asKey];
@@ -94,10 +99,22 @@ export default (Module) => {
     }
 
     @method registerProxy(aoProxy: ProxyInterface): void {
+      const vsName = aoProxy.getName();
+      // Do not allow re-registration (you must removeProxy first).
+      if (this._proxyMap[vsName] != null) {
+        return;
+      }
       aoProxy.initializeNotifier(this._multitonKey);
-      this._proxyMap[aoProxy.getName()] = aoProxy;
+      this._proxyMap[vsName] = aoProxy;
       // container.bind(aoProxy.getProxyName()).to(aoProxy);
       aoProxy.onRegister();
+      if (!this._container.isBoundNamed(`Factory<${vsName}>`)) {
+        this._container.bind(`Factory<${vsName}>`).toFactory((context) => {
+          return () => {
+            return aoProxy;
+          }
+        });
+      }
     }
 
     @method addProxy(...args) {
@@ -125,7 +142,14 @@ export default (Module) => {
         } = this._metaProxyMap[asProxyName] || {};
         if (!_.isEmpty(className)) {
           const voClass = this.ApplicationModule.NS[className];
-          this.registerProxy(voClass.new(asProxyName, data));
+          if (!this._container.isBoundNamed(asProxyName)) {
+            this._container.bind(asProxyName).to(voClass).inSingletonScope();
+          }
+          const voProxy: ProxyInterface = this._container.get(asProxyName);
+          // const voProxy: ProxyInterface = voClass.new();
+          voProxy.setName(asProxyName);
+          voProxy.setData(data);
+          this.registerProxy(voProxy);
         }
       }
       return this._proxyMap[asProxyName] || null;
@@ -146,17 +170,68 @@ export default (Module) => {
         className: asProxyClassName,
         data: ahData
       };
+      if (!this._container.isBoundNamed(`Factory<${asProxyName}>`)) {
+        this._container.bind(`Factory<${asProxyName}>`).toFactory((context) => {
+          return () => {
+            return this.retrieveProxy(asProxyName)
+          }
+        });
+      }
+    }
+
+    @method addAdapter(asKey: string, asClassName: ?string): void {
+      if (asClassName == null) {
+        asClassName = asKey;
+      }
+      if (this._classNames[asKey] == null) {
+        this._classNames[asKey] = asClassName;
+      }
+      if (!this._container.isBoundNamed(`Factory<${asKey}>`)) {
+        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
+          return () => {
+            return this.getAdapter(asKey)
+          }
+        });
+      }
+    }
+
+    @method hasAdapter(asKey: string): boolean {
+      return (this._classNames[asKey] != null);
+    }
+
+    @method removeAdapter(asKey: string): void {
+      if (this.hasAdapter(asKey)) {
+        this._classNames[asKey] = undefined;
+        delete this._classNames[asKey];
+      }
+    }
+
+    @method getAdapter(asKey: string): ?AdapterInterface {
+      let vAdapter;
+      const vsClassName = this._classNames[asKey];
+      if (!_.isEmpty(vsClassName)) {
+        vAdapter = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
+      }
+      if (vAdapter != null) {
+        if (!this._container.isBoundNamed(asKey)) {
+          this._container.bind(asKey).to(vAdapter).inSingletonScope();
+        }
+        const voAdapter: AdapterInterface = this._container.get(asKey);
+        return voAdapter;
+      }
     }
 
     @method _initializeModel(): void { return; }
 
-    constructor(asKey: string) {
+    constructor(asKey: string, container: Container) {
       super(...arguments);
       assert(Model._instanceMap[asKey] == null, Model.MULTITON_MSG);
       this._multitonKey = asKey;
-      Model._instanceMap[asKey] = this;
+      this._container = container;
+      // Model._instanceMap[asKey] = this;
       this._proxyMap = {};
       this._metaProxyMap = {};
+      this._classNames = {};
       this._initializeModel();
     }
 

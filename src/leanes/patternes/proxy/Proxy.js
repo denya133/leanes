@@ -1,15 +1,15 @@
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
-// import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     Notifier,
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-  // @injectable
   @initialize
+  @injectable()
   @module(Module)
   class Proxy extends Notifier implements ProxyInterface {
     @nameBy static  __filename = __filename;
@@ -27,6 +27,10 @@ export default (Module) => {
 
     @method getName(): string {
       return this._proxyName;
+    }
+
+    @method setName(asName: string): void {
+      this._proxyName = asName;
     }
 
     @method setData(ahData: ?any) {
@@ -59,12 +63,9 @@ export default (Module) => {
       return replica;
     }
 
-    constructor(asProxyName: ?string, ahData: ?any) {
+    constructor() {
       super(... arguments);
-      this._proxyName = asProxyName || this.constructor.name;
-      if (ahData != null) {
-        this.setData(ahData);
-      }
+      this._proxyName = this.constructor.name;
     }
   }
 }

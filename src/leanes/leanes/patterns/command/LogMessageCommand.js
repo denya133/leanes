@@ -2,7 +2,9 @@ import type { NotificationInterface } from '../../../patternes';
 
 export default (Module) => {
   const {
-    SimpleCommand, Application,
+    // SimpleCommand,
+    Command,
+    Application,
     initialize, module, meta, method, nameBy
   } = Module.NS;
   const { LOGGER_PROXY } = Application;
@@ -10,7 +12,8 @@ export default (Module) => {
 
   @initialize
   @module(Module)
-  class LogMessageCommand extends SimpleCommand {
+  class LogMessageCommand extends Command {
+  // class LogMessageCommand extends SimpleCommand {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 

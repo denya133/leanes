@@ -5,6 +5,10 @@ import type { ModelInterface } from '../interfaces/ModelInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
 import type { ViewInterface } from '../interfaces/ViewInterface';
+import type { CaseInterface } from '../interfaces/CaseInterface';
+import type { SuiteInterface } from '../interfaces/SuiteInterface';
+import type { AdapterInterface } from '../interfaces/AdapterInterface';
+import { Container } from "inversify";
 // import { injectable, inject, Container } from "inversify";
 
 export default (Module) => {
@@ -17,8 +21,8 @@ export default (Module) => {
 
   // let container = new Container();
 
-  // @injectable
   @initialize
+  // @injectable()
   @module(Module)
   class Facade extends CoreObject implements FacadeInterface {
     @nameBy static __filename = __filename;
@@ -38,13 +42,19 @@ export default (Module) => {
     // ipsMultitonKey = PointerT(Facade.protected({
     @property _multitonKey: ?string = null;
 
+    @property _container: Container = null;
+
     // cphInstanceMap = PointerT(Facade.protected(Facade.static({
     @property static _instanceMap: { [key: string]: ?FacadeInterface } = {};
+
+    @property get container(): Container {
+      return this._container;
+    }
 
     // ipmInitializeModel = PointerT(Facade.protected({
     @method _initializeModel(): void {
       if (this._model == null) {
-        this._model = Module.NS.Model.getInstance(this._multitonKey);
+        this._model = Module.NS.Model.getInstance(this._multitonKey, this._container);
       }
       // container.bind("Model").to(Module.NS.Model);
       // if (this._model == null) {
@@ -55,7 +65,7 @@ export default (Module) => {
     // ipmInitializeController = PointerT(Facade.protected({
     @method _initializeController(): void {
       if (this._controller == null) {
-        this._controller = Module.NS.Controller.getInstance(this._multitonKey);
+        this._controller = Module.NS.Controller.getInstance(this._multitonKey, this._container);
       }
       // container.bind("Controller").to(Module.NS.Controller);
       // if (this._controller == null) {
@@ -66,7 +76,7 @@ export default (Module) => {
     // ipmInitializeView = PointerT(Facade.protected({
     @method _initializeView(): void {
       if (this._view == null) {
-        this._view = Module.NS.View.getInstance(this._multitonKey);
+        this._view = Module.NS.View.getInstance(this._multitonKey, this._container);
       }
       // container.bind("View").to(Module.NS.View);
       // if (this._view == null) {
@@ -107,7 +117,7 @@ export default (Module) => {
     }
 
     @method addCommand(...args): void {
-      return this.registerCommand(...args);
+      return this._controller.addCommand(...args);
     }
 
     @method lazyRegisterCommand(asNotificationName: string, asClassName: ?string): void {
@@ -122,12 +132,52 @@ export default (Module) => {
       return this._controller.hasCommand(asNotificationName);
     }
 
+    @method retrieveCommand(asNotificationName: string): ?CommandInterface {
+      return this._controller.retrieveCommand(asNotificationName);
+    }
+
+    @method getCommand(...args) {
+      return this._controller.getCommand(...args);
+    }
+
+    @method addCase(asKey: string, asClassName: ?string): void {
+      this._controller.addCase(asKey, asClassName);
+    }
+
+    @method hasCase(asKey: string): boolean {
+      return this._controller.hasCase(asKey)
+    }
+
+    @method removeCase(asKey: string): void {
+      this._controller.removeCase(asKey)
+    }
+
+    @method getCase(asKey: string): ?CaseInterface {
+      return this._controller.getCase(asKey)
+    }
+
+    @method addSuite(asKey: string, asClassName: ?string): void {
+      this._controller.addSuite(asKey, asClassName)
+    }
+
+    @method hasSuite(asKey: string): boolean {
+      return this._controller.hasSuite(asKey)
+    }
+
+    @method removeSuite(asKey: string): void {
+      this._controller.removeSuite(asKey)
+    }
+
+    @method getSuite(asKey: string): ?SuiteInterface {
+      return this._controller.getSuite(asKey)
+    }
+
     @method registerProxy(aoProxy: ProxyInterface): void {
       this._model.registerProxy(aoProxy);
     }
 
     @method addProxy(...args): void {
-      return this.registerProxy(...args);
+      return this._model.addProxy(...args);
     }
 
     @method lazyRegisterProxy(asProxyName: string, asProxyClassName: ?string, ahData: ?any): void {
@@ -139,7 +189,7 @@ export default (Module) => {
     }
 
     @method getProxy(...args): ?ProxyInterface {
-      return this.retrieveProxy(...args);
+      return this._model.getProxy(...args);
     }
 
     @method removeProxy(asProxyName: string): ?ProxyInterface {
@@ -150,6 +200,22 @@ export default (Module) => {
       return this._model.hasProxy(asProxyName);
     }
 
+    @method addAdapter(...args): void {
+      return this._model.addAdapter(...args);
+    }
+
+    @method getAdapter(asKey: string): ?AdapterInterface {
+      return this._model.getAdapter(asProxyName);
+    }
+
+    @method removeAdapter(asKey: string): void {
+      return this._model.removeAdapter(asKey);
+    }
+
+    @method hasAdapter(asKey: string): boolean {
+      return this._model.hasAdapter(asKey);
+    }
+
     @method registerMediator(aoMediator: MediatorInterface): void {
       if (this._view) {
         this._view.registerMediator(aoMediator);
@@ -157,7 +223,7 @@ export default (Module) => {
     }
 
     @method addMediator(...args): void {
-      return this.registerMediator(...args);
+      return this._view.addMediator(...args);
     }
 
     @method retrieveMediator(asMediatorName: string): ?MediatorInterface {
@@ -167,7 +233,7 @@ export default (Module) => {
     }
 
     @method getMediator(...args): ?MediatorInterface {
-      return this.retrieveMediator(...args);
+      return this._view.getMediator(...args);
     }
 
     @method removeMediator(asMediatorName: string): ?MediatorInterface {
@@ -210,6 +276,7 @@ export default (Module) => {
 
     @method initializeNotifier(asKey: string): void {
       this._multitonKey = asKey;
+      this._container = new Container();
     }
 
     @method static hasCore(key: string): boolean {
@@ -256,8 +323,8 @@ export default (Module) => {
       console.log('>?>?>? Facade before initializeNotifier');
       this.initializeNotifier(asKey);
       console.log('>?>?>? Facade after initializeNotifier', this._multitonKey);
-      Facade._instanceMap[asKey] = this;
-      console.log('>?>?>? Facade after Facade._instanceMap[asKey] = this');
+      // Facade._instanceMap[asKey] = this;
+      // console.log('>?>?>? Facade after Facade._instanceMap[asKey] = this');
       this._initializeFacade();
       console.log('>?>?>? Facade after _initializeFacade');
     }

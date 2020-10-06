@@ -15,7 +15,8 @@ export default (Module) => {
     DELAYED_JOBS_QUEUE,
     RESQUE,
     MIGRATIONS,
-    SimpleCommand,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
     assert,
     initialize, module, meta, property, method, nameBy, mixin, action, chains,
@@ -56,7 +57,8 @@ export default (Module) => {
   @mixin(ConfigurableMixin)
   class Resource<
     D = RecordInterface
-  > extends SimpleCommand implements ResourceInterface {
+  > extends Command implements ResourceInterface {
+  // > extends SimpleCommand implements ResourceInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 

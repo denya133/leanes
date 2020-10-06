@@ -4,7 +4,8 @@ import type { ScriptInterface } from '../../interfaces/ScriptInterface';
 export default (Module) => {
   const {
     JOB_RESULT,
-    SimpleCommand,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
     initialize, module, meta, method, nameBy, mixin,
     Utils: { _ }
@@ -14,7 +15,8 @@ export default (Module) => {
   @initialize
   @module(Module)
   @mixin(ConfigurableMixin)
-  class Script extends SimpleCommand implements ScriptInterface {
+  class Script extends Command implements ScriptInterface {
+  // class Script extends SimpleCommand implements ScriptInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 

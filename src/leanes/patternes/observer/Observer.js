@@ -12,8 +12,8 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-  // @injectable
   @initialize
+  // @injectable()
   @module(Module)
   class Observer extends CoreObject implements ObserverInterface {
     @nameBy static  __filename = __filename;

@@ -1,7 +1,9 @@
 import type { ControllerInterface } from '../interfaces/ControllerInterface';
 import type { ViewInterface } from '../interfaces/ViewInterface';
 import type { CommandInterface } from '../interfaces/CommandInterface';
+import type { CaseInterface } from '../interfaces/CaseInterface';
 import type { NotificationInterface } from '../interfaces/NotificationInterface';
+import { Container } from "inversify";
 // import { injectable, inject, Container } from "inversify";
 
 export default (Module) => {
@@ -15,8 +17,8 @@ export default (Module) => {
 
   // let container = new Container();
 
-  // @injectable
   @initialize
+  // @injectable()
   @module(Module)
   class Controller extends CoreObject implements ControllerInterface {
     @nameBy static  __filename = __filename;
@@ -32,6 +34,8 @@ export default (Module) => {
     @property _classNames: {[key: string]: ?string} = null;
     // ipsMultitonKey  = PointerT @protected _multitonKey: MaybeG String
     @property _multitonKey: ?string = null;
+
+    @property _container: Container = null;
     // cphInstanceMap  = PointerT @private @static _instanceMap: DictG(String, MaybeG ControllerInterface),
     //   default: {}
     @property static _instanceMap: {[key: string]: ?ControllerInterface} = {};
@@ -65,12 +69,12 @@ export default (Module) => {
       }
     }
 
-    @method static getInstance(asKey: string): Controller {
+    @method static getInstance(asKey: string, container: Container): Controller {
       if (!asKey) {
         return null;
       }
       if (Controller._instanceMap[asKey] == null) {
-        Controller._instanceMap[asKey] = this.new(asKey);
+        Controller._instanceMap[asKey] = this.new(asKey, container);
         // Controller._instanceMap[asKey] = Controller.new(asKey);
       }
       return Controller._instanceMap[asKey];
@@ -90,33 +94,71 @@ export default (Module) => {
       }
     }
 
+    @method retrieveCommand(asNotificationName: string): ?CommandInterface {
+      let vCommand;
+      vCommand = this._commandMap[asNotificationName];
+      // vCommand = container.get(asNotificationName);
+      if (vCommand == null) {
+        const vsClassName = this._classNames[asNotificationName];
+        if (!_.isEmpty(vsClassName)) {
+          vCommand = this._commandMap[asNotificationName] = this.ApplicationModule.NS[vsClassName];
+          // container.bind(asNotificationName).to(this.ApplicationModule.NS[vsClassName]);
+          // vCommand = container.get(asNotificationName);
+        }
+      }
+      if (vCommand != null) {
+        if (!this._container.isBoundNamed(asNotificationName)) {
+          this._container.bind(asNotificationName).to(vCommand);
+        }
+        const voCommand: CommandInterface = this._container.get(asNotificationName);
+        // const voCommand: CommandInterface = vCommand.new();
+        voCommand.initializeNotifier(this._multitonKey);
+        return voCommand;
+      }
+    }
+
+    @method getCommand(...args) {
+      return this.retrieveCommand(...args);
+    }
+
     @method executeCommand(aoNotification: NotificationInterface): void {
       if (!aoNotification) {
         return;
       }
-      let vCommand;
+      // let vCommand;
       const vsName = aoNotification.getName();
-      vCommand = this._commandMap[vsName];
-      // vCommand = container.get(vsName);
-      if (vCommand == null) {
-        const vsClassName = this._classNames[vsName];
-        if (!_.isEmpty(vsClassName)) {
-          vCommand = this._commandMap[vsName] = this.ApplicationModule.NS[vsClassName];
-          // container.bind(vsName).to(this.ApplicationModule.NS[vsClassName]);
-          // vCommand = container.get(vsName);
-        }
-      }
-      if (vCommand != null) {
-        const voCommand: CommandInterface = vCommand.new();
-        voCommand.initializeNotifier(this._multitonKey);
+      const voCommand: ?CommandInterface = this.retrieveCommand(vsName);
+      if (voCommand != null) {
         voCommand.execute(aoNotification);
       }
+      // vCommand = this._commandMap[vsName];
+      // // vCommand = container.get(vsName);
+      // if (vCommand == null) {
+      //   const vsClassName = this._classNames[vsName];
+      //   if (!_.isEmpty(vsClassName)) {
+      //     vCommand = this._commandMap[vsName] = this.ApplicationModule.NS[vsClassName];
+      //     // container.bind(vsName).to(this.ApplicationModule.NS[vsClassName]);
+      //     // vCommand = container.get(vsName);
+      //   }
+      // }
+      // if (vCommand != null) {
+      //   const voCommand: CommandInterface = vCommand.new();
+      //   voCommand.initializeNotifier(this._multitonKey);
+      //   voCommand.execute(aoNotification);
+      // }
     }
 
     @method registerCommand(asNotificationName: string, aCommand: Class<CoreObject>): void {
       if (!this._commandMap[asNotificationName]) {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._commandMap[asNotificationName] = aCommand;
+        if (!this._container.isBoundNamed(`Factory<${asNotificationName}>`)) {
+          this._container.bind(`Factory<${asNotificationName}>`).toFactory((context) => {
+            return () => {
+              return this.retrieveCommand(asNotificationName)
+            }
+          });
+        }
       }
       // if (!container.get(asNotificationName)) {
       //   this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
@@ -132,9 +174,16 @@ export default (Module) => {
       if (asClassName == null) {
         asClassName = asNotificationName;
       }
-      if (!this._commandMap[asNotificationName]) {
+      if (this._commandMap[asNotificationName] == null && this._classNames[asNotificationName] == null) {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._classNames[asNotificationName] = asClassName;
+      }
+      if (!this._container.isBoundNamed(`Factory<${asNotificationName}>`)) {
+        this._container.bind(`Factory<${asNotificationName}>`).toFactory((context) => {
+          return () => {
+            return this.retrieveCommand(asNotificationName)
+          }
+        });
       }
       // if (!container.get(asNotificationName)) {
       //   this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
@@ -157,15 +206,102 @@ export default (Module) => {
       }
     }
 
+    @method addCase(asKey: string, asClassName: ?string): void {
+      if (asClassName == null) {
+        asClassName = asKey;
+      }
+      if (this._classNames[asKey] == null) {
+        this._classNames[asKey] = asClassName;
+      }
+      if (!this._container.isBoundNamed(`Factory<${asKey}>`)) {
+        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
+          return () => {
+            return this.getCase(asKey)
+          }
+        });
+      }
+    }
+
+    @method hasCase(asKey: string): boolean {
+      return (this._classNames[asKey] != null);
+    }
+
+    @method removeCase(asKey: string): void {
+      if (this.hasCase(asKey)) {
+        this._classNames[asKey] = undefined;
+        delete this._classNames[asKey];
+      }
+    }
+
+    @method getCase(asKey: string): ?CaseInterface {
+      let vCase;
+      const vsClassName = this._classNames[asKey];
+      if (!_.isEmpty(vsClassName)) {
+        vCase = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
+      }
+      if (vCase != null) {
+        if (!this._container.isBoundNamed(asKey)) {
+          this._container.bind(asKey).to(vCase);
+        }
+        const voCase: CaseInterface = this._container.get(asKey);
+        voCase.initializeNotifier(this._multitonKey);
+        return voCase;
+      }
+    }
+
+    @method addSuite(asKey: string, asClassName: ?string): void {
+      if (asClassName == null) {
+        asClassName = asKey;
+      }
+      if (this._classNames[asKey] == null) {
+        this._classNames[asKey] = asClassName;
+      }
+      if (!this._container.isBoundNamed(`Factory<${asKey}>`)) {
+        this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
+          return () => {
+            return this.getSuite(asKey)
+          }
+        });
+      }
+    }
+
+    @method hasSuite(asKey: string): boolean {
+      return (this._classNames[asKey] != null);
+    }
+
+    @method removeSuite(asKey: string): void {
+      if (this.hasSuite(asKey)) {
+        this._classNames[asKey] = undefined;
+        delete this._classNames[asKey];
+      }
+    }
+
+    @method getSuite(asKey: string): ?SuiteInterface {
+      let vSuite;
+      const vsClassName = this._classNames[asKey];
+      if (!_.isEmpty(vsClassName)) {
+        vSuite = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
+      }
+      if (vSuite != null) {
+        if (!this._container.isBoundNamed(asKey)) {
+          this._container.bind(asKey).to(vSuite);
+        }
+        const voSuite: SuiteInterface = this._container.get(asKey);
+        voSuite.initializeNotifier(this._multitonKey);
+        return voSuite;
+      }
+    }
+
     @method _initializeController(): void {
       this._view = Module.NS.View.getInstance(this._multitonKey);
     }
 
-    constructor(asKey: string) {
+    constructor(asKey: string, container: Container) {
       super(... arguments);
       assert(Controller._instanceMap[asKey] == null, Controller.MULTITON_MSG);
       this._multitonKey = asKey;
-      Controller._instanceMap[asKey] = this;
+      this._container = container;
+      // Controller._instanceMap[asKey] = this;
       this._commandMap = {};
       this._classNames = {};
       this._initializeController();

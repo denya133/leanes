@@ -1,19 +1,19 @@
 import type { SuiteInterface } from '../interfaces/SuiteInterface';
-// import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 
 export default (Module) => {
 
   const {
-    CoreObject,
+    Notifier,
     assert,
     initialize, module, meta, method, property, nameBy
   } = Module.NS;
 
-  // @injectable
   @initialize
+  @injectable()
   @module(Module)
-  class Suite extends CoreObject implements SuiteInterface {
+  class Suite extends Notifier implements SuiteInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
