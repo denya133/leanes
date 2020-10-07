@@ -69,6 +69,7 @@
     "content-type": "^1.0.4",
     "core-decorators": "^0.14.0",
     "db.js": "^0.15.0",
+    "feed": "^4.2.1",
     "flow-runtime": "^0.17.0",
     "http-errors": "^1.6.3",
     "i": "^0.3.5",
@@ -91,6 +92,7 @@
     "semver": "7.3.2",
     "sinon-chai": "^3.5.0",
     "statuses": "^1.4.0",
-    "type-is": "^1.6.16"
+    "type-is": "^1.6.16",
+    "xml2js": "^0.4.23"
   }
 }
