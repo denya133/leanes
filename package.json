@@ -1,6 +1,6 @@
 {
   "name": "@leansdk/leanes",
-  "version": "1.0.0",
+  "version": "7.0.0",
   "description": "LeanES is a MVC framework for creating graceful applications",
   "main": "lib/index.js",
   "license": "LGPL-3.0",
