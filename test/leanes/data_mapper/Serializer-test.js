@@ -28,7 +28,7 @@ describe('Serializer', () => {
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
-        @method findRecordByName() {
+        @method static findRecordByName() {
           return Test.NS.TestRecord;
         }
         @attribute({ type: 'string' }) string;
@@ -73,7 +73,7 @@ describe('Serializer', () => {
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
-        @method findRecordByName() {
+        @method static findRecordByName() {
           return Test.NS.TestRecord;
         }
         @attribute({ type: 'string' }) string;
