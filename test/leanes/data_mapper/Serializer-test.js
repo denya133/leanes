@@ -36,9 +36,12 @@ describe('Serializer', () => {
         @attribute({ type: 'boolean' }) boolean;
       }
 
-      const serializer = Serializer.new(TestsCollection.new('Tests', {
+      const collection = TestsCollection.new();
+      collection.setName('Tests');
+      collection.setData({
         delegate: 'TestRecord'
-      }));
+      });
+      const serializer = Serializer.new(collection);
       const record = await serializer.normalize(Test.NS.TestRecord, {
         type: 'Test::TestRecord',
         string: 'string',
@@ -80,16 +83,18 @@ describe('Serializer', () => {
         @attribute({ type: 'number' }) number;
         @attribute({ type: 'boolean' }) boolean;
       }
-      const col = TestsCollection.new('Tests', {
+      const collection = TestsCollection.new();
+      collection.setName('Tests');
+      collection.setData({
         delegate: 'TestRecord'
       });
-      const serializer = Serializer.new(col);
+      const serializer = Serializer.new(collection);
       const data = await serializer.serialize(Test.NS.TestRecord.new({
         type: 'Test::TestRecord',
         string: 'string',
         number: 123,
         boolean: true
-      }), col);
+      }), collection);
       assert.instanceOf(data, Object, 'Serialize is incorrect');
       assert.equal(data.type, 'Test::TestRecord', '`type` is incorrect');
       assert.equal(data.string, 'string', '`string` is incorrect');
@@ -128,10 +133,13 @@ describe('Serializer', () => {
         @meta static object = {};
       }
       const COLLECTION = 'COLLECTION';
-      let collection = facade.registerProxy(MyCollection.new(COLLECTION, {
+      const col = MyCollection.new();
+      col.setName(COLLECTION);
+      col.setData({
         delegate: Test.NS.Record,
         serializer: MySerializer
-      }));
+      });
+      let collection = facade.registerProxy(col);
       collection = facade.retrieveProxy(COLLECTION);
       const replica = await MySerializer.replicateObject(collection.serializer);
       assert.deepEqual(replica, {
@@ -173,10 +181,13 @@ describe('Serializer', () => {
         @meta static object = {};
       }
       const COLLECTION = 'COLLECTION';
-      let collection = facade.registerProxy(MyCollection.new(COLLECTION, {
+      const col = MyCollection.new();
+      col.setName(COLLECTION);
+      col.setData({
         delegate: Test.NS.Record,
         serializer: MySerializer
-      }));
+      });
+      let collection = facade.registerProxy(col);
       collection = facade.retrieveProxy(COLLECTION);
       const restoredRecord = await MySerializer.restoreObject(Test, {
         type: 'instance',

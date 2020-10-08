@@ -1,15 +1,17 @@
 const { expect, assert } = require('chai');
+const _ = require('lodash');
 const sinon = require('sinon');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method
+  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, map
 } = LeanES.NS;
 
 describe('ResourceRenderer', () => {
   describe('.new', () => {
     it('should create renderer instance', () => {
       expect(() => {
-        const renderer = LeanES.NS.ResourceRenderer.new('TEST_RENDERER');
+        const renderer = LeanES.NS.ResourceRenderer.new();
+        renderer.setName('TEST_RENDERER');
       }).to.not.throw(Error);
     });
   });
@@ -28,8 +30,8 @@ describe('ResourceRenderer', () => {
         @nameBy static __filename = 'Test';
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
-        @method static templates() {
-          {
+        static get templates() {
+          return {
             sample: (async function (resourceName, action, aoData) {
               return {
                 [`${this.listEntityName}`]: await map(aoData, function (i) {
@@ -70,9 +72,14 @@ describe('ResourceRenderer', () => {
         @nameBy static __filename = 'FakeApplication';
         @meta static object = {};
       }
-      const configuration = MyConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configuration = MyConfiguration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
       facade.registerProxy(configuration);
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, FakeApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.setViewComponent(FakeApplication.new());
+      facade.registerMediator(mediator);
 
       @initialize
       @moduleD(Test)
@@ -87,7 +94,8 @@ describe('ResourceRenderer', () => {
           data: 'data1'
         }
       ];
-      const renderer = TestRenderer.new('TEST_RENDERER');
+      const renderer = TestRenderer.new();
+      renderer.setName('TEST_RENDERER');
       facade.registerProxy(renderer);
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
