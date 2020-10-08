@@ -318,15 +318,15 @@ export default (Module) => {
 
     constructor(asKey: string) {
       super(...arguments);
-      console.log('>?>?>? Facade', asKey);
+      // console.log('>?>?>? Facade', asKey);
       assert(Facade._instanceMap[asKey] == null, Facade.MULTITON_MSG);
-      console.log('>?>?>? Facade before initializeNotifier');
+      // console.log('>?>?>? Facade before initializeNotifier');
       this.initializeNotifier(asKey);
-      console.log('>?>?>? Facade after initializeNotifier', this._multitonKey);
+      // console.log('>?>?>? Facade after initializeNotifier', this._multitonKey, this._container);
       // Facade._instanceMap[asKey] = this;
       // console.log('>?>?>? Facade after Facade._instanceMap[asKey] = this');
       this._initializeFacade();
-      console.log('>?>?>? Facade after _initializeFacade');
+      // console.log('>?>?>? Facade after _initializeFacade');
     }
   }
 }

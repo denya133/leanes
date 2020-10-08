@@ -166,16 +166,15 @@ export default (Module) => {
       return await this.serializer.serialize(aoRecord, ahOptions);
     }
 
-    constructor(proxyName: string, data: ?{
+    @method setData(ahData: ?{
       delegate: (string | Function | RecordStaticInterface),
       serializer?: (string | Function | Class<Serializer>),
       objectizer?: (string | Function | Class<Objectizer>)
     }) {
-      super(proxyName, data);
-      const proxyData = this.getData();
+      super.setData(... arguments);
       const NS = this.ApplicationModule.NS;
-      const serializer = proxyData != null ? proxyData.serializer : undefined;
-      const objectizer = proxyData != null ? proxyData.objectizer : undefined;
+      const serializer = ahData != null ? ahData.serializer : undefined;
+      const objectizer = ahData != null ? ahData.objectizer : undefined;
       const SerializerClass = serializer == null ?
         Serializer
       :
@@ -204,6 +203,13 @@ export default (Module) => {
             objectizer;
       this.serializer = SerializerClass.new(this);
       this.objectizer = ObjectizerClass.new(this);
+      return ahData;
+    }
+
+    constructor() {
+      super(... arguments);
+      this.serializer = Serializer.new(this);
+      this.objectizer = Objectizer.new(this);
     }
   }
 }

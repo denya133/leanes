@@ -293,7 +293,7 @@ export default (Module) => {
     }
 
     @method _initializeController(): void {
-      this._view = Module.NS.View.getInstance(this._multitonKey);
+      this._view = Module.NS.View.getInstance(this._multitonKey, this._container);
     }
 
     constructor(asKey: string, container: Container) {

@@ -9,12 +9,13 @@ const {
   View, Controller, Notification, Observer, Mediator,
   initialize, module:moduleD, nameBy, meta, method, property
 } = LeanES.NS;
+import { Container } from 'inversify';
 
 describe('View', () => {
   describe('.getInstance', () => {
     it('should get new or exiciting instance of View', () => {
       expect(() => {
-        const view = View.getInstance('TEST1');
+        const view = View.getInstance('VIEW__TEST1', new Container());
         if(!(view instanceof View)) {
           throw new Error('The `view` is not an instance of View');
         }
@@ -24,9 +25,9 @@ describe('View', () => {
   describe('.removeView', () => {
     it('should get new instance of View, remove it and get new one', () => {
       expect(() => {
-        const view = View.getInstance('TEST2');
-        View.removeView('TEST2');
-        const newView = View.getInstance('TEST2');
+        const view = View.getInstance('VIEW__TEST2', new Container());
+        View.removeView('VIEW__TEST2');
+        const newView = View.getInstance('VIEW__TEST2', new Container());
         if(view === newView) {
           throw new Error('View instance didn`t renewed')
         }
@@ -36,8 +37,8 @@ describe('View', () => {
   describe('.registerObserver', () => {
     it('should register new observer', () => {
       expect(() => {
-        const view = View.getInstance('TEST3');
-        const controller = Controller.getInstance('TEST3');
+        const view = View.getInstance('VIEW__TEST3', new Container());
+        const controller = Controller.getInstance('VIEW__TEST3');
         const notifyMethod = sinon.spy();
         notifyMethod.resetHistory();
         const observer = Observer.new(notifyMethod, controller);
@@ -51,8 +52,8 @@ describe('View', () => {
   describe('.removeObserver', () => {
     it('should remove observer', () => {
       expect(() => {
-        const view = View.getInstance('TEST4');
-        const controller = Controller.getInstance('TEST4');
+        const view = View.getInstance('VIEW__TEST4', new Container());
+        const controller = Controller.getInstance('VIEW__TEST4');
         const notifyMethod = sinon.spy();
         notifyMethod.resetHistory();
         const observer = Observer.new(notifyMethod, controller);
@@ -67,7 +68,7 @@ describe('View', () => {
   describe('.registerMediator', () => {
     it('should register new mediator', () => {
       expect(() => {
-        const view = View.getInstance('TEST5');
+        const view = View.getInstance('VIEW__TEST5', new Container());
         const onRegister = sinon.spy();
         const handleNotification = sinon.spy();
         const viewComponent = {};
@@ -85,7 +86,10 @@ describe('View', () => {
             onRegister();
           }
         }
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         view.registerMediator(mediator);
         assert(onRegister.called, 'Mediator is not registered');
         onRegister.resetHistory();
@@ -97,14 +101,17 @@ describe('View', () => {
   describe('.retrieveMediator', () => {
     it('should retrieve registered mediator', () => {
       expect(() => {
-        const view = View.getInstance('TEST6');
+        const view = View.getInstance('VIEW__TEST6', new Container());
         const viewComponent = {};
         @initialize
         class TestMediator extends Mediator {
           @nameBy static  __filename = 'TestMediator';
           @meta static object = {};
         }
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         view.registerMediator(mediator);
         const retrievedMediator = view.retrieveMediator('TEST_MEDIATOR');
         assert.deepEqual(retrievedMediator, mediator, 'Mediator cannot be retrieved');
@@ -116,7 +123,7 @@ describe('View', () => {
   describe('.removeMediator', () => {
     it('should remove mediator', () => {
       expect(() => {
-        const view = View.getInstance('TEST7');
+        const view = View.getInstance('VIEW__TEST7', new Container());
         const onRegister = sinon.spy();
         const onRemove = sinon.spy(() => {});
         const viewComponent = {};
@@ -131,7 +138,10 @@ describe('View', () => {
             onRemove();
           }
         }
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         view.registerMediator(mediator);
         assert(onRegister.called, 'Mediator is not registered');
         onRegister.resetHistory();
@@ -145,14 +155,17 @@ describe('View', () => {
   describe('.hasMediator', () => {
     it('should has mediator', () => {
       expect(() => {
-        const view = View.getInstance('TEST8');
+        const view = View.getInstance('VIEW__TEST8', new Container());
         @initialize
         class TestMediator extends Mediator {
           @nameBy static  __filename = 'TestMediator';
           @meta static object = {};
         }
         const viewComponent = {};
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         view.registerMediator(mediator);
         const hasMediator = view.hasMediator('TEST_MEDIATOR');
         assert(hasMediator, 'Mediator is absent');

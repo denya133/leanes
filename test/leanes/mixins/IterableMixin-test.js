@@ -49,7 +49,10 @@ describe('IterableMixin', () => {
       }
       const array = [{}, {}, {}];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const cursor = await iterable.takeAll();
@@ -111,7 +114,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const spyLambda = sinon.spy(async () => {});
@@ -179,7 +185,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const records = await iterable.map(async (record) => {
@@ -248,7 +257,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const records = await iterable.filter(async (record) => {
@@ -314,7 +326,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const records = await iterable.reduce(async (accumulator, item) => {

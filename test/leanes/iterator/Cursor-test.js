@@ -33,7 +33,12 @@ describe('Cursor', () => {
           @nameBy static  __filename = 'MemoryCollection';
           @meta static object = {};
         }
-        const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        //   delegate: TestRecord
+        // });
+        const voMemoryCollection = MemoryCollection.new();
+        voMemoryCollection.setName('MemoryCollection');
+        voMemoryCollection.setData({
           delegate: TestRecord
         });
         const array = [{}, {}, {}];
@@ -65,7 +70,12 @@ describe('Cursor', () => {
           @nameBy static  __filename = 'MemoryCollection';
           @meta static object = {};
         }
-        const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        //   delegate: TestRecord
+        // });
+        const voMemoryCollection = MemoryCollection.new();
+        voMemoryCollection.setName('MemoryCollection');
+        voMemoryCollection.setData({
           delegate: TestRecord
         });
         const cursor = Cursor.new();
@@ -115,7 +125,12 @@ describe('Cursor', () => {
           type: 'TestRecord'
         }
       ];
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const cursor = Cursor.new(voMemoryCollection, array);
@@ -150,7 +165,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -189,7 +209,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -244,7 +269,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -295,7 +325,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -344,7 +379,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -400,7 +440,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -457,7 +502,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -511,7 +561,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -559,7 +614,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -605,7 +665,12 @@ describe('Cursor', () => {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [

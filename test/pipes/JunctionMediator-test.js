@@ -34,7 +34,10 @@ describe('JunctionMediator', () => {
         const junction = Junction.new();
         const spyRegisterPipe = sinon.spy(junction, 'registerPipe');
         const spyAddPipeListener = sinon.spy(junction, 'addPipeListener');
-        const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        // const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        const mediator = JunctionMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(junction);
         mediator.initializeNotifier(MULTITON_KEY);
         const spySendNotification = sinon.spy(mediator, 'sendNotification');
         const notification = Notification.new(JunctionMediator.ACCEPT_INPUT_PIPE, inputPipe, 'INPUT_PIPE');
@@ -54,7 +57,10 @@ describe('JunctionMediator', () => {
         const outputPipe = Pipe.new(finalNode);
         const junction = Junction.new();
         const spyRegisterPipe = sinon.spy(junction, 'registerPipe');
-        const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        // const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        const mediator = JunctionMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(junction);
         mediator.initializeNotifier(MULTITON_KEY);
         const notification = Notification.new(JunctionMediator.ACCEPT_OUTPUT_PIPE, outputPipe, 'OUTPUT_PIPE');
         mediator.handleNotification(notification);
@@ -70,7 +76,10 @@ describe('JunctionMediator', () => {
         const outputPipe = Pipe.new();
         const junction = Junction.new();
         const spyRemovePipe = sinon.spy(junction, 'removePipe');
-        const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        // const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        const mediator = JunctionMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(junction);
         mediator.initializeNotifier(MULTITON_KEY);
         const acceptNotification = Notification.new(JunctionMediator.ACCEPT_OUTPUT_PIPE, outputPipe, 'OUTPUT_PIPE');
         mediator.handleNotification(acceptNotification);
@@ -87,7 +96,10 @@ describe('JunctionMediator', () => {
       expect(() => {
         const MULTITON_KEY = 'TEST_JUNCTION_3';
         const junction = Junction.new();
-        const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        // const mediator = JunctionMediator.new('TEST_MEDIATOR', junction);
+        const mediator = JunctionMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(junction);
         mediator.initializeNotifier(MULTITON_KEY);
         const message = PipeMessage.new(PipeMessage.NORMAL);
         const spySendNotification = sinon.spy(mediator, 'sendNotification');

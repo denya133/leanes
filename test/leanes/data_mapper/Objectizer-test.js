@@ -39,9 +39,12 @@ describe('Objectizer', () => {
         @attribute({type: 'boolean'}) boolean
       }
 
-      const objectizer = Objectizer.new(TestsCollection.new('Tests', {
+      const collection = TestsCollection.new();
+      collection.setName('Tests');
+      collection.setData({
         delegate: 'TestRecord'
-      }));
+      });
+      const objectizer = Objectizer.new(collection);
       const record = await objectizer.recoverize(Test.NS.TestRecord, {
         type: 'Test::TestRecord',
         string: 'string',
@@ -85,17 +88,22 @@ describe('Objectizer', () => {
         @attribute({type: 'boolean'}) boolean
       }
 
-      const col = TestsCollection.new('Tests', {
+      // const col = TestsCollection.new('Tests', {
+      //   delegate: 'TestRecord'
+      // });
+      const collection = TestsCollection.new();
+      collection.setName('Tests');
+      collection.setData({
         delegate: 'TestRecord'
       });
 
-      const objectizer = Objectizer.new(col);
+      const objectizer = Objectizer.new(collection);
       const data = await objectizer.objectize(Test.NS.TestRecord.new({
         type: 'Test::TestRecord',
         string: 'string',
         number: 123,
         boolean: true
-      }, col));
+      }, collection));
 
       assert.instanceOf(data, Object, 'Objectize is incorrect');
       assert.equal(data.type, 'Test::TestRecord', '`type` is incorrect');
@@ -136,10 +144,13 @@ describe('Objectizer', () => {
       }
 
       const COLLECTION = 'COLLECTION';
-      let collection = facade.registerProxy(MyCollection.new(COLLECTION, {
+      const col = MyCollection.new();
+      col.setName(COLLECTION);
+      col.setData({
         delegate: Test.NS.Record,
         objectizer: MyObjectizer
-      }));
+      });
+      let collection = facade.registerProxy(col);
       collection = facade.retrieveProxy(COLLECTION);
       const replica = await MyObjectizer.replicateObject(collection.objectizer);
       assert.deepEqual(replica, {
@@ -183,18 +194,21 @@ describe('Objectizer', () => {
       }
 
       const COLLECTION = 'COLLECTION';
-      let collection = facade.registerProxy(MyCollection.new(COLLECTION, {
+      const col = MyCollection.new();
+      col.setName(COLLECTION);
+      col.setData({
         delegate: Test.NS.Record,
         objectizer: MyObjectizer
-      }));
+      });
+      let collection = facade.registerProxy(col);
       collection = facade.retrieveProxy(COLLECTION);
-      const restoredRecord = await MyObjectizer.restoreObject(Test, {
+      const restored = await MyObjectizer.restoreObject(Test, {
         type: 'instance',
         class: 'MyObjectizer',
         multitonKey: KEY,
         collectionName: COLLECTION
       });
-      assert.deepEqual(collection.objectizer, restoredRecord);
+      assert.deepEqual(collection.objectizer, restored);
     });
   });
 });

@@ -12,16 +12,16 @@ describe('Facade', () => {
   describe('.getInstance', () => {
     it('should get new or exiciting instance of Facade', () => {
       const { Facade } = LeanES.NS;
-      const facade = LeanES.NS.Facade.getInstance('TEST1');
+      const facade = LeanES.NS.Facade.getInstance('FACADE__TEST1');
       assert.instanceOf(facade, Facade, 'The `facade` is not an instance of Facade');
-      const facade1 = Facade.getInstance('TEST1');
+      const facade1 = Facade.getInstance('FACADE__TEST1');
       assert.deepEqual(facade, facade1, 'Instances of facade not equal');
       facade.remove();
     });
   });
   describe('.initializeNotifier', () => {
     it('should initialize notifier', () => {
-      const multitonKey = 'TEST2';
+      const multitonKey = 'FACADE__TEST2';
       const facade = LeanES.NS.Facade.getInstance(multitonKey);
       expect(facade._multitonKey).to.equal(multitonKey);
       facade.remove();
@@ -30,7 +30,7 @@ describe('Facade', () => {
   describe('.registerCommand', () => {
     it('should register new command', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST3');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST3');
 
         @initialize
         class TestCommand extends LeanES.NS.Command {
@@ -79,7 +79,11 @@ describe('Facade', () => {
       }
 
       facade = Test.NS.Facade.getInstance(INSTANCE_NAME);
-      facade.registerMediator(Test.NS.Mediator.new(APPLICATION_MEDIATOR, Application.new()));
+      // facade.registerMediator(Test.NS.Mediator.new(APPLICATION_MEDIATOR, Application.new()));
+      const mediator = Test.NS.Mediator.new();
+      mediator.setName(APPLICATION_MEDIATOR);
+      mediator.setViewComponent(Application.new());
+      facade.registerMediator(mediator);
       const vsNotificationName = 'TEST_COMMAND2';
       facade.lazyRegisterCommand(vsNotificationName, 'TestCommand');
       assert(facade.hasCommand(vsNotificationName));
@@ -90,7 +94,7 @@ describe('Facade', () => {
   describe('.removeCommand', () => {
     it('should remove command if present', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST4');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST4');
 
         @initialize
         class TestCommand extends LeanES.NS.Command {
@@ -108,7 +112,7 @@ describe('Facade', () => {
   describe('.hasCommand', () => {
     it('has command', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST5');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST5');
 
         @initialize
         class TestCommand extends LeanES.NS.Command {
@@ -146,7 +150,10 @@ describe('Facade', () => {
           }
         }
         const proxyData = {data: 'data'};
-        const testProxy = TestProxy.new('TEST_PROXY', proxyData);
+        // const testProxy = TestProxy.new('TEST_PROXY', proxyData);
+        const testProxy = TestProxy.new();
+        testProxy.setName('TEST_PROXY');
+        testProxy.setData(proxyData);
         facade.registerProxy(testProxy);
         assert(onRegister.called, 'Proxy is not registered');
         onRegister.resetHistory();
@@ -191,7 +198,11 @@ describe('Facade', () => {
       }
 
       facade = Test.NS.Facade.getInstance(INSTANCE_NAME);
-      facade.registerMediator(Test.NS.Mediator.new(APPLICATION_MEDIATOR, Application.new()));
+      // facade.registerMediator(Test.NS.Mediator.new(APPLICATION_MEDIATOR, Application.new()));
+      const mediator = Test.NS.Mediator.new();
+      mediator.setName(APPLICATION_MEDIATOR);
+      mediator.setViewComponent(Application.new());
+      facade.registerMediator(mediator);
       const proxyData = {data: 'data'};
       facade.lazyRegisterProxy('TEST_PROXY', 'TestProxy', proxyData);
       assert.isFalse(onRegister.called, 'Proxy is already registered');
@@ -207,7 +218,7 @@ describe('Facade', () => {
   describe('retrieveProxy', () => {
     it('should retrieve registered proxy', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST7');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST7');
 
         @initialize
         class TestProxy extends LeanES.NS.Proxy {
@@ -216,7 +227,10 @@ describe('Facade', () => {
         }
 
         const proxyData = {data: 'data'};
-        const testProxy = TestProxy.new('TEST_PROXY', proxyData);
+        // const testProxy = TestProxy.new('TEST_PROXY', proxyData);
+        const testProxy = TestProxy.new();
+        testProxy.setName('TEST_PROXY');
+        testProxy.setData(proxyData);
         facade.registerProxy(testProxy);
         const retrievedProxy = facade.retrieveProxy('TEST_PROXY');
         assert.deepEqual(retrievedProxy, testProxy, 'Proxy cannot be retrieved');
@@ -230,7 +244,7 @@ describe('Facade', () => {
   describe('.removeProxy', () => {
     it('should create new proxy and register it, after that remove it', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST8');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST8');
         const onRemove = sinon.spy(() => {});
 
         @initialize
@@ -243,7 +257,10 @@ describe('Facade', () => {
           }
         }
         const proxyData = {data: 'data'};
-        const testProxy = TestProxy.new('TEST_PROXY2', proxyData);
+        // const testProxy = TestProxy.new('TEST_PROXY2', proxyData);
+        const testProxy = TestProxy.new();
+        testProxy.setName('TEST_PROXY2');
+        testProxy.setData(proxyData);
         facade.registerProxy(testProxy);
         const hasProxy = facade.hasProxy('TEST_PROXY2');
         assert(hasProxy, 'Proxy is not registered');
@@ -258,14 +275,17 @@ describe('Facade', () => {
   describe('.hasProxy', () => {
     it('should retrieve registered proxy', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST9');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST9');
         @initialize
         class TestProxy extends LeanES.NS.Proxy {
           @nameBy static  __filename = 'TestProxy';
           @meta static object = {};
         }
         const proxyData = {data: 'data'};
-        const testProxy = TestProxy.new('TEST_PROXY', proxyData);
+        // const testProxy = TestProxy.new('TEST_PROXY', proxyData);
+        const testProxy = TestProxy.new();
+        testProxy.setName('TEST_PROXY');
+        testProxy.setData(proxyData);
         facade.registerProxy(testProxy);
         const hasProxy = facade.hasProxy('TEST_PROXY');
         assert(hasProxy, 'Proxy is absent');
@@ -278,7 +298,7 @@ describe('Facade', () => {
   describe('.registerMediator', () => {
     it('should register new mediator', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST10');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST10');
         const onRegister = sinon.spy(() => {});
         const handleNotification = sinon.spy(() => {});
         const viewComponent = {};
@@ -298,7 +318,10 @@ describe('Facade', () => {
           }
         }
 
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         facade.registerMediator(mediator);
         assert(onRegister.called, 'Mediator is not registered');
         onRegister.resetHistory();
@@ -311,7 +334,7 @@ describe('Facade', () => {
   describe('retrieveMediator', () => {
     it('should retrieve registered mediator', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST11');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST11');
         const viewComponent = {};
 
         @initialize
@@ -320,7 +343,10 @@ describe('Facade', () => {
           @meta static object = {};
         }
 
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         facade.registerMediator(mediator);
         const retrievedMediator = facade.retrieveMediator('TEST_MEDIATOR');
         assert.deepEqual(retrievedMediator, mediator, 'Mediator cannot be retrieved');
@@ -333,7 +359,7 @@ describe('Facade', () => {
   describe('.removeMediator', () => {
     it('should create new mediator and register it, after that remove it', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST12');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST12');
         const onRemove = sinon.spy(() => {});
         const viewComponent = {};
 
@@ -346,7 +372,10 @@ describe('Facade', () => {
             onRemove();
           }
         }
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         facade.registerMediator(mediator);
         facade.removeMediator('TEST_MEDIATOR');
         assert(onRemove.called, 'Mediator onRemove hook not called');
@@ -359,14 +388,17 @@ describe('Facade', () => {
   describe('.hasMediator', () => {
     it('should retrieve registered mediator', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST13');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST13');
         @initialize
         class TestMediator extends LeanES.NS.Mediator {
           @nameBy static  __filename = 'TestMediator';
           @meta static object = {};
         }
         const viewComponent = {};
-        const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        // const mediator = TestMediator.new('TEST_MEDIATOR', viewComponent);
+        const mediator = TestMediator.new();
+        mediator.setName('TEST_MEDIATOR');
+        mediator.setViewComponent(viewComponent);
         facade.registerMediator(mediator);
         const hasMediator = facade.hasMediator('TEST_MEDIATOR');
         assert(hasMediator, 'Mediator is absent');
@@ -379,7 +411,7 @@ describe('Facade', () => {
   describe('.notifyObservers', () => {
     it('should call notification for all observers', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST14');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST14');
         const handleNotification = sinon.spy(() => {});
         const viewComponent = {};
 
@@ -405,7 +437,7 @@ describe('Facade', () => {
   describe('.sendNotification', () => {
     it('should send single notification', () => {
       expect(() => {
-        const facade = LeanES.NS.Facade.getInstance('TEST15');
+        const facade = LeanES.NS.Facade.getInstance('FACADE__TEST15');
         const handleNotification = sinon.spy(() => {});
         const viewComponent = {};
 
@@ -502,7 +534,10 @@ describe('Facade', () => {
         @meta static object = {};
         @method execute(aoNotification) {
           const voApplication = aoNotification.getBody();
-          this.facade.registerMediator(ApplicationMediator.new(APPLICATION_MEDIATOR, voApplication))
+          const mediator = ApplicationMediator.new();
+          mediator.setName(APPLICATION_MEDIATOR);
+          mediator.setViewComponent(voApplication);
+          this.facade.registerMediator(mediator)
         }
       }
       application = new TestApplication();

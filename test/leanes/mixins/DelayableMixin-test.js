@@ -48,7 +48,9 @@ describe('DelayableMixin', () => {
         @nameBy static  __filename = 'TestTest';
         @meta static object = {};
       }
-      facade.registerProxy(TestResque.new(LeanES.NS.RESQUE));
+      const rq = TestResque.new();
+      rq.setName(LeanES.NS.RESQUE);
+      facade.registerProxy(rq);
       const resque = facade.retrieveProxy(LeanES.NS.RESQUE);
       await resque.create(LeanES.NS.DELAYED_JOBS_QUEUE, 4);
       const delayJobSymbol = TestTest.classMethods._delayJob;
@@ -114,7 +116,9 @@ describe('DelayableMixin', () => {
 
         @method static test () {}
       }
-      facade.registerProxy(TestResque.new(LeanES.NS.RESQUE));
+      const rq = TestResque.new();
+      rq.setName(LeanES.NS.RESQUE);
+      facade.registerProxy(rq);
       const resque = facade.retrieveProxy(LeanES.NS.RESQUE);
       await resque.create(LeanES.NS.DELAYED_JOBS_QUEUE, 4);
       const DELAY_UNTIL = Date.now();
@@ -183,7 +187,9 @@ describe('DelayableMixin', () => {
 
         @method static test () {}
       }
-      facade.registerProxy(TestResque.new(LeanES.NS.RESQUE));
+      const rq = TestResque.new();
+      rq.setName(LeanES.NS.RESQUE);
+      facade.registerProxy(rq);
       const resque = facade.retrieveProxy(LeanES.NS.RESQUE);
       await resque.create(LeanES.NS.DELAYED_JOBS_QUEUE, 4);
       const DELAY_UNTIL = Date.now();
