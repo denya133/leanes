@@ -290,7 +290,7 @@ describe('Switch', () => {
         updated: new Date()
       };
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
-      const ctx = LeanES.NS.Context.new(req, res, switchMediator);
+      const ctx = LeanES.NS.Context.new(switchMediator, req, res);
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
       const { collectionName } = resource;
@@ -464,7 +464,7 @@ describe('Switch', () => {
         updated: new Date()
       };
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
-      const ctx = LeanES.NS.Context.new(req, res, switchMediator);
+      const ctx = LeanES.NS.Context.new(switchMediator, req, res);
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
       const { collectionName } = resource;
@@ -589,7 +589,7 @@ describe('Switch', () => {
           secure: false
         };
         const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
-        const ctx = LeanES.NS.Context.new(req, res, switchMediator);
+        const ctx = LeanES.NS.Context.new(switchMediator, req, res);
         const spySwitchSendNotification = sinon.spy(switchMediator, 'sendNotification');
         const vhParams = {
           context: ctx,
@@ -692,7 +692,7 @@ describe('Switch', () => {
           'x-forwarded-for': '192.168.0.1'
         }
       };
-      const voContext = Test.NS.Context.new(req, res, switchMediator);
+      const voContext = Test.NS.Context.new(switchMediator, req, res);
       const middlewares = [];
       const handlers = [[]];
       const COUNT = 4;
@@ -779,7 +779,7 @@ describe('Switch', () => {
           'x-forwarded-for': '192.168.0.1'
         }
       };
-      let voContext = Test.NS.Context.new(req, res, switchMediator);
+      let voContext = Test.NS.Context.new(switchMediator, req, res);
       let endPromise = new Promise(function (resolve, reject) {
         trigger.once('end', resolve);
       });
@@ -798,7 +798,7 @@ describe('Switch', () => {
           'x-forwarded-for': '192.168.0.1'
         }
       };
-      voContext = Test.NS.Context.new(req, res, switchMediator);
+      voContext = Test.NS.Context.new(switchMediator, req, res);
       endPromise = new Promise(function (resolve, reject) {
         trigger.once('end', resolve);
       });
@@ -1195,7 +1195,7 @@ describe('Switch', () => {
         }
       };
       let res = new MyResponse();
-      let voContext = Test.NS.Context.new(req, res, switchMediator);
+      let voContext = Test.NS.Context.new(switchMediator, req, res);
       let promise = LeanES.NS.Promise.new(function (resolve) {
         res.once('finish', resolve);
       });
@@ -1212,7 +1212,7 @@ describe('Switch', () => {
         }
       };
       res = new MyResponse();
-      voContext = Test.NS.Context.new(req, res, switchMediator);
+      voContext = Test.NS.Context.new(switchMediator, req, res);
       promise = LeanES.NS.Promise.new(function (resolve) {
         res.once('finish', resolve);
       });
@@ -1374,7 +1374,7 @@ describe('Switch', () => {
         }
       };
       const res = new MyResponse();
-      const voContext = Test.NS.Context.new(req, res, switchMediator);
+      const voContext = Test.NS.Context.new(switchMediator, req, res);
       facade.registerMediator(LeanES.NS.Mediator.new(LeanES.NS.APPLICATION_MEDIATOR, {
         context: voContext
       }));

@@ -697,7 +697,7 @@ describe('Resource', () => {
       });
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      const context = Test.NS.Context.new(req, res, switchMediator);
+      const context = Test.NS.Context.new(switchMediator, req, res);
       context.query = {
         query: '{}'
       };
@@ -862,7 +862,7 @@ describe('Resource', () => {
       });
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      const context = Test.NS.Context.new(req, res, switchMediator);
+      const context = Test.NS.Context.new(switchMediator, req, res);
       context.pathParams = {
         [`${resource.keyName}`]: record.id
       };
@@ -1259,7 +1259,7 @@ describe('Resource', () => {
 
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      const context = Test.NS.Context.new(req, res, switchMediator);
+      const context = Test.NS.Context.new(switchMediator, req, res);
       const record = await collection.create({
         test: 'test3'
       });
@@ -1453,7 +1453,7 @@ describe('Resource', () => {
       const collection = facade.retrieveProxy(COLLECTION_NAME);
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      const context = Test.NS.Context.new(req, res, switchMediator);
+      const context = Test.NS.Context.new(switchMediator, req, res);
       context.query = {
         query: '{"test":{"$eq":"test2"}}'
       };
@@ -1579,7 +1579,7 @@ describe('Resource', () => {
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      resource.context = Test.NS.Context.new(req, res, switchMediator);
+      resource.context = Test.NS.Context.new(switchMediator, req, res);
       let e;
       try {
         resource.context.pathParams = {
@@ -1912,7 +1912,7 @@ describe('Resource', () => {
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      resource.context = Test.NS.Context.new(req, res, switchMediator);
+      resource.context = Test.NS.Context.new(switchMediator, req, res);
       resource.context.pathParams = {
         test_entity: 'ID123455',
         space: 'SPACE123'
@@ -2078,7 +2078,7 @@ describe('Resource', () => {
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      resource.context = Test.NS.Context.new(req, res, switchMediator);
+      resource.context = Test.NS.Context.new(switchMediator, req, res);
       resource.context.pathParams = {
         test_entity: 'ID123455',
         space: 'SPACE123'
@@ -2223,7 +2223,7 @@ describe('Resource', () => {
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      resource.context = Test.NS.Context.new(req, res, switchMediator);
+      resource.context = Test.NS.Context.new(switchMediator, req, res);
       resource.context.pathParams = {
         test_entity: 'ID123456',
         space: 'SPACE123'
@@ -2370,7 +2370,7 @@ describe('Resource', () => {
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      const context = Test.NS.Context.new(req, res, switchMediator);
+      const context = Test.NS.Context.new(switchMediator, req, res);
       await resource.doAction('test', context);
       assert.isTrue(testAction.called);
       assert.isTrue(testAction.calledWith(context));
@@ -2569,7 +2569,7 @@ describe('Resource', () => {
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      const context = Test.NS.Context.new(req, res, switchMediator);
+      const context = Test.NS.Context.new(switchMediator, req, res);
       assert.isFalse(await resource.writeTransaction('test', context));
       context.request.method = 'POST';
       assert.isTrue(await resource.writeTransaction('test', context));

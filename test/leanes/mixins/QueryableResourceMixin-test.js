@@ -159,7 +159,7 @@ describe('QueryableResourceMixin', () => {
       });
       let resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      let context = Test.NS.Context.new(req, res, switchMediator);
+      let context = Test.NS.Context.new(switchMediator, req, res);
       let result = await resource.list(context);
       assert.deepEqual(result.meta, {
         pagination: {
@@ -172,7 +172,7 @@ describe('QueryableResourceMixin', () => {
       req.url = 'http://localhost:8888/space/SPACE123/test_entity/ID123456?query={"$filter":{"@doc.test":"test2"}}';
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      context = Test.NS.Context.new(req, res, switchMediator);
+      context = Test.NS.Context.new(switchMediator, req, res);
       result = await resource.list(context);
       console.log('/,./,./,./,./,./,./,./1111', result);
       assert.propertyVal(result.items[0], 'test', 'test2')
