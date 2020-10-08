@@ -46,6 +46,8 @@ export default (Module) => {
   ): Promise<L> => {
 
     const vhOptions = convertToAxiosOptions(asMethod, asUrl, ahOptions);
+    // console.log('/////////////////////</L>', axios.request(vhOptions));
+
     return axios.request(vhOptions)
       .then(<T = any, R = T>(res: AxiosResponse<T, R>) => {
         return {

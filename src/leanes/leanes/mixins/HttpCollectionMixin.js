@@ -430,7 +430,7 @@ export default (Module) => {
       @method async sendRequest<
         T = any, R = T, L = LegacyResponseInterface<AxiosResponse<T, R>>
       >(...args: RequestArgumentsT<T, R>): Promise<L> {
-        const [ method, url, options ] = args;
+        const [{ method, url, options }] = args;
         return await request(method, url, options);
       }
 
