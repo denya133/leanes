@@ -90,7 +90,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.instanceOf(response, TestResponse);
     });
   });
@@ -175,7 +175,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.ctx, context);
     });
   });
@@ -260,7 +260,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.res, res);
       assert.equal(response.ctx._req, res);
     });
@@ -346,7 +346,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.switch, switchMediator);
       assert.equal(response.ctx._res, switchMediator);
     });
@@ -434,7 +434,7 @@ describe('Response', () => {
         socket: socket
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.socket, socket);
     });
   });
@@ -520,7 +520,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.headerSent, res.headerSent);
     });
   });
@@ -607,7 +607,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.deepEqual(response.headers, {
         'Foo': 'Bar'
       });
@@ -699,7 +699,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.deepEqual(response.header, {
         'Foo': 'Bar'
       });
@@ -788,7 +788,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.status, 200);
       response.status = 400;
       assert.equal(response.status, 400);
@@ -891,7 +891,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.message, 'OK');
       response.message = 'TEST';
       assert.equal(response.message, 'TEST');
@@ -981,7 +981,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.deepEqual(response.get('Foo'), 'Bar');
     });
   });
@@ -1068,7 +1068,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       response.set('Content-Type', 'text/plain');
       assert.equal(res._headers['content-type'], 'text/plain');
       assert.equal(response.get('Content-Type'), 'text/plain');
@@ -1171,7 +1171,7 @@ describe('Response', () => {
         }
       };
       const rcontext = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       response.append('Test', 'data');
       assert.equal(response.get('Test'), 'data');
       response.append('Test', 'Test');
@@ -1263,7 +1263,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       response.set('Test', 'data');
       assert.equal(response.get('Test'), 'data');
       response.remove('Test');
@@ -1353,7 +1353,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       response.vary('Origin');
       assert.equal(response.get('Vary'), 'Origin');
     });
@@ -1441,7 +1441,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       const now = new Date();
       response.lastModified = now;
       assert.equal(res._headers['last-modified'], now.toUTCString());
@@ -1531,7 +1531,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       let etag = '123456789';
       response.etag = etag;
       assert.equal(res._headers['etag'], `\"${etag}\"`);
@@ -1625,7 +1625,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.type, '');
       response.type = 'markdown';
       assert.equal(response.type, 'text/markdown');
@@ -1724,7 +1724,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       response.attachment(`${__dirname}/${__filename}`);
       assert.equal(response.type, 'text/coffeescript');
       assert.equal(response.get('Content-Disposition'), 'attachment; filename="Response-test.coffee"');
@@ -1817,27 +1817,27 @@ describe('Response', () => {
         }
       };
       let context = Test.NS.Context.new(switchMediator, req, res);
-      let response = TestResponse.new(context);
+      let response = TestResponse.new(context, res);
       assert.isFalse(response.writable);
       res.finished = false;
       context = Test.NS.Context.new(switchMediator, req, res);
-      response = TestResponse.new(context);
+      response = TestResponse.new(context, res);
       assert.isTrue(response.writable);
       res = new MyResponse();
       context = Test.NS.Context.new(switchMediator, req, res);
-      response = TestResponse.new(context);
+      response = TestResponse.new(context, res);
       assert.isTrue(response.writable);
       res.socket = {
         writable: true
       };
       context = Test.NS.Context.new(switchMediator, req, res);
-      response = TestResponse.new(context);
+      response = TestResponse.new(context, res);
       assert.isTrue(response.writable);
       res.socket = {
         writable: false
       };
       context = Test.NS.Context.new(switchMediator, req, res);
-      response = TestResponse.new(context);
+      response = TestResponse.new(context, res);
       assert.isFalse(response.writable);
     });
   });
@@ -1924,7 +1924,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       response.type = 'data.json';
       assert.equal(response.is('html', 'application/*'), 'application/json');
       assert.isFalse(response.is('html'));
@@ -2013,7 +2013,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.isUndefined(response.body);
       response.body = 'TEST';
       assert.equal(response.status, 200);
@@ -2155,7 +2155,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       assert.equal(response.length, 0);
       response.length = 10;
       assert.equal(response.length, 10);
@@ -2262,8 +2262,8 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const request = TestRequest.new(context);
-      const response = TestResponse.new(context);
+      const request = TestRequest.new(context, req);
+      const response = TestResponse.new(context, res);
       response.redirect('back', 'http://localhost:8888/test1');
       assert.equal(response.get('Location'), 'http://localhost:8888/test1');
       assert.equal(response.status, 302);
@@ -2366,7 +2366,7 @@ describe('Response', () => {
         }
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
-      const response = TestResponse.new(context);
+      const response = TestResponse.new(context, res);
       const now = new Date();
       const array = [1, now, 'TEST'];
       response.set({
