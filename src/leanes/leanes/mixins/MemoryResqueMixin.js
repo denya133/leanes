@@ -82,7 +82,7 @@ export default (Module) => {
         }
       }
 
-      @method async removeQueue(name: string): Promise<void> {
+      @method async removeQueue(queueName: string): Promise<void> {
         const fullName = this.fullQueueName(queueName);
         const queue = this._queues[fullName];
         if (queue != null) {
