@@ -1,0 +1,31 @@
+const { expect, assert } = require('chai');
+const LeanES = require("../../../src/leanes/index.js").default;
+const {
+  CoreObject,
+  initialize, module:moduleD, method, nameBy, meta
+} = LeanES.NS;
+
+describe('method', () => {
+  describe('method(target, key, descriptor)', () => {
+    it('should add method in metaObject', () => {
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class SubTest extends CoreObject {
+        @nameBy static  __filename = 'Test';
+        @meta static object = {};
+        @method testMethod() {};
+        @method static testStaticMethod() {};
+      }
+      assert.equal(SubTest.metaObject.parent.data.instanceMethods.testMethod, SubTest.new().testMethod);
+      assert.equal(SubTest.metaObject.parent.data.classMethods.testStaticMethod, SubTest.testStaticMethod);
+    });
+  });
+});
+
