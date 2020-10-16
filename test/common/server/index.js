@@ -10,14 +10,12 @@ module.exports = function (options) {
     data: {}
   };
   const FIXTURE_NAME = `${__dirname}/fixtures/${options.fixture}.json`;
-  console.log('..................', options.fixture);
   let ref = null;
   const FIXTURE = (ref = ((function () {
     try {
-      console.log('........>>>>>>>>>>>>>>>>>>..........', require(FIXTURE_NAME));
       require(FIXTURE_NAME);
     } catch (error) {
-      err = error;
+      const err = error;
       console.log(err);
     }
   })())) != null ? ref : {
@@ -63,7 +61,7 @@ module.exports = function (options) {
     });
     req.on('end', function () {
       req.body = req.rawBody.toString('utf8');
-      const ref2 = null;
+      let ref2 = null;
       let response = '';
       const body = _.isEmpty(req.body) ? {} : (ref2 = ((function () {
         try {
