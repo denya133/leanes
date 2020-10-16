@@ -21,7 +21,6 @@ describe('Configuration', () => {
         @meta static object = {};
       }
 
-      // const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
       const configuration = Test.NS.Configuration.new();
       configuration.setName(LeanES.NS.CONFIGURATION);
       configuration.setData(Test.NS.ROOT);
@@ -45,7 +44,6 @@ describe('Configuration', () => {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
       }
-      // const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
       const configuration = Test.NS.Configuration.new();
       configuration.setName(LeanES.NS.CONFIGURATION);
       configuration.setData(Test.NS.ROOT);
@@ -71,7 +69,6 @@ describe('Configuration', () => {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
       }
-      // const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
       const configuration = Test.NS.Configuration.new();
       configuration.setName(LeanES.NS.CONFIGURATION);
       configuration.setData(Test.NS.ROOT);

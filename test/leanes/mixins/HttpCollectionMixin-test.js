@@ -28,9 +28,9 @@ describe('HttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -42,7 +42,9 @@ describe('HttpCollectionMixin', () => {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       assert.instanceOf(collection, HttpCollection, 'The `collection` is not an instance of HttpCollection')
@@ -78,9 +80,9 @@ describe('HttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -92,10 +94,12 @@ describe('HttpCollectionMixin', () => {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection, 'The `collection` is not an instance of HttpCollection');
       const data = await collection.sendRequest({
         method: 'GET',

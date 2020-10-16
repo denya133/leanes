@@ -35,7 +35,9 @@ describe('LogMessageCommand', () => {
           spyAddLogEntry(body);
         }
       }
-      facade.registerProxy(TestProxy.new(LeanES.NS.Application.LOGGER_PROXY));
+      const proxy = TestProxy.new();
+      proxy.setName(LeanES.NS.Application.LOGGER_PROXY);
+      facade.registerProxy(proxy);
       const command = LogMessageCommand.new();
       command.initializeNotifier(KEY);
       const body = {

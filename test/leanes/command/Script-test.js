@@ -14,34 +14,36 @@ describe('Script', () => {
       assert.instanceOf(command, Script, 'Cannot instantiate class LogMessageCommand');
     });
   });
-  // describe('.do', () => {
-  //   it('should add script body', () => {
+  describe('body', () => {
+    it('should run script body', async () => {
+      const KEY = 'TEST_SCRIPT_001';
 
-  //     @initialize
-  //     class Test extends LeanES {
-  //       @nameBy static __filename = 'Test';
-  //       @meta static object = {};
-  //       @constant ROOT = `${__dirname}/config/root2`;
-  //     }
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/config/root2`;
+      }
 
-  //     @initialize
-  //     @moduleD(Test)
-  //     class TestScript extends LeanES.NS.Script {
-  //       @nameBy static __filename = 'TestScript';
-  //       @meta static object = {};
-  //     }
-  //     const command = TestScript.new();
-  //     const [ data ] = await command.body({
-  //       test: 'test'
-  //     });
-  //     assert.deepEqual(data, {
-  //       test: 'test'
-  //     });
-  //   });
-  // });
+      @initialize
+      @moduleD(Test)
+      class TestScript extends LeanES.NS.Script {
+        @nameBy static __filename = 'TestScript';
+        @meta static object = {};
+        @method async body(data: ?any): Promise<?any> { return data }
+      }
+      const command = TestScript.new();
+      const data = await command.body({
+        test: 'test'
+      });
+      assert.deepEqual(data, {
+        test: 'test'
+      });
+    });
+  });
   describe('execute', () => {
     it('should run script', async () => {
-      const KEY = 'TEST_SCRIPT_001';
+      const KEY = 'TEST_SCRIPT_002';
       const facade = LeanES.NS.Facade.getInstance(KEY);
       const trigger = new EventEmitter();
 
@@ -57,8 +59,9 @@ describe('Script', () => {
       class TestScript extends Script {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
+        @method async body(data: ?any): Promise<?any> { return data }
         @method sendNotification(...args) {
-          const result = this.super(...args);
+          const result = super.sendNotification(...args);
           trigger.emit('RUN_SCRIPT', args);
           return result;
         }
@@ -77,18 +80,16 @@ describe('Script', () => {
       assert.deepEqual(options, [
         LeanES.NS.JOB_RESULT,
         {
-          result: [
-            {
-              body: 'body'
-            }
-          ]
+          result: {
+            body: 'body'
+          }
         },
         'TEST_TYPE'
       ]);
       facade.remove();
     });
     it('should fail script', async () => {
-      const KEY = 'TEST_SCRIPT_001';
+      const KEY = 'TEST_SCRIPT_003';
       const facade = LeanES.NS.Facade.getInstance(KEY);
       const trigger = new EventEmitter();
 
@@ -104,8 +105,11 @@ describe('Script', () => {
       class TestScript extends Script {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
+        @method async body(data: ?any): Promise<?any> {
+          throw new Error('TEST_ERROR')
+        }
         @method sendNotification(...args) {
-          const result = this.super(...args);
+          const result = super.sendNotification(...args);
           trigger.emit('RUN_SCRIPT', args);
           return result;
         }
@@ -123,7 +127,7 @@ describe('Script', () => {
       const [title, body, type] = await promise;
       assert.equal(title, LeanES.NS.JOB_RESULT);
       assert.instanceOf(body.error, Error);
-      assert.equal(body.error.message, 'TEST_ERROR');
+      assert.equal(body.error.message, 'ERROR in Script::execute TEST_ERROR');
       assert.equal(type, 'TEST_TYPE');
       facade.remove();
     });

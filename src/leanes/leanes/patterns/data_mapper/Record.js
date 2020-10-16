@@ -1,18 +1,18 @@
-console.log('>?>?>??? 000');
+// console.log('>?>?>??? 000');
 import type { CollectionInterface } from '../../interfaces/CollectionInterface';
-console.log('>?>?>??? 111');
+// console.log('>?>?>??? 111');
 import type { RecordInterface } from '../../interfaces/RecordInterface';
-console.log('>?>?>??? 222');
+// console.log('>?>?>??? 222');
 import type { RecordStaticInterface } from '../../interfaces/RecordStaticInterface';
-console.log('>?>?>??? 333');
+// console.log('>?>?>??? 333');
 import type { TransformStaticInterface } from '../../interfaces/TransformStaticInterface';
-console.log('>?>?>??? 444');
+// console.log('>?>?>??? 444');
 import type { JoiT } from '../../types/JoiT';
-console.log('>?>?>??? 555');
+// console.log('>?>?>??? 555');
 import type { AttributeConfigT } from '../../types/AttributeConfigT';
-console.log('>?>?>??? 666');
+// console.log('>?>?>??? 666');
 import type { ComputedConfigT } from '../../types/ComputedConfigT';
-console.log('>?>?>??? 777');
+// console.log('>?>?>??? 777');
 
 
 const hasProp = {}.hasOwnProperty;
@@ -291,13 +291,13 @@ export default (Module) => {
     }
 
     @method async save(): Promise<RecordInterface> {
-      console.log(':::::LLLL Record::save enter');
+      // console.log(':::::LLLL Record::save enter');
       const result = (await this.isNew()) ? (await this.create()) : (await this.update());
       return result;
     }
 
     @method async create(): Promise<RecordInterface> {
-      console.log(':::::LLLL Record::create enter');
+      // console.log(':::::LLLL Record::create enter');
       // console.log '>>??? create push ', @, @collection
       const response = await this.collection.push(this);
       // response = await @collection.push.body.call @collection, @
@@ -453,7 +453,7 @@ export default (Module) => {
     }
 
     @method async isNew(): Promise<boolean> {
-      console.log(':::::LLLL Record::isNew enter', this.collection.delegate.name);
+      // console.log(':::::LLLL Record::isNew enter', this.collection.delegate.name);
       if (this.id == null) {
         return true;
       }

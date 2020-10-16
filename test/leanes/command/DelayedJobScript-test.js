@@ -60,8 +60,11 @@ describe('DelayedJobScript', () => {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.getViewComponent(TestApplication.new());
+      // facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      facade.registerMediator(mediator);
       const command = TestScript.new();
       command.initializeNotifier(KEY);
       const promise = new Promise(function (resolve, reject) {
@@ -103,7 +106,7 @@ describe('DelayedJobScript', () => {
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
-        @method static test(...args) {
+        @method test(...args) {
           trigger.emit('RUN_SCRIPT', args);
         }
       }
@@ -121,7 +124,10 @@ describe('DelayedJobScript', () => {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.getViewComponent(TestApplication.new());
+      facade.registerMediator(mediator);
       const command = TestScript.new();
       command.initializeNotifier(KEY);
       const promise = new Promise(function (resolve, reject) {
@@ -181,7 +187,10 @@ describe('DelayedJobScript', () => {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.getViewComponent(TestApplication.new());
+      facade.registerMediator(mediator);
       const command = TestScript.new();
       command.initializeNotifier(KEY);
       const promise = new Promise(function (resolve, reject) {
@@ -223,7 +232,7 @@ describe('DelayedJobScript', () => {
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
-        @method static test(...args) {
+        @method test(...args) {
           trigger.emit('RUN_SCRIPT', args);
         }
       }

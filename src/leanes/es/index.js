@@ -219,5 +219,4 @@ export type {StateInterface} from './interfaces/StateInterface';
 export type {StateMachineInterface} from './interfaces/StateMachineInterface';
 export type {RecoverableStaticInterface} from './interfaces/RecoverableStaticInterface';
 
-console.log('?>?>?>00');
 export default ES;

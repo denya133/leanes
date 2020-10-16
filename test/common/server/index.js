@@ -10,12 +10,10 @@ module.exports = function (options) {
     data: {}
   };
   const FIXTURE_NAME = `${__dirname}/fixtures/${options.fixture}.json`;
-  console.log('..................', options.fixture);
   let ref = null;
   const FIXTURE = (ref = ((function () {
     try {
-      console.log('........>>>>>>>>>>>>>>>>>>..........', require(FIXTURE_NAME));
-      require(FIXTURE_NAME);
+      return require(FIXTURE_NAME);
     } catch (error) {
       err = error;
       console.log(err);
@@ -45,7 +43,7 @@ module.exports = function (options) {
       if (methodName === '*' || [].indexOf.call(methodName, ',') >= 0) {
         const names = methodName === '*' ? ['HEAD', 'OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'] : methodName.split(',');
         delete methods[methodName];
-        for (name of names) {
+        for (const name of names) {
           if (!_.isEmpty(name)) {
             methods[name] = methodConfig;
 
