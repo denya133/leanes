@@ -13,17 +13,13 @@
     "type": "git",
     "url": "git+https://github.com/LeanSDK/leanes.git"
   },
-  "author": {
-    "name": "Denis Trayzhon",
-    "email": "d.g.trayzhon@gmail.com"
-  },
+  "author": "Denis Trayzhon <d.g.trayzhon@gmail.com>",
   "contributors": [
-    {
-      "name": "Irina Markevich"
-    }
+    "Irina Markevich"
   ],
   "directories": {
-    "test": "./test"
+    "lib": "lib",
+    "test": "test"
   },
   "keywords": [
     "MVC",
@@ -94,5 +90,9 @@
     "statuses": "^1.4.0",
     "type-is": "^1.6.16",
     "xml2js": "^0.4.23"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/LeanSDK/leanes/issues"
+  },
+  "homepage": "https://github.com/LeanSDK/leanes#readme"
 }
