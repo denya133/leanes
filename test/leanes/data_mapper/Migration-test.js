@@ -40,8 +40,12 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {}
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -82,19 +86,28 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.createCollection('collectionName', {
+            prop: 'prop'
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        return this.createCollection('collectionName', {
-          prop: 'prop'
-        });
-      });
+      // BaseMigration.change(function () {
+      //   return this.createCollection('collectionName', {
+      //     prop: 'prop'
+      //   });
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
+      console.log('dfdf', migration);
       assert.lengthOf(migration.steps, 1);
       assert.deepEqual(migration.steps[0], {
         args: [

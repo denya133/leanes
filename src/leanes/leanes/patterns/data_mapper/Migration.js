@@ -17,7 +17,7 @@ export default (Module) => {
     @meta static object = {};
 
     // iplSteps = PointerT(Migration.private({
-    @property _steps: ?Array<{|args: Array, method: $Keys<typeof REVERSE_MAP> | 'reversible'|}> = null;
+    // @property _steps: ?Array<{|args: Array, method: $Keys<typeof REVERSE_MAP> | 'reversible'|}> = null;
 
     @property get steps(): Array<{|args: Array, method: $Keys<typeof REVERSE_MAP> | 'reversible'|}> {
       return assign([], (this._steps && [... this._steps]) || []);
@@ -33,7 +33,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [name, options],
         method: 'createCollection'
       });
     }
@@ -51,7 +51,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_1, collection_2, options],
         method: 'createEdgeCollection'
       });
     }
@@ -72,7 +72,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name, options],
         method: 'addField'
       });
     }
@@ -97,7 +97,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_names, options],
         method: 'addIndex'
       });
     }
@@ -119,7 +119,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, options],
         method: 'addTimestamps'
       });
     }
@@ -136,7 +136,7 @@ export default (Module) => {
       options: object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [name, options],
         method: 'changeCollection'
       });
     }
@@ -156,7 +156,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name, options],
         method: 'changeField'
       });
     }
@@ -177,7 +177,7 @@ export default (Module) => {
       new_field_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name, new_field_name],
         method: 'renameField'
       });
     }
@@ -196,7 +196,7 @@ export default (Module) => {
       new_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, old_name, new_name],
         method: 'renameIndex'
       });
     }
@@ -214,7 +214,7 @@ export default (Module) => {
       new_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, new_name],
         method: 'renameCollection'
       });
     }
@@ -230,7 +230,7 @@ export default (Module) => {
       collection_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name],
         method: 'dropCollection'
       });
     }
@@ -246,7 +246,7 @@ export default (Module) => {
       collection_2: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_1, collection_2],
         method: 'dropEdgeCollection'
       });
     }
@@ -263,7 +263,7 @@ export default (Module) => {
       field_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name],
         method: 'removeField'
       });
     }
@@ -285,7 +285,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_names, options],
         method: 'removeIndex'
       });
     }
@@ -307,7 +307,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, options],
         method: 'removeTimestamps'
       });
     }
@@ -323,7 +323,7 @@ export default (Module) => {
       lambda: ({|up: () => Promise<void>, down: () => Promise<void>|}) => Promise<void>
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [lambda],
         method: 'reversible'
       });
     }

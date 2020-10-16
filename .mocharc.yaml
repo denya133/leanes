@@ -51,7 +51,7 @@ file:
   - './test/leanes/data_mapper/Serializer-test.js'
   - './test/leanes/data_mapper/Queue-test.js'
   - './test/leanes/data_mapper/Record-test.js'
-  # - './test/leanes/data_mapper/Migration-test.js'
+  - './test/leanes/data_mapper/Migration-test.js'
   - './test/leanes/facade/Application-test.js'
   - './test/leanes/iterator/Cursor-test.js'
   - './test/leanes/mixins/GenerateUuidMixin-test.js'
