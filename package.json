@@ -1,6 +1,6 @@
 {
-  "name": "leanes",
-  "version": "1.0.0",
+  "name": "@leansdk/leanes",
+  "version": "7.0.0",
   "description": "LeanES is a MVC framework for creating graceful applications",
   "main": "lib/index.js",
   "license": "LGPL-3.0",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LeanPack/leanes.git"
+    "url": "git+https://github.com/LeanSDK/leanes.git"
   },
   "author": {
     "name": "Denis Trayzhon",
