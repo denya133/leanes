@@ -1,8 +1,7 @@
 const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  CoreObject,
-  initialize, module: moduleD, nameBy, meta, decorator
+  initialize, nameBy, meta, decorator
 } = LeanES.NS;
 
 describe('decorator', () => {
