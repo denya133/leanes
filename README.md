@@ -4,7 +4,7 @@ LeanES
 LeanES is a MVC framework for creating graceful applications.
 
 ## CoffeeScript code guidelines
-https://docs.google.com/a/saifas.com/document/d/114zNDimqXbdF76nnKBUqDfZoKd7xn6c7V14Fb7jOlk0/edit?usp=sharing
+[google document](https://docs.google.com/a/saifas.com/document/d/114zNDimqXbdF76nnKBUqDfZoKd7xn6c7V14Fb7jOlk0/edit?usp=sharing)
 
 
 ## Tasks

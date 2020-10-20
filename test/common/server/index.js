@@ -15,7 +15,7 @@ module.exports = function (options) {
     try {
       return require(FIXTURE_NAME);
     } catch (error) {
-      err = error;
+      const err = error;
       console.log(err);
     }
   })())) != null ? ref : {
@@ -61,7 +61,7 @@ module.exports = function (options) {
     });
     req.on('end', function () {
       req.body = req.rawBody.toString('utf8');
-      const ref2 = null;
+      let ref2 = null;
       let response = '';
       const body = _.isEmpty(req.body) ? {} : (ref2 = ((function () {
         try {

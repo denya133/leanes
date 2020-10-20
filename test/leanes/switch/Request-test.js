@@ -1,11 +1,8 @@
 const EventEmitter = require('events');
 const { expect, assert } = require('chai');
-const sinon = require('sinon');
-const _ = require('lodash');
-const { accepts } = require('accepts');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, module: moduleD, nameBy, meta, constant, property
 } = LeanES.NS;
 
 describe('Request', () => {
@@ -98,7 +95,7 @@ describe('Request', () => {
       };
       const context = Test.NS.Context.new(switchMediator, req, res);
       const request = TestRequest.new(context, req);
-      assert.instanceOf(request, TestRequest);
+      assert.instanceOf(request, TestRequest, 'The `request` is not an instance of TestRequest');
       assert.equal(request.ctx, context);
       assert.equal(request.ip, '192.168.0.1');
     });
@@ -2304,6 +2301,886 @@ describe('Request', () => {
       const context = Test.NS.Context.new(switchMediator, req, res);
       const request = TestRequest.new(context, req);
       assert.equal(request.charset, 'utf-8');
+    });
+  });
+  describe('.length', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get content length of request', () => {
+      const KEY = 'TEST_REQUEST_024';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        method: 'GET',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'content-length': '123456'
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.equal(request.length, 123456);
+    });
+  });
+  describe('.secure', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should if request protocol is secure', () => {
+      const KEY = 'TEST_REQUEST_025';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      let req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+        }
+      };
+      let context = Test.NS.Context.new(switchMediator, req, res);
+      let request = TestRequest.new(context, req);
+      assert.isFalse(request.secure);
+      req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'x-forwarded-proto': 'https'
+        }
+      };
+      context = Test.NS.Context.new(switchMediator, req, res);
+      request = TestRequest.new(context, req);
+      assert.isTrue(request.secure);
+    });
+  });
+  describe('.ips', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get request IPs', () => {
+      const KEY = 'TEST_REQUEST_026';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1, 192.168.1.1, 123.222.12.21',
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.deepEqual(request.ips, ['192.168.0.1', '192.168.1.1', '123.222.12.21']);
+    });
+  });
+  describe('.subdomains', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get request URL subdomains', () => {
+      const KEY = 'TEST_REQUEST_027';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      let res = new MyResponse();
+      let req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'host': 'www.test.localhost:9999'
+        }
+      };
+      let context = Test.NS.Context.new(switchMediator, req, res);
+      let request = TestRequest.new(context, req);
+      assert.deepEqual(request.subdomains, [ 'test', 'www' ]);
+      req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'host': '192.168.0.2:9999'
+        }
+      };
+      context = Test.NS.Context.new(switchMediator, req, res);
+      request = TestRequest.new(context, req);
+      assert.deepEqual(request.subdomains, []);
+    });
+  });
+  describe('.accepts', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get acceptable types from request', () => {
+      const KEY = 'TEST_REQUEST_028';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'accept': 'application/json, text/plain, image/png'
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.deepEqual(request.accepts(), ['application/json', 'text/plain', 'image/png']);
+    });
+  });
+  describe('.acceptsCharsets', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get acceptable charsets from request', () => {
+      const KEY = 'TEST_REQUEST_029';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'accept-charset': 'utf-8, iso-8859-1;q=0.5, *;q=0.1'
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.deepEqual(request.acceptsCharsets(), [ 'utf-8', 'iso-8859-1', '*' ]);
+    });
+  });
+  describe('.acceptsEncodings', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get acceptable charsets from request', () => {
+      const KEY = 'TEST_REQUEST_030';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'accept-encoding': 'compress, gzip, deflate, sdch, identity'
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.deepEqual(request.acceptsEncodings(), [ 'compress', 'gzip', 'deflate', 'sdch', 'identity' ]);
+    });
+  });
+  describe('.acceptsLanguages', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get acceptable languages from request', () => {
+      const KEY = 'TEST_REQUEST_031';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'accept-language': 'en, ru, cn, fr'
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.deepEqual(request.acceptsLanguages(), [ 'en', 'ru', 'cn', 'fr' ]);
+    });
+  });
+  describe('.test', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get types from request', () => {
+      const KEY = 'TEST_REQUEST_032';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'content-type': 'application/json'
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.deepEqual(request.type, 'application/json');
+    });
+  });
+  describe('.is', () => {
+    let facade = null;
+    afterEach(() => {
+      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    });
+    it('should get types from request', () => {
+      const KEY = 'TEST_REQUEST_033';
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/../command/config`;
+      }
+      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRequest extends LeanES.NS.Request {
+        @nameBy static __filename = 'TestRequest';
+        @meta static object = {};
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        _headers = {};
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8888',
+        headers: {
+          'x-forwarded-for': '192.168.0.1',
+          'content-type': 'application/json',
+          'content-length': '0'
+        }
+      };
+      const context = Test.NS.Context.new(switchMediator, req, res);
+      const request = TestRequest.new(context, req);
+      assert.deepEqual(request.is('html', 'application/*'), 'application/json');
     });
   });
 });
