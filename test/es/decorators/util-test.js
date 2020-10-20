@@ -2,7 +2,7 @@ const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const moment = require('moment');
 const {
-  initialize, method, nameBy, meta, util
+  initialize, nameBy, meta, util
 } = LeanES.NS;
 
 describe('util', () => {
