@@ -430,7 +430,7 @@ export default (Module) => {
       @method async sendRequest<
         T = any, R = T, L = LegacyResponseInterface<AxiosResponse<T, R>>
       >(...args: RequestArgumentsT<T, R>): Promise<L> {
-        const [{ method, url, options }] = args;
+        const [ method, url, options ] = args;
         return await request(method, url, options);
       }
 
@@ -499,7 +499,7 @@ export default (Module) => {
       ): Promise<CursorInterface<?CollectionInterface<D>, *>> {
         console.log('>>?? HttpCollectionMixin::executeQuery enter');
         const requestObj = this.requestFor(aoQuery);
-        res = await this.makeRequest(requestObj);
+        const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
         if ((body != null) && body !== '') {

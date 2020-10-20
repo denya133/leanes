@@ -342,7 +342,7 @@ export default (Module) => {
       }
     }
 
-    @method static change(): Symbol {
+    @method static change(): ?Symbol {
       return NON_OVERRIDDEN;
     }
 
@@ -361,7 +361,7 @@ export default (Module) => {
       });
     }
 
-    @method static up(): Symbol {
+    @method static up(): ?Symbol {
       return NON_OVERRIDDEN;
     }
 
@@ -381,13 +381,16 @@ export default (Module) => {
         } else if (methodName === 'renameCollection') {
           const [ oldCollectionName, newCollectionName ] = args;
           await this[methodName](newCollectionName, oldCollectionName);
+        } else if (methodName === 'addField') {
+          const [ collectionName, fieldName ] = args;
+          await this[REVERSE_MAP[methodName]](collectionName, fieldName);
         } else {
           await this[REVERSE_MAP[methodName]](...args);
         }
       });
     }
 
-    @method static down(): Symbol {
+    @method static down(): ?Symbol {
       return NON_OVERRIDDEN;
     }
 
@@ -401,9 +404,9 @@ export default (Module) => {
 
     @method static onInitialize(...args) {
       super.onInitialize(...args);
-      if (this.prototype._steps == null) {
-        this.prototype._steps = [];
-      }
+      // if (this.prototype._steps == null) {
+      this.prototype._steps = [];
+      // }
       if (this === Migration) return;
       const changeReturn = this.change();
       if (changeReturn === NON_OVERRIDDEN) {
@@ -414,7 +417,7 @@ export default (Module) => {
         hasUpDownDeined &= downFunctor !== NON_OVERRIDDEN;
         assert(hasUpDownDeined == 1, 'Static `change` method should be defined or direct static methods `up` and `down` should be defined with return lambda functors');
         Reflect.defineProperty(this.prototype, 'up', method(this.prototype, 'up', { value: upFunctor }));
-        Refle.defineProperty(this.prototype, 'down', method(this.prototype, 'down', { value: downFunctor }));
+        Reflect.defineProperty(this.prototype, 'down', method(this.prototype, 'down', { value: downFunctor }));
       }
     }
   }

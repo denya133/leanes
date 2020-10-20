@@ -119,14 +119,17 @@ module.exports = function (options) {
             if (method.data != null) {
               switch (method.data) {
                 case 'SELF':
+                  let resp;
                   if (req.method === 'POST') {
                     if (body.id == null) {
-                      body.id = RC.prototype.Utils.uuid.v4();
+                      body.id = LeanES.prototype.Utils.uuid.v4();
                     }
-                    const resp = {
+                    resp = {
                       [`${path.single}`]: body
                     };
-                    if ((base = server.data)[name1 = `test_${path.plural}`] == null) {
+                    const base = server.data;
+                    const name1 = `test_${path.plural}`;
+                    if (base[name1] == null) {
                       base[name1] = [];
                     }
                     server.data[`test_${path.plural}`].push(body);
@@ -143,7 +146,8 @@ module.exports = function (options) {
                 case 'GET':
                   let key = Object.keys(url.params)[0];
                   let collectionId = inflect.pluralize(key.replace(/(^\:|_id$)/g, ''));
-                  let collection = (ref4 = server.data[`test_${path.plural}`]) != null ? ref4 : [];
+                  const ref4 = server.data[`test_${path.plural}`];
+                  let collection = ref4 != null ? ref4 : [];
                   let record = _.find(collection, {
                     id: url.params[key]
                   });
@@ -159,7 +163,8 @@ module.exports = function (options) {
                 case 'DELETE':
                   key = Object.keys(url.params)[0];
                   collectionId = inflect.pluralize(key.replace(/(^\:|_id$)/g, ''));
-                  collection = (ref5 = server.data[`test_${path.plural}`]) != null ? ref5 : [];
+                  const ref5 = server.data[`test_${path.plural}`];
+                  collection = ref5 != null ? ref5 : [];
                   record = _.find(collection, {
                     id: url.params[key]
                   });
@@ -179,13 +184,14 @@ module.exports = function (options) {
                 case 'PATCH':
                   key = Object.keys(url.params)[0];
                   collectionId = inflect.pluralize(key.replace(/(^\:|_id$)/g, ''));
-                  collection = (ref6 = server.data[`test_${path.plural}`]) != null ? ref6 : [];
+                  const ref6 = server.data[`test_${path.plural}`];
+                  collection = ref6 != null ? ref6 : [];
                   record = _.find(collection, {
                     id: url.params[key]
                   });
                   if (record != null) {
-                    for (key in body) {
-                      value = body[key];
+                    for (const key in body) {
+                      const value = body[key];
                       if (value != null) {
                         record[key] = value;
                       }
@@ -199,6 +205,7 @@ module.exports = function (options) {
                   }
                   break;
                 case 'QUERY':
+                  let query;
                   ({ query } = querystring.parse(url.query));
                   if (!_.isEmpty(query)) {
                     query = JSON.parse(query);
@@ -208,9 +215,9 @@ module.exports = function (options) {
                       query = body.query;
                     }
                   }
-                  const ref7 = null;
-                  const ref8 = null;
-                  const ref9 = null;
+                  let ref7 = null;
+                  let ref8 = null;
+                  let ref9 = null;
                   collection = (ref7 = server.data[(ref8 = query != null ? (ref9 = query['$forIn']) != null ? ref9['@doc'] : void 0 : void 0) != null ? ref8 : `test_${path.plural}`]) != null ? ref7 : [];
                   const filter = function (item) {
                     if ((query != null ? query.$filter : void 0) != null) {
@@ -249,6 +256,7 @@ module.exports = function (options) {
                     }
                     return true;
                   };
+                  let records = [];
                   switch (req.method) {
                     case 'POST':
                       if (query['$insert'] != null) {

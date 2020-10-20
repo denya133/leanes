@@ -4,7 +4,7 @@ import type { NotificationInterface } from '../../../patternes';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR, STOPPED_ROLLBACK, MIGRATIONS,
+    APPLICATION_MEDIATOR, STOPPED_ROLLBACK, MIGRATIONS, DOWN,
     // SimpleCommand,
     Command,
     ConfigurableMixin,
@@ -62,7 +62,7 @@ export default (Module) => {
       executedMigrations = executedMigrations.slice(0, (options.steps || 1));
       for (const executedMigration of executedMigrations) {
         try {
-          await executedMigration.migrate(Module.NS.Migration.DOWN);
+          await executedMigration.migrate(DOWN);
           await executedMigration.destroy();
         } catch (error) {
           err = error;

@@ -2305,8 +2305,8 @@ describe('Request', () => {
   });
   describe('.length', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get content length of request', () => {
       const KEY = 'TEST_REQUEST_024';
@@ -2318,7 +2318,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2342,8 +2344,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -2392,8 +2398,8 @@ describe('Request', () => {
   });
   describe('.secure', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should if request protocol is secure', () => {
       const KEY = 'TEST_REQUEST_025';
@@ -2405,7 +2411,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2429,8 +2437,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -2487,8 +2499,8 @@ describe('Request', () => {
   });
   describe('.ips', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get request IPs', () => {
       const KEY = 'TEST_REQUEST_026';
@@ -2500,7 +2512,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2524,8 +2538,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -2572,8 +2590,8 @@ describe('Request', () => {
   });
   describe('.subdomains', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get request URL subdomains', () => {
       const KEY = 'TEST_REQUEST_027';
@@ -2585,7 +2603,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2609,8 +2629,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -2668,8 +2692,8 @@ describe('Request', () => {
   });
   describe('.accepts', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get acceptable types from request', () => {
       const KEY = 'TEST_REQUEST_028';
@@ -2681,7 +2705,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2705,8 +2731,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -2754,8 +2784,8 @@ describe('Request', () => {
   });
   describe('.acceptsCharsets', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get acceptable charsets from request', () => {
       const KEY = 'TEST_REQUEST_029';
@@ -2767,7 +2797,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2791,8 +2823,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -2840,8 +2876,8 @@ describe('Request', () => {
   });
   describe('.acceptsEncodings', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get acceptable charsets from request', () => {
       const KEY = 'TEST_REQUEST_030';
@@ -2853,7 +2889,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2877,8 +2915,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -2926,8 +2968,8 @@ describe('Request', () => {
   });
   describe('.acceptsLanguages', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get acceptable languages from request', () => {
       const KEY = 'TEST_REQUEST_031';
@@ -2939,7 +2981,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -2963,8 +3007,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -3012,8 +3060,8 @@ describe('Request', () => {
   });
   describe('.test', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get types from request', () => {
       const KEY = 'TEST_REQUEST_032';
@@ -3025,7 +3073,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -3049,8 +3099,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
@@ -3098,8 +3152,8 @@ describe('Request', () => {
   });
   describe('.is', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get types from request', () => {
       const KEY = 'TEST_REQUEST_033';
@@ -3111,7 +3165,9 @@ describe('Request', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/../command/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -3135,8 +3191,12 @@ describe('Request', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
