@@ -76,8 +76,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.exists', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check data existance by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_002';
@@ -158,8 +158,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.findBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should find data by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_003';
@@ -246,8 +246,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.deleteBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should find data by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_004';
@@ -349,8 +349,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.removeBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove data by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_005';
@@ -465,8 +465,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.destroyBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove records by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_006';
@@ -579,8 +579,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.updateBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should update data in records by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_009';
@@ -701,8 +701,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.patchBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should update data in records by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_010';

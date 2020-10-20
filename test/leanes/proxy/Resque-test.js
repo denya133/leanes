@@ -301,8 +301,8 @@ describe('Resque', () => {
   });
   describe('.delay', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should put delayed procedure into queue', async () => {
       const MULTITON_KEY = 'TEST_RESQUE_001';
@@ -429,8 +429,8 @@ describe('Resque', () => {
   });
   describe('.getDelayed', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get delayed jobs from cache', async () => {
       const MULTITON_KEY = 'TEST_RESQUE_001|>123456-5432-234-5432';

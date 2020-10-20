@@ -7,6 +7,10 @@ const {
 
 describe('Application', () => {
   describe('start', () => {
+    let application = null;
+    afterEach(async () => {
+      return application != null ? typeof application.finish === "function" ? await application.finish() : void 0 : void 0;
+    });
     it('should create new Application instance', () => {
       @initialize
       class Test extends LeanES {
@@ -22,13 +26,10 @@ describe('Application', () => {
         @property static _instanceMap = {};
         @property isInitialized: boolean = false;
         @method startup(...args) {
-          this.super(...args);
+          super.startup(...args);
           if (!this.isInitialized) {
             this.isInitialized = true;
           }
-        }
-        @method finish(...args) {
-          this.super(...args);
         }
       }
 
@@ -46,13 +47,13 @@ describe('Application', () => {
         }
       }
 
-      const application = Application.new();
+      application = Application.new();
       assert.instanceOf(application, Application);
       assert.instanceOf(application.facade, ApplicationFacade);
     });
   });
   describe('finish', () => {
-    it('should deactivate application', () => {
+    it('should deactivate application', async () => {
       @initialize
       class Test extends LeanES {
         @nameBy static  __filename = 'Test';
@@ -67,13 +68,10 @@ describe('Application', () => {
         @property static _instanceMap = {};
         @property isInitialized: boolean = false;
         @method startup(...args) {
-          this.super(...args);
+          super.startup(...args);
           if (!this.isInitialized) {
             this.isInitialized = true;
           }
-        }
-        @method finish(...args) {
-          this.super(...args);
         }
       }
 
@@ -94,7 +92,7 @@ describe('Application', () => {
       assert.instanceOf(application, Application);
       assert.instanceOf(application.facade, ApplicationFacade);
       assert.isDefined(LeanES.NS.Facade._instanceMap[Application.NAME]);
-      application.finish();
+      await application.finish();
       assert.isUndefined(LeanES.NS.Facade._instanceMap[Application.NAME]);
     });
   });

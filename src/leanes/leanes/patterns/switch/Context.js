@@ -108,7 +108,7 @@ export default (Module) => {
       this.status = err.status;
       const vsMessage = JSON.stringify(message);
       this.length = Buffer.byteLength(vsMessage);
-      this.body = vsMessage;
+      this.res.end(vsMessage);
     }
 
     // Request aliases

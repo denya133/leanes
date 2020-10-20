@@ -11,8 +11,8 @@ const {
 describe('Migration', () => {
   describe('.new', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create migration instance', () => {
       const collectionName = 'TestsCollection';
@@ -57,8 +57,8 @@ describe('Migration', () => {
   });
   describe('.createCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step for create collection', () => {
       const collectionName = 'TestsCollection';
@@ -107,7 +107,6 @@ describe('Migration', () => {
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
-      console.log('dfdf', migration);
       assert.lengthOf(migration.steps, 1);
       assert.deepEqual(migration.steps[0], {
         args: [

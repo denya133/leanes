@@ -44,7 +44,7 @@ export default (Module) => {
 
     @method onRegister(): void  { return; }
 
-    @method onRemove(): void { return; }
+    @method async onRemove(): void { return; }
 
     @method static async restoreObject(acModule: Class<Module>, replica: object): ProxyInterface {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {

@@ -12,8 +12,8 @@ const {
 describe('HttpSerializerMixin', () => {
   describe('.normalize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it("should normalize object value", async () => {
       const KEY = 'TEST_HTTP_SERIALIZER_001';
@@ -74,8 +74,8 @@ describe('HttpSerializerMixin', () => {
   });
   describe('.serialize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it("should serialize Record.NS value", async () => {
       const KEY = 'TEST_HTTP_SERIALIZER_002';

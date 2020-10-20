@@ -257,8 +257,8 @@ describe('Collection', () => {
   // });
   describe('.build', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create record from delegate', async () => {
       const collectionName = 'TestsCollection';
@@ -670,8 +670,8 @@ describe('Collection', () => {
   // });
   describe('.normalize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should normalize record from data', async () => {
       const collectionName = 'TestsCollection';
@@ -740,8 +740,8 @@ describe('Collection', () => {
   });
   describe('.serialize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should serialize record to data', async () => {
       const collectionName = 'TestsCollection';

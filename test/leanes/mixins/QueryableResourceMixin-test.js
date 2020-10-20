@@ -8,8 +8,8 @@ const hasProp = {}.hasOwnProperty;
 
 describe('QueryableResourceMixin', () => {
   let facade = null;
-  after(() => {
-    facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+  afterEach(async () => {
+    facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
   });
   describe('.list', () => {
     it('should list of resource items', async () => {

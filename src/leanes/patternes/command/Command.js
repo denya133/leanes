@@ -23,7 +23,7 @@ export default (Module) => {
     @method execute(aoNotification: NotificationInterface): void {
       const vlSubCommands = [... this._subCommands];
       for (const vCommand of vlSubCommands) {
-        if (!this.facade.container.isBoundNamed(vCommand.name)) {
+        if (!this.facade.container.isBound(vCommand.name)) {
           this.facade.container.bind(vCommand.name).to(vCommand);
         }
         const voCommand: CommandInterface = this.facade.container.get(vCommand.name);

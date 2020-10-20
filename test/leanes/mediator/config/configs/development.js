@@ -3,6 +3,6 @@ module.exports = {
     description: 'Server port',
     type: 'number',
     required: true,
-    default: 8888
+    default: 8878
   }
 };

@@ -81,16 +81,16 @@ export default (Module) => {
       return View._instanceMap[asKey];
     }
 
-    @method static removeView(asKey: string): void {
+    @method static async removeView(asKey: string): void {
       const voView = View._instanceMap[asKey];
       if (voView != null) {
         for (const asMediatorName of Reflect.ownKeys(voView._mediatorMap)) {
-          voView.removeMediator(asMediatorName);
+          await voView.removeMediator(asMediatorName);
         }
         // for (const asMediatorName of container._bindingDictionary._map) {
         //   voView.removeMediator(asMediatorName[0]);
         // }
-        View._instanceMap[asKey] = undefined;
+        // View._instanceMap[asKey] = undefined;
         delete View._instanceMap[asKey];
       }
     }
@@ -155,7 +155,7 @@ export default (Module) => {
       }
       // Alert the mediator that it has been registered.
       aoMediator.onRegister();
-      if (!this._container.isBoundNamed(`Factory<${vsName}>`)) {
+      if (!this._container.isBound(`Factory<${vsName}>`)) {
         this._container.bind(`Factory<${vsName}>`).toFactory((context) => {
           return () => {
             return aoMediator;
@@ -170,13 +170,13 @@ export default (Module) => {
 
     @method retrieveMediator(asMediatorName: string): ?MediatorInterface {
       if (this._mediatorMap[asMediatorName] == null) {
-      // if (!container.isBoundNamed(asMediatorName)) {
+      // if (!container.isBound(asMediatorName)) {
         const {
           className, data = {}
         } = this._metaMediatorMap[asMediatorName] || {};
         if (!_.isEmpty(className)) {
           const voClass = this.ApplicationModule.NS[className];
-          if (!this._container.isBoundNamed(asMediatorName)) {
+          if (!this._container.isBound(asMediatorName)) {
             this._container.bind(asMediatorName).to(voClass).inSingletonScope();
           }
           const voMediator: MediatorInterface = this._container.get(asMediatorName);
@@ -194,7 +194,7 @@ export default (Module) => {
       return this.retrieveMediator(...args);
     }
 
-    @method removeMediator(asMediatorName: string): ?MediatorInterface {
+    @method async removeMediator(asMediatorName: string): ?MediatorInterface {
       const voMediator = this._mediatorMap[asMediatorName];
       // const voMediator = container.get(asMediatorName);
       if (voMediator == null) {
@@ -214,7 +214,7 @@ export default (Module) => {
       delete this._mediatorMap[asMediatorName];
       delete this._metaMediatorMap[asMediatorName];
       // Alert the mediator that it has been removed
-      voMediator.onRemove();
+      await voMediator.onRemove();
       return voMediator;
     }
 
@@ -229,7 +229,7 @@ export default (Module) => {
         className: asMediatorClassName,
         data: ahData
       };
-      if (!this._container.isBoundNamed(`Factory<${asMediatorName}>`)) {
+      if (!this._container.isBound(`Factory<${asMediatorName}>`)) {
         this._container.bind(`Factory<${asMediatorName}>`).toFactory((context) => {
           return () => {
             return this.retrieveMediator(asMediatorName)

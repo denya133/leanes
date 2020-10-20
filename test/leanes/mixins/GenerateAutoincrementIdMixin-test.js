@@ -13,12 +13,12 @@ describe('GenerateAutoincrementIdMixin', () => {
   describe('.generateId', () => {
     var facade;
     facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should generate id for itemsusing autoincrement', async () => {
       const KEY = 'FACADE_TEST_AUTOINCREMENT_ID_001';
-      const facade = LeanES.NS.Facade.getInstance(KEY);initialize;
+      facade = LeanES.NS.Facade.getInstance(KEY);initialize;
       class Test extends LeanES {
         @nameBy static  __filename = 'Test';
         @meta static object = {};

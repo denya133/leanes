@@ -15,8 +15,8 @@ describe('DelayedJobScript', () => {
   });
   describe('.body', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run delayed job script (class, sync)', async () => {
       const KEY = 'TEST_DELAYED_JOB_SCRIPT_001';

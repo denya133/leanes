@@ -19,6 +19,10 @@ export default (Module) => {
 
     @property _cleanType = 'adapter';
 
+    @method onRegister(): void  { return; }
+
+    @method async onRemove(): void { return; }
+
     @method static async restoreObject() {
       assert.fail(`restoreObject method not supported for ${this.name}`);
     }

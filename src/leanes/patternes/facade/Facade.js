@@ -98,18 +98,20 @@ export default (Module) => {
       return Facade._instanceMap[asKey];
     }
 
-    @method remove(): void {
-      Module.NS.Model.removeModel(this._multitonKey);
-      Module.NS.Controller.removeController(this._multitonKey);
-      Module.NS.View.removeView(this._multitonKey);
+    @method async remove(): void {
+      await Module.NS.Model.removeModel(this._multitonKey);
+      await Module.NS.Controller.removeController(this._multitonKey);
+      await Module.NS.View.removeView(this._multitonKey);
       // container.get("Model").removeModel(this._multitonKey);
       // container.get("Controller").removeController(this._multitonKey);
       // container.get("View").removeView(this._multitonKey);
-      this._model = undefined;
-      this._view = undefined;
-      this._controller = undefined;
-      Module.NS.Facade._instanceMap[this._multitonKey] = undefined;
-      delete Module.NS.Facade._instanceMap[this._multitonKey];
+      // this._model = undefined;
+      // this._view = undefined;
+      // this._controller = undefined;
+      delete this._model;
+      delete this._view;
+      delete this._controller;
+      delete Facade._instanceMap[this._multitonKey];
     }
 
     @method registerCommand(asNotificationName: string, aCommand: Class<CoreObject>): void {
@@ -124,8 +126,8 @@ export default (Module) => {
       this._controller.lazyRegisterCommand(asNotificationName, asClassName);
     }
 
-    @method removeCommand(asNotificationName: string): void {
-      this._controller.removeCommand(asNotificationName);
+    @method async removeCommand(asNotificationName: string): void {
+      await this._controller.removeCommand(asNotificationName);
     }
 
     @method hasCommand(asNotificationName: string): boolean {
@@ -148,8 +150,8 @@ export default (Module) => {
       return this._controller.hasCase(asKey)
     }
 
-    @method removeCase(asKey: string): void {
-      this._controller.removeCase(asKey)
+    @method async removeCase(asKey: string): void {
+      await this._controller.removeCase(asKey)
     }
 
     @method getCase(asKey: string): ?CaseInterface {
@@ -164,8 +166,8 @@ export default (Module) => {
       return this._controller.hasSuite(asKey)
     }
 
-    @method removeSuite(asKey: string): void {
-      this._controller.removeSuite(asKey)
+    @method async removeSuite(asKey: string): void {
+      await this._controller.removeSuite(asKey)
     }
 
     @method getSuite(asKey: string): ?SuiteInterface {
@@ -192,8 +194,8 @@ export default (Module) => {
       return this._model.getProxy(...args);
     }
 
-    @method removeProxy(asProxyName: string): ?ProxyInterface {
-      return this._model.removeProxy(asProxyName);
+    @method async removeProxy(asProxyName: string): ?ProxyInterface {
+      return await this._model.removeProxy(asProxyName);
     }
 
     @method hasProxy(asProxyName: string): boolean {
@@ -208,8 +210,8 @@ export default (Module) => {
       return this._model.getAdapter(asProxyName);
     }
 
-    @method removeAdapter(asKey: string): void {
-      return this._model.removeAdapter(asKey);
+    @method async removeAdapter(asKey: string): void {
+      await this._model.removeAdapter(asKey);
     }
 
     @method hasAdapter(asKey: string): boolean {
@@ -236,9 +238,9 @@ export default (Module) => {
       return this._view.getMediator(...args);
     }
 
-    @method removeMediator(asMediatorName: string): ?MediatorInterface {
+    @method async removeMediator(asMediatorName: string): ?MediatorInterface {
       if (this._view) {
-        return this._view.removeMediator(asMediatorName);
+        return await this._view.removeMediator(asMediatorName);
       }
     }
 
@@ -283,17 +285,18 @@ export default (Module) => {
       return !!Facade._instanceMap[key];
     }
 
-    @method static removeCore(key: string): void {
+    @method static async removeCore(key: string): void {
       if (!Facade._instanceMap[key]) {
         return;
       }
-      Module.NS.Model.removeModel(key);
-      Module.NS.View.removeView(key);
-      Module.NS.Controller.removeController(key);
+      await Facade._instanceMap[key].remove();
+      // Module.NS.Model.removeModel(key);
+      // Module.NS.View.removeView(key);
+      // Module.NS.Controller.removeController(key);
       // container.get("Model").removeModel(key);
       // container.get("View").removeView(key);
       // container.get("Controller").removeController(key);
-      delete Facade._instanceMap[key];
+      // delete Facade._instanceMap[key];
     }
 
     @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<FacadeInterface> {

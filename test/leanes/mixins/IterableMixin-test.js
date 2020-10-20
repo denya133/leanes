@@ -11,8 +11,8 @@ const {
 describe('IterableMixin', () => {
   describe('.new', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create iterable instance', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_001';
@@ -61,8 +61,8 @@ describe('IterableMixin', () => {
   });
   describe('.forEach', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should call lambda in each record in iterable', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_002';
@@ -132,8 +132,8 @@ describe('IterableMixin', () => {
   });
   describe('.map', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should map records using lambda', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_003';
@@ -204,8 +204,8 @@ describe('IterableMixin', () => {
   });
   describe('.filter', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should filter records using lambda', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_004';
@@ -273,8 +273,8 @@ describe('IterableMixin', () => {
   });
   describe('.reduce', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should reduce records using lambda', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_005';

@@ -7,8 +7,8 @@ const {
 describe('DelayableMixin', () => {
   describe('._delayJob', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should put job into delayed queue', async () => {
       const KEY = 'TEST_DELAYABLE_MIXIN_001';
@@ -82,8 +82,8 @@ describe('DelayableMixin', () => {
   });
   describe('.delay', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get delayed function wrapper', async () => {
       const KEY = 'TEST_DELAYABLE_MIXIN_002';
@@ -152,8 +152,8 @@ describe('DelayableMixin', () => {
   });
   describe('.delay', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get delayed function wrapper', async () => {
       const KEY = 'TEST_DELAYABLE_MIXIN_003';

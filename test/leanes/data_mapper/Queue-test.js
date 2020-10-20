@@ -479,8 +479,8 @@ describe('.failed', () => {
   describe('.replicatedObject', () => {
     let facade = null;
     const KEY = 'TEST_DELAYED_QUEUE_001';
-    after(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create replica for delayed queue', async () => {
       const RESQUE = 'RESQUE';
@@ -528,8 +528,8 @@ describe('.failed', () => {
   describe('.restoreObject', () => {
     let facade = null;
     const KEY = 'TEST__QUEUE_002';
-    after(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should restore delayed queue from replica', async () => {
       const RESQUE = 'RESQUE';

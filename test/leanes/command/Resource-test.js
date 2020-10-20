@@ -109,8 +109,8 @@ describe('Resource', () => {
   });
   describe('.collection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get collection', () => {
       const TEST_FACADE = 'TEST_FACADE_001';
@@ -129,7 +129,7 @@ describe('Resource', () => {
         @meta static object = {};
         @property entityName = 'TestEntity';
       }
-      const facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
+      facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
       const resource = TestResource.new();
       resource.initializeNotifier(TEST_FACADE);
       const { collectionName } = resource;
@@ -436,12 +436,12 @@ describe('Resource', () => {
   });
   describe('.omitBody', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should clean body from unneeded properties', () => {
       const TEST_FACADE = 'TEST_FACADE_002';
-      const facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
+      facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
 
       @initialize
       class Test extends LeanES {
@@ -563,12 +563,12 @@ describe('Resource', () => {
   });
   describe('.list', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should list of resource items', async () => {
       const KEY = 'TEST_RESOURCE_001';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -725,12 +725,12 @@ describe('Resource', () => {
   });
   describe('.detail', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get resource single item', async () => {
       const KEY = 'TEST_RESOURCE_002';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -889,8 +889,8 @@ describe('Resource', () => {
   });
   describe('.create', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create resource single item', async () => {
       const KEY = 'TEST_RESOURCE_003';
@@ -994,8 +994,8 @@ describe('Resource', () => {
   });
   describe('.update', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should update resource single item', async () => {
       const KEY = 'TEST_RESOURCE_005';
@@ -1124,8 +1124,8 @@ describe('Resource', () => {
   });
   describe('.delete', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove resource single item', async () => {
       const KEY = 'TEST_RESOURCE_006';
@@ -1294,8 +1294,8 @@ describe('Resource', () => {
   });
   describe('.execute', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should call execution', async () => {
       const KEY = 'TEST_RESOURCE_008';
@@ -1507,8 +1507,8 @@ describe('Resource', () => {
   });
   describe('.checkApiVersion', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check API version', async () => {
       const KEY = 'TEST_RESOURCE_001';
@@ -1810,8 +1810,8 @@ describe('Resource', () => {
   });
   describe('.checkOwner', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check if user is resource owner', async () => {
       const KEY = 'TEST_RESOURCE_003';
@@ -1984,8 +1984,8 @@ describe('Resource', () => {
   });
   describe('.checkExistence', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check if entity exists', async () => {
       const KEY = 'TEST_RESOURCE_102';
@@ -2142,8 +2142,8 @@ describe('Resource', () => {
   });
   describe('.adminOnly', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check if user is administrator', async () => {
       const KEY = 'TEST_RESOURCE_004';
@@ -2305,8 +2305,8 @@ describe('Resource', () => {
   });
   describe('.doAction', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run specified action', async () => {
       const KEY = 'TEST_RESOURCE_104';
@@ -2429,8 +2429,8 @@ describe('Resource', () => {
   });
   describe('.saveDelayeds', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should save delayed jobs from cache into queue', async () => {
       const MULTITON_KEY = 'TEST_RESOURCE_105|>123456765432';
@@ -2536,8 +2536,8 @@ describe('Resource', () => {
   });
   describe('.writeTransaction', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should test if transaction is needed', async () => {
       const KEY = 'TEST_RESOURCE_106';

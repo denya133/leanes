@@ -42,8 +42,8 @@ export default (Module) => {
       this.facade.startup(this);
     }
 
-    @method finish(): void {
-      this.facade.remove();
+    @method async finish(): void {
+      await this.facade.remove();
     }
 
     @method async migrate(opts?: {until: ?string}): Promise<void> {

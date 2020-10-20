@@ -80,16 +80,20 @@ export default (Module) => {
       return Controller._instanceMap[asKey];
     }
 
-    @method static removeController(asKey: string): void {
+    @method static async removeController(asKey: string): void {
       const voController = Controller._instanceMap[asKey]
       if (voController != null) {
         for (const asNotificationName of Reflect.ownKeys(voController._commandMap)) {
-          voController.removeCommand(asNotificationName);
+          await voController.removeCommand(asNotificationName);
+        }
+        for (const asName of Reflect.ownKeys(voController._classNames)) {
+          await voController.removeCase(asName);
+          await voController.removeSuite(asName);
         }
         // for (const asNotificationName of container._bindingDictionary._map) {
         //   voController.removeCommand(asNotificationName[0]);
         // }
-        Controller._instanceMap[asKey] = undefined;
+        // Controller._instanceMap[asKey] = undefined;
         delete Controller._instanceMap[asKey];
       }
     }
@@ -107,7 +111,7 @@ export default (Module) => {
         }
       }
       if (vCommand != null) {
-        if (!this._container.isBoundNamed(asNotificationName)) {
+        if (!this._container.isBound(asNotificationName)) {
           this._container.bind(asNotificationName).to(vCommand);
         }
         const voCommand: CommandInterface = this._container.get(asNotificationName);
@@ -152,7 +156,7 @@ export default (Module) => {
       if (!this._commandMap[asNotificationName]) {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._commandMap[asNotificationName] = aCommand;
-        if (!this._container.isBoundNamed(`Factory<${asNotificationName}>`)) {
+        if (!this._container.isBound(`Factory<${asNotificationName}>`)) {
           this._container.bind(`Factory<${asNotificationName}>`).toFactory((context) => {
             return () => {
               return this.retrieveCommand(asNotificationName)
@@ -178,7 +182,7 @@ export default (Module) => {
         this._view.registerObserver(asNotificationName, Module.NS.Observer.new(this.executeCommand, this));
         this._classNames[asNotificationName] = asClassName;
       }
-      if (!this._container.isBoundNamed(`Factory<${asNotificationName}>`)) {
+      if (!this._container.isBound(`Factory<${asNotificationName}>`)) {
         this._container.bind(`Factory<${asNotificationName}>`).toFactory((context) => {
           return () => {
             return this.retrieveCommand(asNotificationName)
@@ -196,11 +200,11 @@ export default (Module) => {
       // return (container.get(asNotificationName) != null) || (this._classNames[asNotificationName] != null);
     }
 
-    @method removeCommand(asNotificationName: string): void {
+    @method async removeCommand(asNotificationName: string): void {
       if (this.hasCommand(asNotificationName)) {
         this._view.removeObserver(asNotificationName, this);
-        this._commandMap[asNotificationName] = undefined;
-        this._classNames[asNotificationName] = undefined;
+        // this._commandMap[asNotificationName] = undefined;
+        // this._classNames[asNotificationName] = undefined;
         delete this._commandMap[asNotificationName];
         delete this._classNames[asNotificationName];
       }
@@ -213,7 +217,7 @@ export default (Module) => {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = asClassName;
       }
-      if (!this._container.isBoundNamed(`Factory<${asKey}>`)) {
+      if (!this._container.isBound(`Factory<${asKey}>`)) {
         this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
           return () => {
             return this.getCase(asKey)
@@ -226,10 +230,16 @@ export default (Module) => {
       return (this._classNames[asKey] != null);
     }
 
-    @method removeCase(asKey: string): void {
+    @method async removeCase(asKey: string): void {
       if (this.hasCase(asKey)) {
-        this._classNames[asKey] = undefined;
         delete this._classNames[asKey];
+        delete this._commandMap[asKey];
+        if (this._container.isBound(`Factory<${asKey}>`)) {
+          this._container.unbind(`Factory<${asKey}>`);
+        }
+        if (this._container.isBound(asKey)) {
+          this._container.unbind(asKey);
+        }
       }
     }
 
@@ -240,7 +250,7 @@ export default (Module) => {
         vCase = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
       }
       if (vCase != null) {
-        if (!this._container.isBoundNamed(asKey)) {
+        if (!this._container.isBound(asKey)) {
           this._container.bind(asKey).to(vCase);
         }
         const voCase: CaseInterface = this._container.get(asKey);
@@ -256,7 +266,7 @@ export default (Module) => {
       if (this._classNames[asKey] == null) {
         this._classNames[asKey] = asClassName;
       }
-      if (!this._container.isBoundNamed(`Factory<${asKey}>`)) {
+      if (!this._container.isBound(`Factory<${asKey}>`)) {
         this._container.bind(`Factory<${asKey}>`).toFactory((context) => {
           return () => {
             return this.getSuite(asKey)
@@ -269,10 +279,17 @@ export default (Module) => {
       return (this._classNames[asKey] != null);
     }
 
-    @method removeSuite(asKey: string): void {
+    @method async removeSuite(asKey: string): void {
       if (this.hasSuite(asKey)) {
-        this._classNames[asKey] = undefined;
         delete this._classNames[asKey];
+        delete this._commandMap[asKey];
+        if (this._container.isBound(`Factory<${asKey}>`)) {
+          this._container.unbind(`Factory<${asKey}>`);
+        }
+        if (this._container.isBound(asKey)) {
+          this._container.unbind(asKey);
+          this._container.unbind(asKey);
+        }
       }
     }
 
@@ -283,7 +300,7 @@ export default (Module) => {
         vSuite = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
       }
       if (vSuite != null) {
-        if (!this._container.isBoundNamed(asKey)) {
+        if (!this._container.isBound(asKey)) {
           this._container.bind(asKey).to(vSuite);
         }
         const voSuite: SuiteInterface = this._container.get(asKey);

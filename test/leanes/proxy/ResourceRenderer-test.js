@@ -17,8 +17,8 @@ describe('ResourceRenderer', () => {
   });
   describe('.render(template)', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should render the data with template', async () => {
       const KEY = 'TEST_RENDERER_005';
