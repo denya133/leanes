@@ -91,7 +91,13 @@ file:
   # - './test/es/decorators/util-test.js'
   # - './test/es/decorators/nameBy-test.js'
   # - './test/es/decorators/machine-test.js'
-  - './test/es/decorators/mixin-test.js'
+  # - './test/es/decorators/mixin-test.js'
+  # - './test/es/decorators/decorator-test.js'
+  # - './test/es/decorators/module-test.js'
+  # - './test/es/decorators/resolver-test.js'
+  # - './test/leanes/decorators/action-test.js'
+  # - './test/leanes/decorators/attribute-test.js'
+  - './test/leanes/decorators/computed-test.js'
 full-trace: true
 growl: true
 recursive: false
