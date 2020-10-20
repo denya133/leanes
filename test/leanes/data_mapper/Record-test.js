@@ -243,17 +243,17 @@ describe('Record', () => {
             return TestRecord;
           }
           @attribute({ type: 'string' }) test;
-          @computed string(aoData) {
-            return aoData;
+          @computed({ type: 'string' }) get string() {
+            return ;
           }
-          @computed number(aoData) {
-            return aoData;
+          @computed({ type: 'number' }) get number() {
+            return ;
           }
-          @computed boolean(aoData) {
-            return aoData;
+          @computed({ type: 'boolean' }) get boolean() {
+            return ;
           }
-          @computed date(aoData) {
-            return aoData;
+          @computed({ type: 'date' }) get date() {
+            return ;
           }
         }
         assert.isTrue('string' in TestRecord.computeds, 'Computed property `string` did not defined');
