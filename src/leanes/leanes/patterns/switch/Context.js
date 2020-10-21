@@ -76,12 +76,19 @@ export default (Module) => {
       if (!_.isError(err)) {
         err = new Error(`non-error thrown: ${err}`);
       }
-
+      let headerSent = false;
+      if (this.headerSent || !this.writable)
+        headerSent = err.headerSent = true;
       this.switch.getViewComponent().emit('error', err, this);
+      if (headerSent) return;
+
+      if (_.isFunction(this.res.getHeaderNames))
+        this.res.getHeaderNames().forEach((name) => {this.res.removeHeader(name)});
 
       const vlHeaderNames = Object.keys(this.res.headers || {});
 
       vlHeaderNames.forEach((name) => {
+        this.res.removeHeader(name);
         delete this.res.headers[name];
       });
 
@@ -283,6 +290,14 @@ export default (Module) => {
       return this.response.headerSent;
     }
 
+    @method redirect(...args) {
+      return this.response.redirect(...args);
+    }
+
+    @method attachment(...args) {
+      return this.response.attachment(...args);
+    }
+
     @method 'set'(...args: [string | object]): ?any {
       return this.response.set(...args);
     }
@@ -291,12 +306,24 @@ export default (Module) => {
       return this.response.append(...args);
     }
 
+    @method vary(...args) {
+      return this.response.vary(...args);
+    }
+
     @method flushHeaders(...args): void {
       return this.response.flushHeaders(...args);
     }
 
     @method remove(...args: [string]): void {
       return this.response.remove(...args);
+    }
+
+    @property set lastModified(date: Date): ?string {
+      return this.response.lastModified = date;
+    }
+
+    @property set etag(value: string): ?string {
+      return this.response.etag = value;
     }
 
     @method static async restoreObject() {

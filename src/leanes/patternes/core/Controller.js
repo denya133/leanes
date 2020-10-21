@@ -233,7 +233,6 @@ export default (Module) => {
     @method async removeCase(asKey: string): void {
       if (this.hasCase(asKey)) {
         delete this._classNames[asKey];
-        delete this._commandMap[asKey];
         if (this._container.isBound(`Factory<${asKey}>`)) {
           this._container.unbind(`Factory<${asKey}>`);
         }
@@ -247,7 +246,7 @@ export default (Module) => {
       let vCase;
       const vsClassName = this._classNames[asKey];
       if (!_.isEmpty(vsClassName)) {
-        vCase = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
+        vCase = this.ApplicationModule.NS[vsClassName];
       }
       if (vCase != null) {
         if (!this._container.isBound(asKey)) {
@@ -282,12 +281,10 @@ export default (Module) => {
     @method async removeSuite(asKey: string): void {
       if (this.hasSuite(asKey)) {
         delete this._classNames[asKey];
-        delete this._commandMap[asKey];
         if (this._container.isBound(`Factory<${asKey}>`)) {
           this._container.unbind(`Factory<${asKey}>`);
         }
         if (this._container.isBound(asKey)) {
-          this._container.unbind(asKey);
           this._container.unbind(asKey);
         }
       }
@@ -297,7 +294,7 @@ export default (Module) => {
       let vSuite;
       const vsClassName = this._classNames[asKey];
       if (!_.isEmpty(vsClassName)) {
-        vSuite = this._commandMap[asKey] = this.ApplicationModule.NS[vsClassName];
+        vSuite = this.ApplicationModule.NS[vsClassName];
       }
       if (vSuite != null) {
         if (!this._container.isBound(asKey)) {

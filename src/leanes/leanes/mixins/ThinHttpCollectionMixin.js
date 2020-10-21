@@ -64,11 +64,12 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voRecord;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
-          const voRecord = await this.normalize(body[this.recordSingleName()]);
+          voRecord = await this.normalize(body[this.recordSingleName()]);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -94,11 +95,12 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voRecord;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
-          const voRecord = await this.normalize(body[this.recordSingleName()]);
+          voRecord = await this.normalize(body[this.recordSingleName()]);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -118,12 +120,13 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voCursor;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
           const vhRecordsData = body[this.recordMultipleName()];
-          const voCursor = Cursor.new(this, vhRecordsData);
+          voCursor = Cursor.new(this, vhRecordsData);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -140,11 +143,12 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voRecord;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
-          const voRecord = await this.normalize(body[this.recordSingleName()]);
+          voRecord = await this.normalize(body[this.recordSingleName()]);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -157,7 +161,7 @@ export default (Module) => {
       }
 
       @method async length(): Promise<number> {
-        cursor = await this.takeAll();
+        const cursor = await this.takeAll();
         return await cursor.count();
       }
 

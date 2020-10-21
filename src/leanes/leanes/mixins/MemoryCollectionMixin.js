@@ -17,12 +17,12 @@ export default (Module) => {
       @meta static object = {};
 
       // ipoCollection = PointerT(this.protected({
-      @property _collection: {[key: string | number]: ?object} = null;
+      @property _collection: {[key: string | number]: ?object} = {};//null;
 
-      @method onRegister() {
-        super.onRegister(... arguments);
-        this._collection = {};
-      }
+      // @method onRegister() {
+      //   super.onRegister(... arguments);
+      //   this._collection = {};
+      // }
 
       @method async push(aoRecord: D): Promise<D> {
         const id = aoRecord.id;

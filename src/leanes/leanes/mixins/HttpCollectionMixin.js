@@ -226,7 +226,7 @@ export default (Module) => {
           $limit: 1,
           $return: '@doc'
         };
-        console.log('>?>?> HttpCollectionMixin::includes before query');
+        // console.log('>?>?> HttpCollectionMixin::includes before query');
         return await (await this.query(voQuery)).hasNext();
       }
 
@@ -464,7 +464,7 @@ export default (Module) => {
       @method async parseQuery(
         aoQuery: object | QueryInterface
       ): Promise<object | string | QueryInterface> {
-        console.log('>>?? HttpCollectionMixin::parseQuery enter');
+        // console.log('>>?? HttpCollectionMixin::parseQuery enter');
         const params = {};
         switch (false) {
           case aoQuery.$remove == null:
@@ -497,7 +497,7 @@ export default (Module) => {
       @method async executeQuery(
         aoQuery: object | string | QueryInterface
       ): Promise<CursorInterface<?CollectionInterface<D>, *>> {
-        console.log('>>?? HttpCollectionMixin::executeQuery enter');
+        // console.log('>>?? HttpCollectionMixin::executeQuery enter');
         const requestObj = this.requestFor(aoQuery);
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
@@ -510,14 +510,14 @@ export default (Module) => {
             body = [body];
           }
           if (aoQuery.isCustomReturn) {
-            console.log('>>?? HttpCollectionMixin::executeQuery aoQuery.isCustomReturn');
+            // console.log('>>?? HttpCollectionMixin::executeQuery aoQuery.isCustomReturn');
             return (Cursor.new(null, body): Cursor<null, *>);
           } else {
-            console.log('>>?? HttpCollectionMixin::executeQuery NOT aoQuery.isCustomReturn');
+            // console.log('>>?? HttpCollectionMixin::executeQuery NOT aoQuery.isCustomReturn');
             return (Cursor.new(this, body): Cursor<CollectionInterface<D>, D>);
           }
         } else {
-          console.log('>>?? HttpCollectionMixin::executeQuery EMPTY CURSOR');
+          // console.log('>>?? HttpCollectionMixin::executeQuery EMPTY CURSOR');
           return (Cursor.new(null, []): Cursor<null, *>);
         }
       }
