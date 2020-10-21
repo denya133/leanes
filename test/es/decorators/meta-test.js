@@ -1,7 +1,8 @@
 const { expect, assert } = require('chai');
+const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, nameBy, meta
+  initialize, module:moduleD, nameBy, meta, method
 } = LeanES.NS;
 
 describe('meta', () => {
@@ -24,9 +25,8 @@ describe('meta', () => {
           @nameBy static __filename = 'Test';
           @meta static object = {};
         }
-        const cplExtensibles = Symbol.for('~isExtensible');
-        const cpsExtensibleSymbol = Symbol.for('~extensibleSymbol');
-        assert.isTrue(Test[cplExtensibles][Test[cpsExtensibleSymbol]]);
+        const cpoMetaObject = Symbol.for('~metaObject');
+        assert.notEqual(LeanES[cpoMetaObject], Test[cpoMetaObject])
       }).to.not.throw(Error);
     });
   });

@@ -10,7 +10,6 @@ export default function constant(target, key, descriptor) {
 
   // console.log('>>??? IN `constant` decorator', target.constructor.name, key);
 
-  target.constructor.metaObject.addMetaData('constants', key, descriptor);
   // const newDescriptor = Object.assign({}, descriptor);
   // newDescriptor.configurable = false;
   // newDescriptor.enumerable = true;
@@ -25,22 +24,18 @@ export default function constant(target, key, descriptor) {
       set: descriptor.set,
     };
     Reflect.defineProperty(target.constructor.prototype, key, newDescriptor);
+    target.constructor.metaObject.addMetaData('constants', key, newDescriptor);
   } else {
     // const value = descriptor.value || descriptor.initializer && descriptor.initializer();
     newDescriptor = {
       configurable: false,
       enumerable: true,
       writable: false,
-      value: descriptor.value,
-      initializer: descriptor.initializer
+      value: (descriptor.value || descriptor.initializer())
     };
     // target.constructor.prototype[key] = (newDescriptor.value || newDescriptor.initializer());
-    Reflect.defineProperty(target.constructor.prototype, key, {
-      configurable: false,
-      enumerable: true,
-      writable: false,
-      value: (newDescriptor.value || newDescriptor.initializer())
-    });
+    Reflect.defineProperty(target.constructor.prototype, key, newDescriptor);
+    target.constructor.metaObject.addMetaData('constants', key, newDescriptor);
   }
   // console.log('>>??? END IN `constant` decorator', (newDescriptor.value || newDescriptor.initializer()), target.constructor.prototype, target.constructor.prototype[key]);
   return newDescriptor;

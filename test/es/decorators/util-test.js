@@ -16,6 +16,10 @@ describe('util', () => {
           @meta static object = {};
           @util moment = moment;
         }
+        assert.isOk(Test.metaObject.data.utilities.moment);
+        assert.isFalse(Test.metaObject.data.utilities.moment.configurable);
+        assert.isFalse(Test.metaObject.data.utilities.moment.writable);
+        assert.isTrue(Test.metaObject.data.utilities.moment.enumerable);
       }).to.not.throw(Error);
     });
     it('should add utilities in metaObject(fail)', () => {

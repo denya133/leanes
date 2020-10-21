@@ -18,11 +18,11 @@ describe('machine', () => {
 
         @initialize
         @moduleD(Test)
-        @machine('default', spySMConfig)
+        @machine('42', spySMConfig)
         class MyClass extends LeanES.NS.CoreObject {
           @meta static object = {};
         }
-        assert.isOk(MyClass.metaObject.parent.data.stateMachines);
+        assert.isOk(MyClass.metaObject.parent.data.stateMachines['42']);
       }).to.not.throw(Error);
     });
   });

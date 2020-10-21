@@ -25,7 +25,27 @@ describe('constant', () => {
           @constant TEST = 'test';
         }
         assert.isOk(Test.metaObject.data.constants.TEST);
-        assert.equal(Test.metaObject.data.constants.TEST.initializer(), 'test');
+        assert.equal(Test.metaObject.data.constants.TEST.value, 'test');
+        assert.isFalse(Test.metaObject.data.constants.TEST.configurable, 'Configurable should be false');
+        assert.isFalse(Test.metaObject.data.constants.TEST.writable, 'Writable should be false');
+        assert.isTrue(Test.metaObject.data.constants.TEST.enumerable, 'Enumerable should be false');
+      }).to.not.throw(Error);
+    });
+    it('should decorator `constant` with getter without error', () => {
+      expect(() => {
+
+        @initialize
+        class Test extends LeanES {
+          @nameBy static __filename = 'Test';
+          @meta static object = {};
+          @constant get TEST() {
+            return 'test';
+          };
+        }
+        assert.isOk(Test.metaObject.data.constants.TEST);
+        assert.equal(Test.metaObject.data.constants.TEST.get(), 'test');
+        assert.isFalse(Test.metaObject.data.constants.TEST.configurable, 'Configurable should be false');
+        assert.isTrue(Test.metaObject.data.constants.TEST.enumerable, 'Enumerable should be false');
       }).to.not.throw(Error);
     });
   });
