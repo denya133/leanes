@@ -49,17 +49,20 @@ describe('QueryableCollectionMixin', () => {
         return aoQuery;
       });
 
+      let queryObj = null;
+
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
       @moduleD(Test)
       class Queryable extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @method async parseQuery() {
-          return spyParseQuery();
+        @method async parseQuery(aoQuery) {
+          queryObj = aoQuery;
+          return spyParseQuery(aoQuery);
         }
-        @method async executeQuery() {
-          return spyExecuteQuery();
+        @method async executeQuery(aoQuery) {
+          return spyExecuteQuery(aoQuery);
         }
       }
       const queryable = Queryable.new();
@@ -67,14 +70,14 @@ describe('QueryableCollectionMixin', () => {
         test: 'test'
       };
       await queryable.query(query);
-      assert.isTrue(spyParseQuery.calledWith(query));
-      assert.isTrue(spyExecuteQuery.calledWith(query));
+      assert.isTrue(spyParseQuery.calledWith(queryObj));
+      assert.isTrue(spyExecuteQuery.calledWith(queryObj));
     });
   });
   describe('.exists', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check data existance by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_002';
@@ -92,6 +95,10 @@ describe('QueryableCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
+        }
       }
 
       @initialize
@@ -107,7 +114,7 @@ describe('QueryableCollectionMixin', () => {
           return aoQuery;
         }
         @method async executeQuery(aoParsedQuery) {
-          const data = _.filter(this.getData, aoParsedQuery.$filter);
+          const data = _.filter(this.getData(), aoParsedQuery.$filter);
           return await Cursor.new(this, data);
         }
         @method async update(id, item) {
@@ -124,7 +131,9 @@ describe('QueryableCollectionMixin', () => {
           return await record;
         }
       }
-      const collection = Queryable.new(KEY, []);
+      const collection = Queryable.new();
+      collection.setName(KEY);
+      collection.setData([]);
       facade.registerProxy(collection);
       const queryable = facade.retrieveProxy(KEY);
       await queryable.create({
@@ -149,8 +158,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.findBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should find data by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_003';
@@ -168,8 +177,8 @@ describe('QueryableCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -178,7 +187,7 @@ describe('QueryableCollectionMixin', () => {
       @mixin(LeanES.NS.QueryableCollectionMixin)
       @moduleD(Test)
       class Queryable extends LeanES.NS.Collection {
-        @nameBy static __filename = 'Test';
+        @nameBy static __filename = 'Queryable';
         @meta static object = {};
         @property get delegate() {
           return TestRecord;
@@ -187,7 +196,7 @@ describe('QueryableCollectionMixin', () => {
           return aoQuery;
         }
         @method async executeQuery(aoParsedQuery) {
-          const data = _.filter(this.getData, aoParsedQuery.$filter);
+          const data = _.filter(this.getData(), aoParsedQuery.$filter);
           return Cursor.new(this, data);
         }
         @method async update(id, item) {
@@ -208,10 +217,12 @@ describe('QueryableCollectionMixin', () => {
             .forIn({ '@doc': this.collectionFullName() })
             .filter(query)
             .limit(1);
-          return this.query(voQuery);
+          return await this.query(voQuery);
         }
       }
-      const collection = Queryable.new(KEY, []);
+      const collection = Queryable.new();
+      collection.setName(KEY);
+      collection.setData([]);
       facade.registerProxy(collection);
       const queryable = facade.retrieveProxy(KEY);
       await queryable.create({
@@ -226,17 +237,17 @@ describe('QueryableCollectionMixin', () => {
       await queryable.create({
         test: 'test4'
       });
-      const record1 = await (await queryable.findBy({ 'test': 'test2' }).next());
+      const record1 = await (await queryable.findBy({ 'test': 'test2' })).next();
       assert.isDefined(record1);
       assert.equal(record1.test, 'test2');
-      const record2 = await (await queryable.findBy({ 'test': 'test5' }).next());
+      const record2 = await (await queryable.findBy({ 'test': 'test5' })).next();
       assert.isUndefined(record2);
     });
   });
   describe('.deleteBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should find data by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_004';
@@ -254,8 +265,8 @@ describe('QueryableCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -273,7 +284,7 @@ describe('QueryableCollectionMixin', () => {
           return await aoQuery;
         }
         @method async executeQuery(aoParsedQuery) {
-          const data = _.filter(this.getData, aoParsedQuery.$filter);
+          const data = _.filter(this.getData(), aoParsedQuery.$filter);
           return await Cursor.new(this, data);
         }
         @method async update(id, item) {
@@ -305,7 +316,9 @@ describe('QueryableCollectionMixin', () => {
           return await Test.NS.Cursor.new(this, [this.getData()[index]]).first();
         }
       }
-      const collection = Queryable.new(KEY, []);
+      const collection = Queryable.new();
+      collection.setName(KEY);
+      collection.setData([]);
       facade.registerProxy(collection);
       const queryable = facade.retrieveProxy(KEY);
       await queryable.create({
@@ -336,8 +349,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.removeBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove data by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_005';
@@ -355,8 +368,8 @@ describe('QueryableCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -382,7 +395,7 @@ describe('QueryableCollectionMixin', () => {
             default:
               data = _.filter(this.getData(), aoParsedQuery.$filter);
           }
-          return await Cursor.new(this, []);
+          return await Cursor.new(this, data);
         }
         @method async update(id, item) {
           const data = _.filter(this.getData(), { id });
@@ -427,7 +440,9 @@ describe('QueryableCollectionMixin', () => {
           return await Test.NS.Cursor.new(this, [this.getData()[index]]).first();
         }
       }
-      const collection = Queryable.new(KEY, []);
+      const collection = Queryable.new();
+      collection.setName(KEY);
+      collection.setData([]);
       facade.registerProxy(collection);
       const queryable = facade.retrieveProxy(KEY);
       await queryable.create({
@@ -440,7 +455,7 @@ describe('QueryableCollectionMixin', () => {
         test: 'test3'
       });
       await queryable.create({
-        test: 'test4'
+        test: 'test2'
       });
       await queryable.removeBy({ test: 'test2' });
       const data = queryable.getData();
@@ -450,8 +465,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.destroyBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove records by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_006';
@@ -469,8 +484,8 @@ describe('QueryableCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -496,7 +511,7 @@ describe('QueryableCollectionMixin', () => {
             default:
               data = _.filter(this.getData(), aoParsedQuery.$filter);
           }
-          return await Cursor.new(this, []);
+          return await Cursor.new(this, data);
         }
         @method async update(id, item) {
           const data = _.filter(this.getData(), { id });
@@ -525,7 +540,7 @@ describe('QueryableCollectionMixin', () => {
           this.getData().push(await this.delegate.serialize(record));
           return record;
         }
-        @method remove() {
+        @method remove(id) {
           _.remove(this.getData(), { id });
         }
         @method async takeBy(query) {
@@ -539,7 +554,9 @@ describe('QueryableCollectionMixin', () => {
           return await this.exists({ id });
         }
       }
-      const collection = Queryable.new(KEY, []);
+      const collection = Queryable.new();
+      collection.setName(KEY);
+      collection.setData([]);
       facade.registerProxy(collection);
       const queryable = facade.retrieveProxy(KEY);
       await queryable.create({
@@ -552,7 +569,7 @@ describe('QueryableCollectionMixin', () => {
         test: 'test3'
       });
       await queryable.create({
-        test: 'test4'
+        test: 'test2'
       });
       await queryable.destroyBy({ test: 'test2' });
       const data = queryable.getData();
@@ -562,8 +579,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.updateBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should update data in records by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_009';
@@ -582,8 +599,8 @@ describe('QueryableCollectionMixin', () => {
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @attribute({ type: 'boolean' }) updated = false;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -601,7 +618,7 @@ describe('QueryableCollectionMixin', () => {
           return await aoQuery;
         }
         @method async executeQuery(aoParsedQuery) {
-          let data = _.filter(this.getData(), aoParsedQuery.$filter)
+          const data = _.filter(this.getData(), aoParsedQuery.$filter)
           return await Cursor.new(this, data);
         }
         @method async update(id, item) {
@@ -654,7 +671,9 @@ describe('QueryableCollectionMixin', () => {
           return await Test.NS.Cursor.new(this, [this.getData()[index]]).first();
         }
       }
-      const collection = Queryable.new(KEY, []);
+      const collection = Queryable.new();
+      collection.setName(KEY);
+      collection.setData([]);
       facade.registerProxy(collection);
       const queryable = facade.retrieveProxy(KEY);
       await queryable.create({
@@ -682,8 +701,8 @@ describe('QueryableCollectionMixin', () => {
   });
   describe('.patchBy', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should update data in records by query', async () => {
       const KEY = 'FACADE_TEST_QUERYABLE_010';
@@ -702,8 +721,8 @@ describe('QueryableCollectionMixin', () => {
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @attribute({ type: 'boolean' }) updated = false;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -757,7 +776,9 @@ describe('QueryableCollectionMixin', () => {
           return data;
         }
       }
-      const collection = Queryable.new(KEY, []);
+      const collection = Queryable.new();
+      collection.setName(KEY);
+      collection.setData([]);
       facade.registerProxy(collection);
       const queryable = facade.retrieveProxy(KEY);
       await queryable.create({

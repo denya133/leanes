@@ -25,7 +25,10 @@ describe('ConfigurableMixin', () => {
         @nameBy static  __filename = 'TestConfiguration';
         @meta static object = {};
       }
-      facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
+      const configuration = Test.NS.Configuration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
+      facade.registerProxy(configuration);
 
       @initialize
       @mixin(LeanES.NS.ConfigurableMixin)

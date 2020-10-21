@@ -24,7 +24,9 @@ describe('MemoryConfigurationMixin', () => {
          @meta static object = {};
        }
 
-      const config = TestConfiguration.new('TEST_CONFIG', {
+      const config = TestConfiguration.new();
+      config.setName('TEST_CONFIG');
+      config.setData({
         test1: {
           description: 'test1 description',
           type: 'string',

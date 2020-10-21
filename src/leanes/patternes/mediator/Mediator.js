@@ -1,17 +1,17 @@
 import type { MediatorInterface } from '../interfaces/MediatorInterface';
-// import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 export default (Module) => {
 
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     Notifier,
     assert,
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-
   @initialize
+  @injectable()
   @module(Module)
   class Mediator extends Notifier implements MediatorInterface {
     @nameBy static  __filename = __filename;
@@ -25,6 +25,10 @@ export default (Module) => {
 
     @method getMediatorName(): string {
       return this._mediatorName;
+    }
+
+    @method setName(asName: string): void {
+      this._mediatorName = asName;
     }
 
     @method getName(): string {
@@ -62,7 +66,7 @@ export default (Module) => {
 
     @method onRegister(): void  { return; }
 
-    @method onRemove(): void { return; }
+    @method async onRemove(): void { return; }
 
     @method static async restoreObject(acModule: Class<Module>, replica: object): MediatorInterface {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
@@ -81,12 +85,9 @@ export default (Module) => {
       return replica;
     }
 
-    constructor(asMediatorName: ?string, aoViewComponent: ?any) {
+    constructor() {
       super(... arguments);
-      this._mediatorName = asMediatorName || this.constructor.name;
-      if (aoViewComponent != null) {
-        this._viewComponent = aoViewComponent;
-      }
+      this._mediatorName = this.constructor.name;
     }
   }
 }

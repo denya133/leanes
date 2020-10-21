@@ -9,8 +9,8 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-  // @injectable
   @initialize
+  // @injectable()
   @module(Module)
   class Notification extends CoreObject implements NotificationInterface {
     @nameBy static  __filename = __filename;

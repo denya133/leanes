@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, method, attribute, mixin
+  initialize, module: moduleD, nameBy, meta, constant, method, attribute, mixin, resolver
 } = LeanES.NS;
 
 describe('Queue', () => {
@@ -31,11 +31,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
-
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       assert.property(queue, 'name', 'TEST_QUEUE', 'No correct `id` property');
       assert.property(queue, 'concurrency', 4, 'No correct `rev` property');
       assert.instanceOf(queue.resque, TestResque, '`resque` is not a Resque instance');
@@ -64,8 +65,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method pushJob() {
-          return spyMethod();
+        @method pushJob(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -76,10 +77,12 @@ describe('Queue', () => {
         @meta static object = {};
       }
 
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const job = await queue.push('TEST_SCRIPT', { data: 'data' }, UNTIL_DATE);
       assert.equal(job, 42);
@@ -113,8 +116,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method getJob() {
-          return spyMethod();
+        @method getJob(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -124,10 +127,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const job = await queue.get('42');
       assert.equal(job, JOB);
@@ -159,8 +164,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method deleteJob() {
-          return spyMethod();
+        @method deleteJob(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -170,10 +175,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const job = await queue.delete('42');
       assert.equal(job, true);
@@ -205,8 +212,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method abortJob() {
-          return spyMethod();
+        @method abortJob(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -216,10 +223,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const job = await queue.abort('42');
       assert.isTrue(spyMethod.called);
@@ -250,8 +259,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method allJobs() {
-          return spyMethod();
+        @method allJobs(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -261,10 +270,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const jobs = await queue.all('TEST_SCRIPT');
       assert.deepEqual(jobs, [JOB]);
@@ -296,8 +307,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method pendingJobs() {
-          return spyMethod();
+        @method pendingJobs(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -307,10 +318,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const jobs = await queue.pending('TEST_SCRIPT');
       assert.deepEqual(jobs, [JOB]);
@@ -342,8 +355,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method progressJobs() {
-          return spyMethod();
+        @method progressJobs(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -353,10 +366,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const jobs = await queue.progress('TEST_SCRIPT');
       assert.deepEqual(jobs, [JOB]);
@@ -388,8 +403,8 @@ describe('Queue', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method completedJobs() {
-          return spyMethod();
+        @method completedJobs(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -399,10 +414,12 @@ describe('Queue', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
+      const resque = TestResque.new();
+      resque.setName(RESQUE);
       const queue = MyQueue.new({
         name: 'TEST_QUEUE',
         concurrency: 4
-      }, TestResque.new(RESQUE));
+      }, resque);
       const UNTIL_DATE = new Date();
       const jobs = await queue.completed('TEST_SCRIPT');
       assert.deepEqual(jobs, [JOB]);
@@ -435,8 +452,8 @@ describe('.failed', () => {
     class TestResque extends LeanES.NS.Resque {
       @nameBy static __filename = 'TestResque';
       @meta static object = {};
-      @method failedJobs() {
-        return spyMethod();
+      @method failedJobs(... args) {
+        return spyMethod(... args);
       }
     }
 
@@ -446,10 +463,12 @@ describe('.failed', () => {
       @nameBy static __filename = 'MyQueue';
       @meta static object = {};
     }
+    const resque = TestResque.new();
+    resque.setName(RESQUE);
     const queue = MyQueue.new({
       name: 'TEST_QUEUE',
       concurrency: 4
-    }, TestResque.new(RESQUE));
+    }, resque);
     const UNTIL_DATE = new Date();
     const jobs = await queue.failed('TEST_SCRIPT');
     assert.deepEqual(jobs, [JOB]);
@@ -460,8 +479,8 @@ describe('.failed', () => {
   describe('.replicatedObject', () => {
     let facade = null;
     const KEY = 'TEST_DELAYED_QUEUE_001';
-    after(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create replica for delayed queue', async () => {
       const RESQUE = 'RESQUE';
@@ -479,8 +498,8 @@ describe('.failed', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method failedJobs() {
-          return spyMethod();
+        @method failedJobs(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -490,7 +509,9 @@ describe('.failed', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
-      facade.registerProxy(TestResque.new(RESQUE));
+      const rsq = TestResque.new();
+      rsq.setName(RESQUE);
+      facade.registerProxy(rsq);
       const resque = facade.retrieveProxy(RESQUE);
       const NAME = 'TEST_QUEUE';
       const queue = await resque.create(NAME, 4);
@@ -506,15 +527,16 @@ describe('.failed', () => {
   });
   describe('.restoreObject', () => {
     let facade = null;
-    const KEY = 'TEST_DELAYED_QUEUE_002';
-    after(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    const KEY = 'TEST__QUEUE_002';
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should restore delayed queue from replica', async () => {
       const RESQUE = 'RESQUE';
       facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
+      @resolver(require, name => require(name))
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -526,8 +548,8 @@ describe('.failed', () => {
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
-        @method failedJobs() {
-          return spyMethod();
+        @method failedJobs(... args) {
+          return spyMethod(... args);
         }
       }
 
@@ -537,7 +559,9 @@ describe('.failed', () => {
         @nameBy static __filename = 'MyQueue';
         @meta static object = {};
       }
-      facade.registerProxy(TestResque.new(RESQUE));
+      const rsq = TestResque.new();
+      rsq.setName(RESQUE);
+      facade.registerProxy(rsq);
       const resque = facade.retrieveProxy(RESQUE);
       const NAME = 'TEST_QUEUE';
       const queue = await resque.create(NAME, 4);

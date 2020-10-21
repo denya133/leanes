@@ -3,6 +3,8 @@ import contentType from 'content-type';
 import qs from 'querystring';
 import { format as stringify } from 'url';
 import parse from 'parseurl';
+import fresh from 'fresh';
+import net from 'net';
 
 import type { SwitchInterface } from '../../interfaces/SwitchInterface';
 import type { ContextInterface } from '../../interfaces/ContextInterface';
@@ -33,7 +35,7 @@ export default (Module) => {
       return this._req;
     }
 
-    @property get switch(): SwitchInterface {
+    @property get 'switch'(): SwitchInterface {
       return this.ctx.switch;
     }
 
@@ -66,9 +68,8 @@ export default (Module) => {
     }
 
     @property get href(): string {
-      if (/^https?:\/\//i.test(this.originalUrl)) {
+      if (/^https?:\/\//i.test(this.originalUrl))
         return this.originalUrl;
-      }
       return this.origin + this.originalUrl;
     }
 
@@ -86,9 +87,8 @@ export default (Module) => {
 
     @property set path(path: string): string {
       const url = parse(this.req);
-      if (url.pathname === path) {
+      if (url.pathname === path)
         return path;
-      }
       url.pathname = path;
       url.path = null;
       return this.url = stringify(url);
@@ -104,27 +104,24 @@ export default (Module) => {
     }
 
     @property get querystring(): string {
-      if (this.req == null) {
+      if (this.req == null)
         return '';
-      }
       // return parse(this.req).query || '';
-      return parse(this.req) !=null ? parse(this.req).query : '';
+      return parse(this.req) != null ? parse(this.req).query : '';
     }
 
     @property set querystring(str: string): string {
       const url = parse(this.req);
-      if (url.search === `?${str}`) {
+      if (url.search === `?${str}`)
         return str;
-      }
       url.search = str;
       url.path = null;
       return this.url = stringify(url);
     }
 
     @property get search(): string {
-      if (!this.querystring) {
+      if (!this.querystring)
         return '';
-      }
       return `?${this.querystring}`;
     }
 
@@ -135,9 +132,7 @@ export default (Module) => {
     @property get host(): string {
       const { trustProxy } = this.ctx.switch.configs;
       const host = trustProxy && this.get('X-Forwarded-Host') || this.get('Host');
-      if (!host) {
-        return '';
-      }
+      if (!host) return '';
       return host.split(/\s*,\s*/)[0];
     }
 
@@ -149,6 +144,14 @@ export default (Module) => {
     }
 
     @property get fresh(): boolean {
+      const method = this.method;
+      const s = this.ctx.status;
+      // GET or HEAD for weak freshness validation only
+      if ('GET' !== method && 'HEAD' !== method)
+        return false;
+      // 2xx or 304 as per rfc2616 14.26
+      if ((s >= 200 && s < 300) || 304 == s)
+        return fresh(this.headers, this.ctx.response.headers);
       return false;
     }
 
@@ -167,9 +170,8 @@ export default (Module) => {
 
     @property get charset(): string {
       let type = this.get('Content-Type');
-      if (type == null) {
+      if (type == null)
         return '';
-      }
       try {
         type = contentType.parse(type);
       } catch (error) {
@@ -181,9 +183,8 @@ export default (Module) => {
     @property get length(): number {
       const contentLength = this.get('Content-Length');
       if (contentLength != null) {
-        if (contentLength === '') {
+        if (contentLength === '')
           return 0;
-        }
         return ~~Number(contentLength);
       } else {
         return 0;
@@ -192,15 +193,12 @@ export default (Module) => {
 
     @property get protocol(): 'http' | 'https' {
       const { trustProxy } = this.ctx.switch.configs;
-      if (this.socket != null ? this.socket.encrypted : undefined) {
+      if (this.socket != null ? this.socket.encrypted : undefined)
         return 'https';
-      }
-      if (this.req.secure) {
+      if (this.req.secure)
         return 'https';
-      }
-      if (!trustProxy) {
+      if (!trustProxy)
         return 'http';
-      }
       const proto = this.get('X-Forwarded-Proto') || 'http';
       return proto.split(/\s*,\s*/)[0];
     }
@@ -212,11 +210,25 @@ export default (Module) => {
     @property ip: ?string = null;
 
     @property get ips(): string[] {
-      return [];
+      // return [];
+      const { trustProxy } = this.ctx.switch.configs;
+      const value = this.get('X-Forwarded-For');
+      if (trustProxy != null && value != null) {
+        return value.split(/\s*,\s*/);
+      } else {
+        return [];
+      }
     }
 
     @property get subdomains(): string[] {
-      return [];
+      // return [];
+      const { subdomainOffset:offset } = this.ctx.switch.configs;
+      const hostname = this.hostname;
+      if (net.isIP(hostname) != 0) return [];
+      return hostname
+        .split('.')
+        .reverse()
+        .slice(offset != null ? offset : 0)
     }
 
     @method accepts(...args: [?(string | Array)]): string | Array | boolean {
@@ -237,31 +249,27 @@ export default (Module) => {
 
     @method is(...args: [string | Array]): ?(string | boolean) {
       let [ types ] = args;
-      if (!types) {
+      if (!types)
         return typeis(this.req);
-      }
-      if (!_.isArray(types)) {
+      if (!_.isArray(types))
         types = args;
-      }
       return typeis(this.req, types);
     }
 
     @property get type(): string {
       const type = this.get('Content-Type');
-      if (type == null) {
+      if (type == null)
         return '';
-      }
       return type.split(';')[0];
     }
 
     @method 'get'(field: string): string {
-      const req = this.req;
       switch (field = field.toLowerCase()) {
         case 'referer':
         case 'referrer':
-          return req.headers.referrer || req.headers.referer || '';
+          return this.req.headers.referrer || this.req.headers.referer || '';
         default:
-          return req.headers[field] || '';
+          return this.req.headers[field] || '';
       }
     }
 

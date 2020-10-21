@@ -21,13 +21,14 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
-      const resque = Resque.new('TEST_RESQUE');
-      assert.instanceOf(resque, Resque, 'The `resque` is not an instance of Resque');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      assert.instanceOf(resque, TestResque, 'The `resque` is not an instance of Resque');
     });
   });
   describe('.onRegister', () => {
@@ -43,12 +44,13 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       assert.deepEqual(resque._jobs, {});
       assert.deepEqual(resque._queues, {
@@ -72,11 +74,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       assert.deepEqual(resque._jobs, {});
       assert.deepEqual(resque._queues, {
@@ -103,11 +106,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE', 5);
       const queue = resque._queues['Test|>TEST_QUEUE'];
@@ -128,11 +132,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE', 5);
       const queue = await resque.getQueue('TEST_QUEUE');
@@ -153,11 +158,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE', 5);
       let queue = await resque.getQueue('TEST_QUEUE');
@@ -180,11 +186,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       resque.ensureQueue('TEST_QUEUE_2', 2);
@@ -239,11 +246,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       const DATA = {
@@ -278,11 +286,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       const DATA = {
@@ -317,11 +326,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       const DATA = {
@@ -358,11 +368,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       resque.ensureQueue('TEST_QUEUE_2', 1);
@@ -396,11 +407,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       resque.ensureQueue('TEST_QUEUE_2', 1);
@@ -433,11 +445,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       resque.ensureQueue('TEST_QUEUE_2', 1);
@@ -470,11 +483,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       resque.ensureQueue('TEST_QUEUE_2', 1);
@@ -507,11 +521,12 @@ describe('MemoryResqueMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
       @moduleD(Test)
-      class Resque extends LeanES.NS.Resque {
+      class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
-      const resque = Resque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       resque.onRegister();
       resque.ensureQueue('TEST_QUEUE_1', 1);
       resque.ensureQueue('TEST_QUEUE_2', 1);

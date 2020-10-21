@@ -21,7 +21,9 @@ describe('Resque', () => {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
       }
-      const resque = TestResque.new('TEST_RESQUE');
+      // const resque = TestResque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       assert.instanceOf(resque, TestResque);
     });
   });
@@ -39,7 +41,9 @@ describe('Resque', () => {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
       }
-      const resque = TestResque.new('TEST_RESQUE');
+      // const resque = TestResque.new('TEST_RESQUE');
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
       const queueName = resque.fullQueueName('TEST');
       assert.equal(queueName, 'Test|>TEST');
     });
@@ -73,7 +77,12 @@ describe('Resque', () => {
           return queue;
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       const queue = await resque.create('TEST_QUEUE', 4);
@@ -114,7 +123,12 @@ describe('Resque', () => {
           return this.getData().data;
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       await resque.create('TEST_QUEUE_1', 4);
@@ -166,7 +180,12 @@ describe('Resque', () => {
           });
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       await resque.create('TEST_QUEUE_1', 4);
@@ -214,7 +233,12 @@ describe('Resque', () => {
           });
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       await resque.create('TEST_QUEUE_1', 4);
@@ -259,7 +283,12 @@ describe('Resque', () => {
           });
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       await resque.create('TEST_QUEUE_1', 4);
@@ -272,8 +301,8 @@ describe('Resque', () => {
   });
   describe('.delay', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should put delayed procedure into queue', async () => {
       const MULTITON_KEY = 'TEST_RESQUE_001';
@@ -320,7 +349,12 @@ describe('Resque', () => {
           this.jobs = {};
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       facade.registerProxy(resque);
@@ -368,7 +402,12 @@ describe('Resque', () => {
           return queue;
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       facade.registerProxy(resque);
@@ -390,8 +429,8 @@ describe('Resque', () => {
   });
   describe('.getDelayed', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get delayed jobs from cache', async () => {
       const MULTITON_KEY = 'TEST_RESQUE_001|>123456-5432-234-5432';
@@ -429,7 +468,12 @@ describe('Resque', () => {
           });
         }
       }
-      const resque = TestResque.new('TEST_RESQUE', {
+      // const resque = TestResque.new('TEST_RESQUE', {
+      //   data: []
+      // });
+      const resque = TestResque.new();
+      resque.setName('TEST_RESQUE');
+      resque.setData({
         data: []
       });
       facade.registerProxy(resque);

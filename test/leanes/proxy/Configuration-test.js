@@ -21,7 +21,9 @@ describe('Configuration', () => {
         @meta static object = {};
       }
 
-      const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configuration = Test.NS.Configuration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
       const environment = configuration.environment;
       assert.isTrue(environment != null, 'configuration.environment isnt exist');
       assert.isTrue(environment === LeanES.NS.DEVELOPMENT || environment === LeanES.NS.PRODUCTION);
@@ -42,7 +44,9 @@ describe('Configuration', () => {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
       }
-      const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configuration = Test.NS.Configuration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
       configuration.defineConfigProperties();
       assert.propertyVal(configuration, 'test1', 'default');
       assert.propertyVal(configuration, 'test2', 42);
@@ -65,7 +69,9 @@ describe('Configuration', () => {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
       }
-      const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configuration = Test.NS.Configuration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
       configuration.onRegister();
       assert.propertyVal(configuration, 'test1', 'default');
       assert.propertyVal(configuration, 'test2', 42);

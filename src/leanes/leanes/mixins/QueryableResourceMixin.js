@@ -70,6 +70,7 @@ export default (Module) => {
 
       @action async list(): Promise<ResourceListResultT> {
         const receivedQuery = _.pick(this.listQuery, ['$filter', '$sort', '$limit', '$offset']);
+        // console.log('dfdfdf', receivedQuery);
         const voQuery = Module.NS.Query.new().forIn({
           '@doc': this.collection.collectionFullName()
         }).return('@doc');
@@ -111,7 +112,8 @@ export default (Module) => {
           })();
           voQuery.offset(receivedQuery.$offset);
         }
-        const limit = Number(voQuery.$limit);
+        const limit = voQuery.$limit != null ? Number(voQuery.$limit) : MAX_LIMIT;
+        // console.log('sdfsdfsd voQuery', voQuery, limit);
         if (this.needsLimitation) {
           voQuery.limit((() => {
             switch (false) {
@@ -126,7 +128,8 @@ export default (Module) => {
         } else if (!isNaN(limit)) {
           voQuery.limit(limit);
         }
-        const skip = Number(voQuery.$offset);
+        // console.log('sdfsdfsd voQuery 22', voQuery);
+        const skip = voQuery.$offset != null ? Number(voQuery.$offset) : 0;
         voQuery.offset((() => {
           switch (false) {
             case !(skip < 0):
@@ -136,12 +139,13 @@ export default (Module) => {
               return skip;
           }
         })());
+        // console.log('sdfsdfsd voQuery 33', voQuery, voQuery.$offset);
         const vlItems = await (await this.collection.query(voQuery)).toArray();
         return {
           meta: {
             pagination: {
-              limit: voQuery.$limit || 'not defined',
-              offset: voQuery.$offset || 'not defined'
+              limit: voQuery.$limit != null ? voQuery.$limit : 'not defined',
+              offset: voQuery.$offset != null ? voQuery.$offset : 'not defined'
             }
           },
           items: vlItems

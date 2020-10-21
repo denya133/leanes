@@ -13,14 +13,18 @@ describe('Mediator', () => {
     it('should create new mediator', () => {
       expect(() => {
         const mediatorName = 'TEST_MEDIATOR';
-        const mediator = Mediator.new(mediatorName);
+        // const mediator = Mediator.new(mediatorName);
+        const mediator = Mediator.new();
+        mediator.setName(mediatorName);
       }).to.not.throw(Error);
     });
   });
   describe('.getMediatorName', () => {
     it('should get mediator name', () => {
       const mediatorName = 'TEST_MEDIATOR';
-      const mediator = Mediator.new(mediatorName);
+      // const mediator = Mediator.new(mediatorName);
+      const mediator = Mediator.new();
+      mediator.setName(mediatorName);
       expect(mediator.getMediatorName()).to.equal(mediatorName);
     });
   });
@@ -28,7 +32,10 @@ describe('Mediator', () => {
     it('should get mediator view component', () => {
       const mediatorName = 'TEST_MEDIATOR';
       const viewComponent = { id: 'view-component' };
-      const mediator = Mediator.new(mediatorName, viewComponent);
+      // const mediator = Mediator.new(mediatorName, viewComponent);
+      const mediator = Mediator.new();
+      mediator.setName(mediatorName);
+      mediator.setViewComponent(viewComponent);
       expect(mediator.getViewComponent()).to.equal(viewComponent)
     });
   });
@@ -43,7 +50,9 @@ describe('Mediator', () => {
         }
       }
       const mediatorName = 'TEST_MEDIATOR';
-      const mediator = TestMediator.new(mediatorName);
+      // const mediator = TestMediator.new(mediatorName);
+      const mediator = TestMediator.new();
+      mediator.setName(mediatorName);
       expect(mediator.listNotificationInterests()).to.eql(['TEST1', 'TEST2', 'TEST3']);
     });
   });
@@ -51,7 +60,9 @@ describe('Mediator', () => {
     it('should call handleNotification', () => {
       expect(() => {
         const mediatorName = 'TEST_MEDIATOR';
-        const mediator = Mediator.new(mediatorName);
+        // const mediator = Mediator.new(mediatorName);
+        const mediator = Mediator.new();
+        mediator.setName(mediatorName);
         const handleNotification = sinon.spy(mediator, 'handleNotification');
         const notification = Notification.new('TEST_NOTIFICATION', {body: 'body'}, 'TEST');
         mediator.handleNotification(notification);
@@ -63,7 +74,9 @@ describe('Mediator', () => {
     it('should call onRegister', () => {
       expect(() => {
         const mediatorName = 'TEST_MEDIATOR';
-        const mediator = Mediator.new(mediatorName);
+        // const mediator = Mediator.new(mediatorName);
+        const mediator = Mediator.new();
+        mediator.setName(mediatorName);
         const onRegister = sinon.spy(mediator, 'onRegister');
         mediator.onRegister();
         assert(onRegister.called);
@@ -74,7 +87,9 @@ describe('Mediator', () => {
     it('should call onRemove', () => {
       expect(() => {
         const mediatorName = 'TEST_MEDIATOR';
-        const mediator = Mediator.new(mediatorName);
+        // const mediator = Mediator.new(mediatorName);
+        const mediator = Mediator.new();
+        mediator.setName(mediatorName);
         const onRemove = sinon.spy(mediator, 'onRemove');
         mediator.onRemove();
         assert(onRemove.called);

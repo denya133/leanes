@@ -257,8 +257,8 @@ describe('Collection', () => {
   // });
   describe('.build', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create record from delegate', async () => {
       const collectionName = 'TestsCollection';
@@ -275,6 +275,9 @@ describe('Collection', () => {
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
+
+        @attribute({ type: 'string' }) test = null;
+        @attribute({ type: 'number' }) data = null;
       }
 
       @initialize
@@ -285,7 +288,12 @@ describe('Collection', () => {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      // const collection = TestsCollection.new(collectionName, {
+      //   delegate: 'TestRecord'
+      // });
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -293,7 +301,6 @@ describe('Collection', () => {
         test: 'test',
         data: 123
       });
-      console.log('record>>>>>>>>>>>>>>>>>>>>>>>',record );
 
       assert.equal(record.test, 'test', 'Record.test is incorrect');
       assert.equal(record.data, 123, 'Record.data is incorrect');
@@ -663,8 +670,8 @@ describe('Collection', () => {
   // });
   describe('.normalize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should normalize record from data', async () => {
       const collectionName = 'TestsCollection';
@@ -703,11 +710,18 @@ describe('Collection', () => {
       class TestSerializer extends LeanES.NS.Serializer {
         @nameBy static __filename = 'TestSerializer';
         @meta static object = {};
+
+        @method async normalize(... args) {
+          return await spySerializerNormalize(... args)
+        }
       }
-      Reflect.defineProperty(TestSerializer, 'normalize', {
-        value: spySerializerNormalize
-      });
-      const collection = TestsCollection.new(collectionName, {
+      // const collection = TestsCollection.new(collectionName, {
+      //   delegate: TestRecord,
+      //   serializer: TestSerializer
+      // });
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: TestRecord,
         serializer: TestSerializer
       });
@@ -726,8 +740,8 @@ describe('Collection', () => {
   });
   describe('.serialize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should serialize record to data', async () => {
       const collectionName = 'TestsCollection';
@@ -765,11 +779,18 @@ describe('Collection', () => {
       class TestSerializer extends LeanES.NS.Serializer {
         @nameBy static __filename = 'TestSerializer';
         @meta static object = {};
+
+        @method async serialize(... args) {
+          return await spySerializerSerialize(... args)
+        }
       }
-      Reflect.defineProperty(TestSerializer, 'serialize', {
-        value: spySerializerSerialize
-      });
-      const collection = TestsCollection.new(collectionName, {
+      // const collection = TestsCollection.new(collectionName, {
+      //   delegate: TestRecord,
+      //   serializer: TestSerializer
+      // });
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: TestRecord,
         serializer: TestSerializer
       });

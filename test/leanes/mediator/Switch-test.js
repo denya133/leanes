@@ -14,7 +14,8 @@ describe('Switch', () => {
     it('should create new switch mediator', () => {
       expect(() => {
         const mediatorName = 'TEST_MEDIATOR';
-        const switchMediator = Switch.new(mediatorName);
+        const switchMediator = Switch.new();
+        switchMediator.setName(mediatorName);
         assert.isArray(switchMediator.middlewares);
       }).to.not.throw(Error);
     });
@@ -23,7 +24,8 @@ describe('Switch', () => {
     it('should check allowed response formats', () => {
       expect(() => {
         const mediatorName = 'TEST_MEDIATOR';
-        const switchMediator = Switch.new(mediatorName);
+        const switchMediator = Switch.new();
+        switchMediator.setName(mediatorName);
         assert.deepEqual(switchMediator.responseFormats, ['json', 'html', 'xml', 'atom', 'text'], 'Property `responseFormats` returns incorrect values');
       }).to.not.throw(Error);
     });
@@ -32,7 +34,8 @@ describe('Switch', () => {
     it('should check handled notifications list', () => {
       expect(() => {
         const mediatorName = 'TEST_MEDIATOR';
-        const switchMediator = Switch.new(mediatorName);
+        const switchMediator = Switch.new();
+        switchMediator.setName(mediatorName);
         assert.deepEqual(switchMediator.listNotificationInterests(), [LeanES.NS.HANDLER_RESULT], 'Function `listNotificationInterests` returns incorrect values');
       }).to.not.throw(Error);
     });
@@ -47,7 +50,9 @@ describe('Switch', () => {
       const notitficationType = 'TEST_TYPE';
       const notification = LeanES.NS.Notification.new(notitficationName, notificationBody, notitficationType);
       const viewComponent = new EventEmitter();
-      const switchMediator = Switch.new(mediatorName, viewComponent);
+      const switchMediator = Switch.new();
+      switchMediator.setName(mediatorName);
+      switchMediator.setViewComponent(viewComponent);
       const promise = new Promise(function (resolve, reject) {
         viewComponent.once(notitficationType, function (body) {
           resolve(body);
@@ -61,10 +66,10 @@ describe('Switch', () => {
   describe('.defineRoutes', () => {
     let facade;
     facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
-    it('should define routes from route proxies', () => {
+    it('should define routes from route proxies', async () => {
       const KEY = 'TEST_SWITCH_001';
       facade = Facade.getInstance(KEY);
       @initialize
@@ -86,7 +91,9 @@ describe('Switch', () => {
           });
         }
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
       const spyCreateNativeRoute = sinon.spy(() => { });
       @initialize
       @moduleD(Test)
@@ -98,7 +105,8 @@ describe('Switch', () => {
           spyCreateNativeRoute();
         }
       }
-      const switchMediator = TestSwitch.new('TEST_SWITCH_MEDIATOR');
+      const switchMediator = TestSwitch.new();
+      switchMediator.setName('TEST_SWITCH_MEDIATOR');
       switchMediator.initializeNotifier(KEY);
       switchMediator.defineRoutes();
       assert.equal(spyCreateNativeRoute.callCount, 15, 'Some routes are missing');
@@ -106,87 +114,92 @@ describe('Switch', () => {
   });
   describe('.onRegister', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
-    it('should run register procedure', () => {
-      expect(() => {
-        const KEY = 'TEST_SWITCH_002';
-        facade = Facade.getInstance(KEY);
-        @initialize
-        class Test extends LeanES {
-          @nameBy static __filename = 'Test';
-          @meta static object = {};
-          @constant ROOT = `${__dirname}/config/`;
-        }
-        const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
-        facade.registerProxy(configs);
-        @initialize
-        @moduleD(Test)
-        class TestRouter extends LeanES.NS.Router {
-          @nameBy static __filename = 'TestRouter';
-          @meta static object = {};
-        }
-        facade.registerProxy(TestRouter.new(LeanES.NS.APPLICATION_ROUTER));
-        @initialize
-        @moduleD(Test)
-        class TestSwitch extends LeanES.NS.Switch {
-          @nameBy static __filename = 'TestSwitch';
-          @meta static object = {};
-          @property routerName = LeanES.NS.APPLICATION_ROUTER;
-        }
-        facade.registerProxy(TestRouter.new(LeanES.NS.APPLICATION_ROUTER));
-        const switchMediator = TestSwitch.new('TEST_SWITCH_MEDIATOR');
-        switchMediator.initializeNotifier(KEY);
-        switchMediator.onRegister();
-        assert.instanceOf(switchMediator.getViewComponent(), EventEmitter, 'Event emitter did not created');
-        switchMediator.onRemove();
-      }).to.not.throw(Error);
+    it('should run register procedure', async () => {
+      const KEY = 'TEST_SWITCH_002';
+      facade = Facade.getInstance(KEY);
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/config/`;
+      }
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
+      facade.registerProxy(configs);
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      const router = TestRouter.new();
+      router.setName(LeanES.NS.APPLICATION_ROUTER);
+      facade.registerProxy(router);
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = LeanES.NS.APPLICATION_ROUTER;
+      }
+      const switchMediator = TestSwitch.new();
+      switchMediator.setName('TEST_SWITCH_MEDIATOR');
+      switchMediator.initializeNotifier(KEY);
+      switchMediator.onRegister();
+      assert.instanceOf(switchMediator.getViewComponent(), EventEmitter, 'Event emitter did not created');
+      switchMediator.onRemove();
     });
   });
   describe('.onRemove', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
-    it('should run remove procedure', () => {
-      expect(() => {
-        const KEY = 'TEST_SWITCH_003';
-        facade = Facade.getInstance(KEY);
-        @initialize
-        class Test extends LeanES {
-          @nameBy static __filename = 'Test';
-          @meta static object = {};
-          @constant ROOT = `${__dirname}/config/`;
-        }
-        const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
-        facade.registerProxy(configs);
-        @initialize
-        @moduleD(Test)
-        class TestRouter extends LeanES.NS.Router {
-          @nameBy static __filename = 'TestRouter';
-          @meta static object = {};
-        }
-        facade.registerProxy(TestRouter.new(LeanES.NS.APPLICATION_ROUTER));
-        @initialize
-        @moduleD(Test)
-        class TestSwitch extends LeanES.NS.Switch {
-          @nameBy static __filename = 'TestSwitch';
-          @meta static object = {};
-          @property routerName = LeanES.NS.APPLICATION_ROUTER;
-        }
-        const switchMediator = TestSwitch.new('TEST_SWITCH_MEDIATOR');
-        switchMediator.initializeNotifier(KEY);
-        switchMediator.onRegister();
-        switchMediator.onRemove();
-        assert.equal(switchMediator.getViewComponent().eventNames().length, 0, 'Event listeners not cleared');
-      }).to.not.throw(Error);
+    it('should run remove procedure', async () => {
+      const KEY = 'TEST_SWITCH_003';
+      facade = Facade.getInstance(KEY);
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/config/`;
+      }
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
+      facade.registerProxy(configs);
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      const router = TestRouter.new();
+      router.setName(LeanES.NS.APPLICATION_ROUTER);
+      facade.registerProxy(router);
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = LeanES.NS.APPLICATION_ROUTER;
+      }
+      const switchMediator = TestSwitch.new();
+      switchMediator.setName('TEST_SWITCH_MEDIATOR');
+      switchMediator.initializeNotifier(KEY);
+      switchMediator.onRegister();
+      switchMediator.onRemove();
+      assert.equal(switchMediator.getViewComponent().eventNames().length, 0, 'Event listeners not cleared');
     });
   });
   describe('.rendererFor', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should define renderers and get them one by one', async () => {
       const KEY = 'TEST_SWITCH_004';
@@ -214,13 +227,23 @@ describe('Switch', () => {
         @meta static object = {};
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
       require.main.require(__dirname + '/integration/renderers')(Test);
-      facade.registerProxy(Test.NS.AtomRenderer.new('TEST_ATOM_RENDERER'));
-      facade.registerProxy(Test.NS.JsonRenderer.new('TEST_JSON_RENDERER'));
-      facade.registerProxy(Test.NS.HtmlRenderer.new('TEST_HTML_RENDERER'));
-      facade.registerProxy(Test.NS.XmlRenderer.new('TEST_XML_RENDERER'));
+      const atomRenderer = Test.NS.AtomRenderer.new();
+      atomRenderer.setName('TEST_ATOM_RENDERER');
+      const jsonRenderer = Test.NS.JsonRenderer.new();
+      jsonRenderer.setName('TEST_JSON_RENDERER');
+      const htmlRenderer = Test.NS.HtmlRenderer.new();
+      htmlRenderer.setName('TEST_HTML_RENDERER');
+      const xmlRenderer = Test.NS.XmlRenderer.new();
+      xmlRenderer.setName('TEST_XML_RENDERER');
+      facade.registerProxy(atomRenderer);
+      facade.registerProxy(jsonRenderer);
+      facade.registerProxy(htmlRenderer);
+      facade.registerProxy(xmlRenderer);
 
       @initialize
       @moduleD(Test)
@@ -228,7 +251,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -243,11 +268,11 @@ describe('Switch', () => {
       }
       class MyResponse extends EventEmitter {
         getHeaders() {
-          LeanES.NS.Utils.copy(this._headers);
+          return LeanES.NS.Utils.copy(this._headers);
         }
 
         getHeader(field) {
-          this._headers[field.toLowerCase()];
+          return this._headers[field.toLowerCase()];
         }
 
         setHeader(field, value) {
@@ -270,10 +295,12 @@ describe('Switch', () => {
           this._headers = {};
         }
       };
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const res = new MyResponse();
       const req = {
-        url: 'http://localhost:8888/test1',
+        url: 'http://localhost:8878/test1',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         },
@@ -312,13 +339,15 @@ describe('Switch', () => {
         @method static findRecordByName() {
           return TestEntityRecord;
         }
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestEntityRecord';
         }
       }
 
-      const boundCollection = TestsCollection.new(collectionName, {
+      const boundCollection = TestsCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
@@ -347,12 +376,12 @@ describe('Switch', () => {
   });
   describe('.sendHttpResponse', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should send http response', async () => {
       const KEY = 'TEST_SWITCH_005';
-      const facade = Facade.getInstance(KEY);
+      facade = Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -369,7 +398,9 @@ describe('Switch', () => {
         @property entityName = 'TestEntity';
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
       const spyRendererRender = sinon.spy(() => { });
 
@@ -380,15 +411,23 @@ describe('Switch', () => {
         @meta static object = {};
         @method render(ctx, aoData, aoResource, aoOptions) {
           spyRendererRender(ctx, aoData, aoResource, aoOptions);
-          const vhData = RC.NS.Utils.assign({}, aoData);
+          const vhData = LeanES.NS.Utils.assign({}, aoData);
           return JSON.stringify(vhData != null ? vhData : null);
         }
       }
 
-      facade.registerProxy(TestRenderer.new('TEST_JSON_RENDERER'));
-      facade.registerProxy(TestRenderer.new('TEST_HTML_RENDERER'));
-      facade.registerProxy(TestRenderer.new('TEST_XML_RENDERER'));
-      facade.registerProxy(TestRenderer.new('TEST_ATOM_RENDERER'));
+      const atomRenderer = TestRenderer.new();
+      atomRenderer.setName('TEST_ATOM_RENDERER');
+      const jsonRenderer = TestRenderer.new();
+      jsonRenderer.setName('TEST_JSON_RENDERER');
+      const htmlRenderer = TestRenderer.new();
+      htmlRenderer.setName('TEST_HTML_RENDERER');
+      const xmlRenderer = TestRenderer.new();
+      xmlRenderer.setName('TEST_XML_RENDERER');
+      facade.registerProxy(atomRenderer);
+      facade.registerProxy(jsonRenderer);
+      facade.registerProxy(htmlRenderer);
+      facade.registerProxy(xmlRenderer);
 
       @initialize
       @moduleD(Test)
@@ -397,7 +436,9 @@ describe('Switch', () => {
         @meta static object = {};
       }
       const spyResponseSet = sinon.spy(() => { });
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -411,15 +452,17 @@ describe('Switch', () => {
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
 
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
 
       class MyResponse extends EventEmitter {
         getHeaders() {
-          LeanES.NS.Utils.copy(this._headers);
+          return LeanES.NS.Utils.copy(this._headers);
         }
 
         getHeader(field) {
-          this._headers[field.toLowerCase()];
+          return this._headers[field.toLowerCase()];
         }
 
         setHeader(field, value) {
@@ -438,15 +481,13 @@ describe('Switch', () => {
 
         constructor(...args) {
           super(...args);
-          ({ finished: this.finished, _headers: this._headers } = {
-            finished: false,
-            _headers: {}
-          });
+          this.finished = false;
+          this._headers = {};
         }
       };
       const res = new MyResponse();
       const req = {
-        url: 'http://localhost:8888/test1',
+        url: 'http://localhost:8878/test1',
         headers: {
           'x-forwarded-for': '192.168.0.1',
           'accept': 'application/json, text/plain, image/png'
@@ -486,12 +527,14 @@ describe('Switch', () => {
         @method static findRecordByName() {
           return TestEntityRecord;
         }
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestEntityRecord';
         }
       }
-      const boundCollection = TestsCollection.new(collectionName, {
+      const boundCollection = TestsCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
@@ -508,7 +551,6 @@ describe('Switch', () => {
         recordName: 'test'
       };
       await switchMediator.sendHttpResponse(ctx, vhData, resource, vhOptions);
-      console.log('.,.,.,........', ctx, vhData, resource, vhOptions);
 
       assert.isTrue(spyRendererRender.calledWith(ctx, vhData, resource, vhOptions), 'Render not called');
       assert.deepEqual(ctx.body, renderedGauge);
@@ -516,118 +558,12 @@ describe('Switch', () => {
   });
   describe('.sender', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
-    it('should send notification', () => {
-      expect(() => {
-        const KEY = 'TEST_SWITCH_006';
-        facade = Facade.getInstance(KEY);
-
-        @initialize
-        class Test extends LeanES {
-          @nameBy static __filename = 'Test';
-          @meta static object = {};
-          @constant ROOT = `${__dirname}/config/`;
-        }
-
-        const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
-        facade.registerProxy(configs);
-
-        @initialize
-        @moduleD(Test)
-        class TestRouter extends LeanES.NS.Router {
-          @nameBy static __filename = 'TestRouter';
-          @meta static object = {};
-        }
-        facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
-
-        @initialize
-        @moduleD(Test)
-        class TestSwitch extends LeanES.NS.Switch {
-          @nameBy static __filename = 'TestSwitch';
-          @meta static object = {};
-          @property routerName = 'TEST_SWITCH_ROUTER';
-        }
-        facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
-
-        class MyResponse extends EventEmitter {
-          getHeaders() {
-            LeanES.NS.Utils.copy(this._headers);
-          }
-
-          getHeader(field) {
-            this._headers[field.toLowerCase()];
-          }
-
-          setHeader(field, value) {
-            this._headers[field.toLowerCase()] = value;
-          }
-
-          removeHeader(field) {
-            delete this._headers[field.toLowerCase()];
-          }
-
-          end(data, encoding = 'utf-8', callback = () => { }) {
-            this.finished = true;
-            this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
-            callback();
-          }
-
-          constructor(...args) {
-            super(...args);
-            this.finished = false;
-            this._headers = {};
-          }
-        };
-        const res = new MyResponse();
-        const req = {
-          url: 'http://localhost:8888/test1',
-          headers: {
-            'x-forwarded-for': '192.168.0.1'
-          },
-          secure: false
-        };
-        const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
-        const ctx = LeanES.NS.Context.new(switchMediator, req, res);
-        const spySwitchSendNotification = sinon.spy(switchMediator, 'sendNotification');
-        const vhParams = {
-          context: ctx,
-          reverse: 'TEST_REVERSE'
-        };
-        const vhOptions = {
-          method: 'GET',
-          path: '/test',
-          resource: 'test',
-          action: 'list',
-          tag: '',
-          template: 'test/list',
-          keyName: null,
-          entityName: 'test',
-          recordName: 'test'
-        };
-        switchMediator.sender('test', vhParams, vhOptions);
-        assert.isTrue(spySwitchSendNotification.called, 'Notification not sent');
-        assert.deepEqual(spySwitchSendNotification.args[0], [
-          'test',
-          {
-            context: ctx,
-            reverse: 'TEST_REVERSE'
-          },
-          'list'
-        ]);
-      }).to.not.throw(Error);
-    });
-  });
-  describe('.compose', () => {
-    let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
-    });
-    it('should dispatch middlewares', async () => {
-      const KEY = 'TEST_SWITCH_008';
+    it('should send notification', async () => {
+      const KEY = 'TEST_SWITCH_006';
       facade = Facade.getInstance(KEY);
-
       @initialize
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
@@ -635,7 +571,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -644,7 +582,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -653,16 +593,17 @@ describe('Switch', () => {
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
-      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
 
       class MyResponse extends EventEmitter {
         getHeaders() {
-          LeanES.NS.Utils.copy(this._headers);
+          return LeanES.NS.Utils.copy(this._headers);
         }
 
         getHeader(field) {
-          this._headers[field.toLowerCase()];
+          return this._headers[field.toLowerCase()];
         }
 
         setHeader(field, value) {
@@ -687,7 +628,117 @@ describe('Switch', () => {
       };
       const res = new MyResponse();
       const req = {
-        url: 'http://localhost:8888',
+        url: 'http://localhost:8878/test1',
+        headers: {
+          'x-forwarded-for': '192.168.0.1'
+        },
+        secure: false
+      };
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+      const ctx = LeanES.NS.Context.new(switchMediator, req, res);
+      const spySwitchSendNotification = sinon.spy(switchMediator, 'sendNotification');
+      const vhParams = {
+        context: ctx,
+        reverse: 'TEST_REVERSE'
+      };
+      const vhOptions = {
+        method: 'GET',
+        path: '/test',
+        resource: 'test',
+        action: 'list',
+        tag: '',
+        template: 'test/list',
+        keyName: null,
+        entityName: 'test',
+        recordName: 'test'
+      };
+      switchMediator.sender('test', vhParams, vhOptions);
+      assert.isTrue(spySwitchSendNotification.called, 'Notification not sent');
+      assert.deepEqual(spySwitchSendNotification.args[0], [
+        'test',
+        {
+          context: ctx,
+          reverse: 'TEST_REVERSE'
+        },
+        'list'
+      ]);
+    });
+  });
+  describe('.compose', () => {
+    let facade = null;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
+    it('should dispatch middlewares', async () => {
+      const KEY = 'TEST_SWITCH_008';
+      facade = Facade.getInstance(KEY);
+
+      @initialize
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/config/`;
+      }
+
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @moduleD(Test)
+      class TestRouter extends LeanES.NS.Router {
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
+      }
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
+
+      @initialize
+      @moduleD(Test)
+      class TestSwitch extends LeanES.NS.Switch {
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
+      }
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
+      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
+
+      class MyResponse extends EventEmitter {
+        getHeaders() {
+          return LeanES.NS.Utils.copy(this._headers);
+        }
+
+        getHeader(field) {
+          return this._headers[field.toLowerCase()];
+        }
+
+        setHeader(field, value) {
+          this._headers[field.toLowerCase()] = value;
+        }
+
+        removeHeader(field) {
+          delete this._headers[field.toLowerCase()];
+        }
+
+        end(data, encoding = 'utf-8', callback = () => { }) {
+          this.finished = true;
+          this.emit('finish', data != null ? typeof data.toString === "function" ? data.toString(encoding) : void 0 : void 0);
+          callback();
+        }
+
+        constructor(...args) {
+          super(...args);
+          this.finished = false;
+          this._headers = {};
+        }
+      };
+      const res = new MyResponse();
+      const req = {
+        url: 'http://localhost:8878',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         }
@@ -708,8 +759,8 @@ describe('Switch', () => {
   });
   describe('.respond', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run responding request handler', async () => {
       const KEY = 'TEST_SWITCH_009';
@@ -723,7 +774,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -732,7 +785,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -741,16 +796,18 @@ describe('Switch', () => {
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
         getHeaders() {
-          LeanES.NS.Utils.copy(this._headers);
+          return LeanES.NS.Utils.copy(this._headers);
         }
 
         getHeader(field) {
-          this._headers[field.toLowerCase()];
+          return this._headers[field.toLowerCase()];
         }
 
         setHeader(field, value) {
@@ -774,7 +831,7 @@ describe('Switch', () => {
       const res = new MyResponse();
       let req = {
         method: 'POST',
-        url: 'http://localhost:8888',
+        url: 'http://localhost:8878',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         }
@@ -793,7 +850,7 @@ describe('Switch', () => {
       assert.equal(voContext.type, 'text/plain');
       req = {
         method: 'GET',
-        url: 'http://localhost:8888',
+        url: 'http://localhost:8878',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         }
@@ -816,12 +873,12 @@ describe('Switch', () => {
   });
   describe('.callback', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run request handler', async () => {
       const KEY = 'TEST_SWITCH_010';
-      const facade = Facade.getInstance(KEY);
+      facade = Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -830,7 +887,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -839,7 +898,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -848,16 +909,18 @@ describe('Switch', () => {
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
       class MyResponse extends EventEmitter {
         getHeaders() {
-          LeanES.NS.Utils.copy(this._headers);
+          return LeanES.NS.Utils.copy(this._headers);
         }
 
         getHeader(field) {
-          this._headers[field.toLowerCase()];
+          return this._headers[field.toLowerCase()];
         }
 
         setHeader(field, value) {
@@ -882,7 +945,7 @@ describe('Switch', () => {
       };
       const req = {
         method: 'GET',
-        url: 'http://localhost:8888',
+        url: 'http://localhost:8878',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         }
@@ -909,11 +972,11 @@ describe('Switch', () => {
       });
       await switchMediator.callback()(req, res);
       data = await endPromise;
-      parsedData = (ref = ((() => {
+      const parsedData = (() => {
         try {
-          JSON.parse(data != null ? data : null);
-        } catch (error) { }
-      })())) != null ? ref : {};
+          return JSON.parse(data != null ? data : null);
+        } catch (error) { console.log(error);}
+      })() || {};
       assert.propertyVal(parsedData, 'code', 'Not Found');
       res = new MyResponse();
       switchMediator.middlewares = [];
@@ -929,8 +992,8 @@ describe('Switch', () => {
   });
   describe('.use', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should append middlewares', async () => {
       const KEY = 'TEST_SWITCH_011';
@@ -944,7 +1007,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -953,7 +1018,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -965,7 +1032,7 @@ describe('Switch', () => {
 
       @initialize
       @moduleD(Test)
-      class TestLogCommand extends LeanES.NS.SimpleCommand {
+      class TestLogCommand extends LeanES.NS.Command {
         @nameBy static __filename = 'TestLogCommand';
         @meta static object = {};
         @method execute(aoNotification) {
@@ -979,7 +1046,9 @@ describe('Switch', () => {
           assert.equal(used, original);
         }
       };
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       facade.registerCommand(Test.NS.Pipes.NS.LogMessage.SEND_TO_LOG, TestLogCommand);
       let promise = new Promise(function (resolve) {
@@ -1008,8 +1077,8 @@ describe('Switch', () => {
   });
   describe('.onerror', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should handle error', async () => {
       const KEY = 'TEST_SWITCH_012';
@@ -1023,7 +1092,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -1032,7 +1103,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -1044,14 +1117,16 @@ describe('Switch', () => {
 
       @initialize
       @moduleD(Test)
-      class TestLogCommand extends LeanES.NS.SimpleCommand {
+      class TestLogCommand extends LeanES.NS.Command {
         @nameBy static __filename = 'TestLogCommand';
         @meta static object = {};
         @method execute(aoNotification) {
           trigger.emit('log', aoNotification);
         }
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       facade.registerCommand(Test.NS.Pipes.NS.LogMessage.SEND_TO_LOG, TestLogCommand);
       const promise = new Promise(function (resolve) {
@@ -1066,8 +1141,8 @@ describe('Switch', () => {
   });
   describe('.del', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should alias to .delete', async () => {
       const KEY = 'TEST_SWITCH_013';
@@ -1081,7 +1156,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -1090,7 +1167,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -1098,11 +1177,13 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER';
-        @method delete() {
-          spyDelete();
+        @method delete(... args) {
+          spyDelete(... args);
         }
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       switchMediator.del('TEST', (() => { }));
       assert.isTrue(spyDelete.called);
@@ -1111,8 +1192,8 @@ describe('Switch', () => {
   });
   describe('.createMethod', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create method handler', async () => {
       const KEY = 'TEST_SWITCH_014';
@@ -1126,7 +1207,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -1135,7 +1218,9 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -1145,10 +1230,12 @@ describe('Switch', () => {
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
       TestSwitch.createMethod('get');
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
 
-      assert.isFunction(switchMediator.get.body);
+      assert.isFunction(switchMediator.get);
       const keyCount = 1;
       const handlerIndex = 0;
       const spyMethod = sinon.spy(() => { });
@@ -1159,11 +1246,11 @@ describe('Switch', () => {
 
       class MyResponse extends EventEmitter {
         getHeaders() {
-          LeanES.NS.Utils.copy(this._headers);
+          return LeanES.NS.Utils.copy(this._headers);
         }
 
         getHeader(field) {
-          this._headers[field.toLowerCase()];
+          return this._headers[field.toLowerCase()];
         }
 
         setHeader(field, value) {
@@ -1189,31 +1276,31 @@ describe('Switch', () => {
 
       let req = {
         method: 'GET',
-        url: 'http://localhost:8888/test2',
+        url: 'http://localhost:8878/test2',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         }
       };
       let res = new MyResponse();
       let voContext = Test.NS.Context.new(switchMediator, req, res);
-      let promise = LeanES.NS.Promise.new(function (resolve) {
+      let promise = new Promise(function (resolve) {
         res.once('finish', resolve);
       });
       await switchMediator.handlers[keyCount][handlerIndex](voContext);
       res.end();
       await promise;
       assert.isFalse(spyMethod.called);
-      spyMethod.reset();
+      spyMethod.resetHistory();
       req = {
         method: 'GET',
-        url: 'http://localhost:8888/test/123',
+        url: 'http://localhost:8878/test/123',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         }
       };
       res = new MyResponse();
       voContext = Test.NS.Context.new(switchMediator, req, res);
-      promise = LeanES.NS.Promise.new(function (resolve) {
+      promise = new Promise(function (resolve) {
         res.once('finish', resolve);
       });
       await switchMediator.handlers[keyCount][handlerIndex](voContext);
@@ -1224,8 +1311,8 @@ describe('Switch', () => {
   });
   describe('.createNativeRoute', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create method handler', async () => {
       const KEY = 'TEST_SWITCH_015';
@@ -1238,7 +1325,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -1250,13 +1339,15 @@ describe('Switch', () => {
         @method getDelayed() {
           return [];
         }
-        @method init(...args) {
-          this.super(...args);
+        constructor(...args) {
+          super(...args);
           this.jobs = {};
         }
       }
 
-      const resque = TestResque.new(LeanES.NS.RESQUE, {
+      const resque = TestResque.new();
+      resque.setName(LeanES.NS.RESQUE);
+      resque.setData({
         data: []
       });
 
@@ -1279,11 +1370,13 @@ describe('Switch', () => {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
         @property entityName = 'TestEntity';
-        @action test() {
-          spyTestAction();
+        @action test(... args) {
+          spyTestAction(... args);
         }
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
@@ -1293,7 +1386,9 @@ describe('Switch', () => {
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
       TestSwitch.createMethod('get');
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
       let switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       facade.registerCommand('TestResource', TestResource);
       const collectionName = "TestEntitiesCollection";
@@ -1315,17 +1410,18 @@ describe('Switch', () => {
         @method static findRecordByName() {
           return TestEntityRecord;
         }
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestEntityRecord';
         }
       }
 
-      const boundCollection = TestsCollection.new(collectionName, {
+      const boundCollection = TestsCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
       switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const voRouter = facade.retrieveProxy(switchMediator.routerName);
       voRouter.get('/test/:id', {
@@ -1339,11 +1435,11 @@ describe('Switch', () => {
 
       class MyResponse extends EventEmitter {
         getHeaders() {
-          LeanES.NS.Utils.copy(this._headers);
+          return LeanES.NS.Utils.copy(this._headers);
         }
 
         getHeader(field) {
-          this._headers[field.toLowerCase()];
+          return this._headers[field.toLowerCase()];
         }
 
         setHeader(field, value) {
@@ -1368,7 +1464,7 @@ describe('Switch', () => {
       };
       const req = {
         method: 'GET',
-        url: 'http://localhost:8888/test/123',
+        url: 'http://localhost:8878/test/123',
         headers: {
           'x-forwarded-for': '192.168.0.1'
         }
@@ -1378,7 +1474,7 @@ describe('Switch', () => {
       facade.registerMediator(LeanES.NS.Mediator.new(LeanES.NS.APPLICATION_MEDIATOR, {
         context: voContext
       }));
-      const promise = LeanES.NS.Promise.new(function (resolve) {
+      const promise = new Promise(function (resolve) {
         res.once('finish', resolve);
       });
       await switchMediator.handlers[keyCount][handlerIndex](voContext);
@@ -1389,8 +1485,8 @@ describe('Switch', () => {
   });
   describe('.serverListen', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create HTTP server', async () => {
       const KEY = 'TEST_SWITCH_016';
@@ -1404,7 +1500,9 @@ describe('Switch', () => {
         @constant ROOT = `${__dirname}/config/`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -1416,13 +1514,15 @@ describe('Switch', () => {
         @method getDelayed() {
           return [];
         }
-        @method init(...args) {
-          this.super(...args);
+        constructor(...args) {
+          super(...args);
           this.jobs = {};
         }
       }
 
-      const resque = TestResque.new(LeanES.NS.RESQUE, {
+      const resque = TestResque.new();
+      resque.setName(LeanES.NS.RESQUE);
+      resque.setData({
         data: []
       });
 
@@ -1433,6 +1533,9 @@ describe('Switch', () => {
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
+        @method map() {
+          this.get('/test/:id', {to: 'test#test', recordName: null});
+        }
       }
 
       @initialize
@@ -1447,20 +1550,22 @@ describe('Switch', () => {
           };
         }
       }
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName(LeanES.NS.APPLICATION_ROUTER);
+      facade.registerProxy(router);
 
       @initialize
       @moduleD(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
-        @property routerName = 'TEST_SWITCH_ROUTER';
+        @property routerName = LeanES.NS.APPLICATION_ROUTER;
         @property jsonRendererName = Test.NS.APPLICATION_RENDERER;
       }
 
       @initialize
       @moduleD(Test)
-      class TestLogCommand extends LeanES.NS.SimpleCommand {
+      class TestLogCommand extends LeanES.NS.Command {
         @nameBy static __filename = 'TestLogCommand';
         @meta static object = {};
         @method execute(aoNotification) {
@@ -1475,7 +1580,7 @@ describe('Switch', () => {
         @meta static object = {};
         @method render(ctx, aoData, aoResource, aoOptions) {
           const vhData = LeanES.NS.Utils.assign({}, aoData);
-          JSON.stringify(vhData != null ? vhData : null);
+          return JSON.stringify(vhData != null ? vhData : null);
         }
       }
       const collectionName = "TestEntitiesCollection";
@@ -1497,41 +1602,42 @@ describe('Switch', () => {
         @method static findRecordByName() {
           return TestEntityRecord;
         }
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestEntityRecord';
         }
       }
-      const boundCollection = TestsCollection.new(collectionName, {
+      const boundCollection = TestsCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
-      facade.registerProxy(TestRenderer.new(Test.NS.APPLICATION_RENDERER));
+      const testRenderer = TestRenderer.new();
+      testRenderer.setName(Test.NS.APPLICATION_RENDERER);
+      facade.registerProxy(testRenderer);
       facade.registerCommand(Test.NS.Pipes.NS.LogMessage.SEND_TO_LOG, TestLogCommand);
       facade.registerCommand('TestResource', TestResource);
-      let result = await LeanES.NS.Utils.request.get('http://localhost:8888/test/123');
-      console.log('.,.,.,.', result);
-      assert.equal(result.status, 500);
-      assert.equal(result.message, 'connect ECONNREFUSED 127.0.0.1:8888');
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
-      const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
-      const voRouter = facade.retrieveProxy(switchMediator.routerName);
-      voRouter.get('/test/:id', {
-        resource: 'test',
-        action: 'test'
-      });
-      switchMediator.createNativeRoute(voRouter.routes[0]);
-      facade.registerMediator(LeanES.NS.Mediator.new(LeanES.NS.APPLICATION_MEDIATOR, {
+      let result = await LeanES.NS.Utils.request.get('http://localhost:8878/test/123');
+      assert.equal(result.status, 'ECONNREFUSED');
+      assert.equal(result.message, 'connect ECONNREFUSED 127.0.0.1:8878');
+      const mediator = TestSwitch.new();
+      mediator.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(mediator);
+      const appMediator = LeanES.NS.Mediator.new();
+      appMediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      appMediator.setViewComponent({
         context: {}
-      }));
-      result = await LeanES.NS.Utils.request.get('http://localhost:8888/test/123');
+      });
+      facade.registerMediator(appMediator);
+      result = await LeanES.NS.Utils.request.get('http://localhost:8878/test/123');
       assert.equal(result.status, 200);
       assert.equal(result.message, 'OK');
-      assert.equal(result.body, '{"test":"TEST"}');
+      assert.deepEqual(result.body, {test:"TEST"});
       facade.remove();
-      result = await LeanES.NS.Utils.request.get('http://localhost:8888/test/123');
-      assert.equal(result.status, 500);
-      assert.equal(result.message, 'connect ECONNREFUSED 127.0.0.1:8888');
+      result = await LeanES.NS.Utils.request.get('http://localhost:8878/test/123');
+      assert.equal(result.status, 'ECONNREFUSED');
+      assert.equal(result.message, 'connect ECONNREFUSED 127.0.0.1:8878');
     });
   });
 });

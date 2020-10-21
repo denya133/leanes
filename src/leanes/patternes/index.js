@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import ES from '../es';
 // import joi from 'joi';
 // import moment from 'moment';
@@ -5,7 +6,6 @@ import ES from '../es';
 const { initialize, meta, nameBy, constant, resolver, util } = ES.NS;
 
 
-console.log('?>?>?>00--111');
 @initialize
 @resolver(require, name => require(name))
 class PatternES extends ES {
@@ -118,6 +118,13 @@ class PatternES extends ES {
   // @util statuses = statuses;
 }
 
+// require('./clean/Adapter').default(PatternES);
+import AdapterTF from './clean/Adapter';
+// require('./clean/Case').default(PatternES);
+import CaseTF from './clean/Case';
+// require('./clean/Suite').default(PatternES);
+import SuiteTF from './clean/Suite';
+
 // require('./observer/Notification').default(PatternES);
 import NotificationTF from './observer/Notification';
 // require('./observer/Notifier').default(PatternES);
@@ -129,19 +136,26 @@ import ProxyTF from './proxy/Proxy'
 // require('./mediator/Mediator').default(PatternES);
 import MediatorTF from './mediator/Mediator';
 // require('./command/SimpleCommand').default(PatternES);
-import SimpleCommandTF from './command/SimpleCommand';
+// import SimpleCommandTF from './command/SimpleCommand';
 // require('./command/MacroCommand').default(PatternES);
-import MacroCommandTF from './command/MacroCommand';
+// import MacroCommandTF from './command/MacroCommand';
+import CommandTF from './command/Command';
 // require('./facade/Facade').default(PatternES);
 import FacadeTF from './facade/Facade';
 
 NotificationTF(PatternES);
 NotifierTF(PatternES);
 ObserverTF(PatternES);
+
+AdapterTF(PatternES);
+CaseTF(PatternES);
+SuiteTF(PatternES);
+
 ProxyTF(PatternES);
 MediatorTF(PatternES);
-SimpleCommandTF(PatternES);
-MacroCommandTF(PatternES);
+// SimpleCommandTF(PatternES);
+// MacroCommandTF(PatternES);
+CommandTF(PatternES);
 FacadeTF(PatternES);
 
 // require('./core/View').default(PatternES);
@@ -178,6 +192,10 @@ export * from '../es';
 
 // export type { ApplicationInterface } from './interfaces/ApplicationInterface';
 // export type { CollectionInterface } from './interfaces/CollectionInterface';
+export type { AdapterInterface } from './interfaces/AdapterInterface';
+export type { CaseInterface } from './interfaces/CaseInterface';
+export type { SuiteInterface } from './interfaces/SuiteInterface';
+
 export type { CommandInterface } from './interfaces/CommandInterface';
 export type { ControllerInterface } from './interfaces/ControllerInterface';
 // export type { ConfigurationInterface } from './interfaces/ConfigurationInterface';
@@ -215,5 +233,4 @@ export type { ProxyInterface } from './interfaces/ProxyInterface';
 // export type { TransformStaticInterface } from './interfaces/TransformStaticInterface';
 export type { ViewInterface } from './interfaces/ViewInterface';
 
-console.log('?>?>?>00--222');
 export default PatternES;

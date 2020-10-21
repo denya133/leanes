@@ -24,7 +24,10 @@ describe('LoggingJunctionMixin', () => {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(LeanES.NS.Pipes.NS.Junction.new());
       assert.instanceOf(mediator, LeanES.NS.Pipes.NS.JunctionMediator);
       assert.instanceOf(mediator._junction, LeanES.NS.Pipes.NS.Junction);
     });
@@ -45,7 +48,10 @@ describe('LoggingJunctionMixin', () => {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(LeanES.NS.Pipes.NS.Junction.new());
       assert.deepEqual(mediator.listNotificationInterests(), [
         LeanES.NS.Pipes.NS.JunctionMediator.ACCEPT_INPUT_PIPE,
         LeanES.NS.Pipes.NS.JunctionMediator.ACCEPT_OUTPUT_PIPE,
@@ -75,7 +81,10 @@ describe('LoggingJunctionMixin', () => {
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(
         LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG,
@@ -108,7 +117,10 @@ describe('LoggingJunctionMixin', () => {
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(
         LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG,
@@ -141,7 +153,10 @@ describe('LoggingJunctionMixin', () => {
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(
         LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG,
@@ -173,7 +188,10 @@ describe('LoggingJunctionMixin', () => {
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG, TEST_BODY, LeanES.NS.Pipes.NS.LogMessage.LEVELS[LeanES.NS.Pipes.NS.LogMessage.WARN]);
       mediator.handleNotification(notification);
@@ -202,7 +220,10 @@ describe('LoggingJunctionMixin', () => {
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(LeanES.NS.Pipes.NS.LogFilterMessage.SET_LOG_LEVEL, TEST_LEVEL);
       mediator.handleNotification(notification);

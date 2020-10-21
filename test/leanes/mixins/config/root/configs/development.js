@@ -2,7 +2,7 @@ module.exports = {
   port: {
     description: 'port',
     type: 'number',
-    default: 8888
+    default: 8788
   },
   test4: {
     description: 'test4 test',

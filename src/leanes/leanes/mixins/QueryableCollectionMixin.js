@@ -76,7 +76,7 @@ export default (Module) => {
       @method async query(
         aoQuery: object | QueryInterface
       ): Promise<QueryInterface> {
-        console.log('>?>?? QueryableCollectionMixin::query enter');
+        // console.log('>?>?? QueryableCollectionMixin::query enter');
         const voQuery = (() => {
           if (_.isPlainObject(aoQuery)) {
             aoQuery = _.pick(aoQuery, Object.keys(aoQuery).filter((key) =>
@@ -87,7 +87,7 @@ export default (Module) => {
             return aoQuery;
           }
         })();
-        console.log('>?>?? QueryableCollectionMixin::query voQuery', voQuery);
+        // console.log('>?>?? QueryableCollectionMixin::query voQuery', voQuery);
         return await this.executeQuery(await this.parseQuery(voQuery));
       }
 

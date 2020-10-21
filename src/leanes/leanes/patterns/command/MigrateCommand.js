@@ -4,8 +4,9 @@ import type { NotificationInterface } from '../../../patternes';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR, STOPPED_MIGRATE, MIGRATIONS,
-    SimpleCommand,
+    APPLICATION_MEDIATOR, STOPPED_MIGRATE, MIGRATIONS, UP,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
     initialize, module, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
@@ -17,7 +18,8 @@ export default (Module) => {
   @mixin(ConfigurableMixin)
   class MigrateCommand<
     D = RecordInterface
-  > extends SimpleCommand {
+  > extends Command {
+  // > extends SimpleCommand {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
@@ -63,7 +65,7 @@ export default (Module) => {
             voMigration = (await this.migrationsCollection.find(id));
             if (voMigration == null) {
               voMigration = vcMigration.new({id, type}, this.migrationsCollection);
-              await voMigration.migrate(Module.NS.Migration.UP);
+              await voMigration.migrate(UP);
               await voMigration.save();
             }
           } catch (error) {

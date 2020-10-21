@@ -3,6 +3,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
+  UP, DOWN,
   Migration,
   initialize, module: moduleD, nameBy, meta, constant, method, mixin,
 } = LeanES.NS;
@@ -10,8 +11,8 @@ const {
 describe('Migration', () => {
   describe('.new', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create migration instance', () => {
       const collectionName = 'TestsCollection';
@@ -39,8 +40,12 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {}
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -52,8 +57,8 @@ describe('Migration', () => {
   });
   describe('.createCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step for create collection', () => {
       const collectionName = 'TestsCollection';
@@ -81,16 +86,24 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.createCollection('collectionName', {
+            prop: 'prop'
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        return this.createCollection('collectionName', {
-          prop: 'prop'
-        });
-      });
+      // BaseMigration.change(function () {
+      //   return this.createCollection('collectionName', {
+      //     prop: 'prop'
+      //   });
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -108,8 +121,8 @@ describe('Migration', () => {
   });
   describe('.createEdgeCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step for create edge collection', () => {
       const collectionName = 'TestsCollection';
@@ -137,16 +150,19 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.createEdgeCollection('collectionName1', 'collectionName2', {
+            prop: 'prop'
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.createEdgeCollection('collectionName1', 'collectionName2', {
-          prop: 'prop'
-        });
-      });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -165,8 +181,8 @@ describe('Migration', () => {
   });
   describe('.addField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to add field in record at collection', () => {
       const collectionName = 'TestsCollection';
@@ -194,14 +210,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.addField('collectionName', 'attr1', 'number');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.addField('collectionName', 'attr1', 'number');
-      });
+      // BaseMigration.change(() => {
+      //   this.addField('collectionName', 'attr1', 'number');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -214,8 +236,8 @@ describe('Migration', () => {
   });
   describe('.addIndex', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to add index in collection', () => {
       const collectionName = 'TestsCollection';
@@ -243,16 +265,24 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.addIndex('collectionName', ['attr1', 'attr2'], {
+            type: "hash"
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.addIndex('collectionName', ['attr1', 'attr2'], {
-          type: "hash"
-        });
-      });
+      // BaseMigration.change(() => {
+      //   this.addIndex('collectionName', ['attr1', 'attr2'], {
+      //     type: "hash"
+      //   });
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -272,8 +302,8 @@ describe('Migration', () => {
   });
   describe('.addTimestamps', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to add timesteps in collection', () => {
       const collectionName = 'TestsCollection';
@@ -301,16 +331,24 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.addTimestamps('collectionName', {
+            prop: 'prop'
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.addTimestamps('collectionName', {
-          prop: 'prop'
-        });
-      });
+      // BaseMigration.change(() => {
+      //   this.addTimestamps('collectionName', {
+      //     prop: 'prop'
+      //   });
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -328,8 +366,8 @@ describe('Migration', () => {
   });
   describe('.changeCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to change collection', () => {
       const collectionName = 'TestsCollection';
@@ -357,16 +395,24 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.changeCollection('collectionName', {
+            prop: 'prop'
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.changeCollection('collectionName', {
-          prop: 'prop'
-        });
-      });
+      // BaseMigration.change(() => {
+      //   this.changeCollection('collectionName', {
+      //     prop: 'prop'
+      //   });
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -384,8 +430,8 @@ describe('Migration', () => {
   });
   describe('.changeField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to change field in collection', () => {
       const collectionName = 'TestsCollection';
@@ -413,14 +459,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.changeField('collectionName', 'attr1', 'string');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.changeField('collectionName', 'attr1', 'string');
-      });
+      // BaseMigration.change(() => {
+      //   this.changeField('collectionName', 'attr1', 'string');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -433,8 +485,8 @@ describe('Migration', () => {
   });
   describe('.renameField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to rename field in collection', () => {
       const collectionName = 'TestsCollection';
@@ -462,14 +514,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.renameField('collectionName', 'oldAttrName', 'newAttrName');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.renameField('collectionName', 'oldAttrName', 'newAttrName');
-      });
+      // BaseMigration.change(() => {
+      //   this.renameField('collectionName', 'oldAttrName', 'newAttrName');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -482,8 +540,8 @@ describe('Migration', () => {
   });
   describe('.renameIndex', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to rename index in collection', () => {
       const collectionName = 'TestsCollection';
@@ -511,14 +569,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.renameIndex('collectionName', 'oldIndexname', 'newIndexName');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.renameIndex('collectionName', 'oldIndexname', 'newIndexName');
-      });
+      // BaseMigration.change(() => {
+      //   this.renameIndex('collectionName', 'oldIndexname', 'newIndexName');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -531,8 +595,8 @@ describe('Migration', () => {
   });
   describe('.renameCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to rename collection', () => {
       const collectionName = 'TestsCollection';
@@ -560,14 +624,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.renameCollection('oldCollectionName', 'newCollectionName');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.renameCollection('oldCollectionName', 'newCollectionName');
-      });
+      // BaseMigration.change(() => {
+      //   this.renameCollection('oldCollectionName', 'newCollectionName');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -580,8 +650,8 @@ describe('Migration', () => {
   });
   describe('.dropCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to drop collection', () => {
       const collectionName = 'TestsCollection';
@@ -609,14 +679,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.dropCollection('collectionName');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.dropCollection('collectionName');
-      });
+      // BaseMigration.change(() => {
+      //   this.dropCollection('collectionName');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -629,8 +705,8 @@ describe('Migration', () => {
   });
   describe('.dropEdgeCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to drop edge collection', () => {
       const collectionName = 'TestsCollection';
@@ -658,14 +734,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.dropEdgeCollection('collectionName1', 'collectionName2');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.dropEdgeCollection('collectionName1', 'collectionName2');
-      });
+      // BaseMigration.change(() => {
+      //   this.dropEdgeCollection('collectionName1', 'collectionName2');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -678,8 +760,8 @@ describe('Migration', () => {
   });
   describe('.removeField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to remove field in collection', () => {
       const collectionName = 'TestsCollection';
@@ -707,14 +789,20 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.removeField('collectionName', 'attr2');
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.removeField('collectionName', 'attr2');
-      });
+      // BaseMigration.change(() => {
+      //   this.removeField('collectionName', 'attr2');
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -727,8 +815,8 @@ describe('Migration', () => {
   });
   describe('.removeIndex', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to remove index in collection', () => {
       const collectionName = 'TestsCollection';
@@ -756,18 +844,28 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.removeIndex('collectionName', ['attr1', 'attr2'], {
+            type: "hash",
+            unique: true,
+            sparse: false
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.removeIndex('collectionName', ['attr1', 'attr2'], {
-          type: "hash",
-          unique: true,
-          sparse: false
-        });
-      });
+      // BaseMigration.change(() => {
+      //   this.removeIndex('collectionName', ['attr1', 'attr2'], {
+      //     type: "hash",
+      //     unique: true,
+      //     sparse: false
+      //   });
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -789,8 +887,8 @@ describe('Migration', () => {
   });
   describe('.removeTimestamps', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add step to remove timestamps in collection', () => {
       const collectionName = 'TestsCollection';
@@ -818,16 +916,24 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.removeTimestamps('collectionName', {
+            prop: 'prop'
+          });
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      BaseMigration.change(() => {
-        this.removeTimestamps('collectionName', {
-          prop: 'prop'
-        });
-      });
+      // BaseMigration.change(() => {
+      //   this.removeTimestamps('collectionName', {
+      //     prop: 'prop'
+      //   });
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -845,8 +951,8 @@ describe('Migration', () => {
   });
   describe('.reversible', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should add reversible step', async () => {
       const collectionName = 'TestsCollection';
@@ -869,23 +975,34 @@ describe('Migration', () => {
         @meta static object = {};
       }
 
+      const reversibleArg = async ({ up, down }) => {
+        await up(async () => {});
+        await down(async () => {});
+      };
+
       @initialize
       @moduleD(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          this.reversible(reversibleArg);
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const reversibleArg = co.wrap(async function (dir) {
-        await dir.up(co.wrap(async function () { }));
-        await dir.down(co.wrap(async function () { }));
-      });
-      BaseMigration.change(() => {
-        this.reversible(reversibleArg);
-      });
+      // const reversibleArg = co.wrap(async function (dir) {
+      //   await dir.up(co.wrap(async function () { }));
+      //   await dir.down(co.wrap(async function () { }));
+      // });
+      // BaseMigration.change(() => {
+      //   this.reversible(reversibleArg);
+      // });
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
@@ -896,10 +1013,10 @@ describe('Migration', () => {
       });
     });
   });
-  describe('.execute', () => {
+  describe('#execute', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run generator closure with some code', async () => {
       const collectionName = 'TestsCollection';
@@ -922,28 +1039,37 @@ describe('Migration', () => {
         @meta static object = {};
       }
 
+      const spyExecute = sinon.spy(async function () { });
+
       @initialize
       @moduleD(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {}
+
+        // @method execute(...args) {
+        //   spyExecute(...args);
+        // }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
-      const spyExecute = sinon.spy(async function () { });
-      await migration.execute.body.call(migration, spyExecute);
+      await migration.execute.call(migration, spyExecute);
       assert.isTrue(spyExecute.called);
     });
   });
   describe('.change', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run closure with some code', () => {
       const collectionName = 'TestsCollection';
@@ -966,25 +1092,32 @@ describe('Migration', () => {
         @meta static object = {};
       }
 
+      const spyChange = sinon.spy(() => { });
+
       @initialize
       @moduleD(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
+
+        @method static change() {
+          spyChange()
+        }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const spyChange = sinon.spy(() => { });
-      BaseMigration.change(spyChange);
+      // BaseMigration.change(spyChange);
       assert.isTrue(spyChange.called);
     });
   });
-  describe('.up', () => {
+  describe('#up', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run steps in forward direction', async () => {
       const collectionName = 'TestsCollection';
@@ -1015,21 +1148,24 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.reversible(async function ({ up, down }) {
             await up(spyReversibleUp);
-            await this.createCollection('TEST_COLLECTION');
+            await down(async () => {});
           });
+          this.createCollection('TEST_COLLECTION');
           this.addField('collectionName', 'TEST_FIELD', 'number');
         }
-        @method createCollection() {
-          spyCreateCollection();
+        @method async createCollection(... args) {
+          await spyCreateCollection(... args);
         }
-        @method addField() {
-          spyAddField();
+        @method async addField(... args) {
+          await spyAddField(... args);
         }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -1044,17 +1180,17 @@ describe('Migration', () => {
       assert.deepEqual(spyAddField.args[0], ['collectionName', 'TEST_FIELD', 'number']);
     });
   });
-  describe('.down', () => {
+  describe('#down', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run steps in backward direction', async () => {
       const collectionName = 'TestsCollection';
       const KEY = 'TEST_MIGRATION_021';
       facade = LeanES.NS.Facade.getInstance(KEY);
       const spyReversibleDown = sinon.spy(async function () { });
-      const spyCreateCollection = sinon.spy(async function () { });
+      const spyDropCollection = sinon.spy(async function () { });
       const spyRenameIndex = sinon.spy(async function () { });
       const spyRemoveField = sinon.spy(async function () { });
 
@@ -1079,26 +1215,28 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.reversible(async function ({ up, down }) {
+            await up(async () => {});
             await down(spyReversibleDown);
-            await this.createCollection('TEST_COLLECTION');
-            this.addField('collectionName', 'TEST_FIELD', 'number');
-            this.renameIndex('collectionName', 'TEST_INDEX_1', 'TEST_INDEX_2');
           });
+          this.createCollection('TEST_COLLECTION');
           this.addField('collectionName', 'TEST_FIELD', 'number');
+          this.renameIndex('collectionName', 'TEST_INDEX_1', 'TEST_INDEX_2');
         }
-        @method createCollection() {
-          spyCreateCollection();
+        @method async dropCollection(... args) {
+          await spyDropCollection(... args);
         }
-        @method renameIndex() {
-          spyRenameIndex();
+        @method async renameIndex(... args) {
+          await spyRenameIndex(... args);
         }
-        @method removeField() {
-          spyRemoveField();
+        @method async removeField(... args) {
+          await spyRemoveField(... args);
         }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -1108,17 +1246,17 @@ describe('Migration', () => {
       await migration.down();
       assert.isTrue(spyRenameIndex.called);
       assert.isTrue(spyRemoveField.calledAfter(spyRenameIndex));
-      assert.isTrue(spyReversibleDown.calledAfter(spyRemoveField));
-      assert.isTrue(spyCreateCollection.calledAfter(spyReversibleDown));
-      assert.equal(spyCreateCollection.args[0][0], 'TEST_COLLECTION');
-      assert.deepEqual(spyRemoveField.args[0], ['collectionName', 'TEST_FIELD', 'number']);
+      assert.isTrue(spyDropCollection.calledAfter(spyRemoveField));
+      assert.isTrue(spyReversibleDown.calledAfter(spyDropCollection));
+      assert.equal(spyDropCollection.args[0][0], 'TEST_COLLECTION');
+      assert.deepEqual(spyRemoveField.args[0], ['collectionName', 'TEST_FIELD']);
       assert.deepEqual(spyRenameIndex.args[0], ['collectionName', 'TEST_INDEX_2', 'TEST_INDEX_1']);
     });
   });
   describe('.up', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should replace forward stepping caller', async () => {
       const collectionName = 'TestsCollection';
@@ -1147,11 +1285,16 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method async up() {
-          spyUp();
+        @method static up() {
+          return spyUp;
+        }
+        @method static down() {
+          return async () => {}
         }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -1165,8 +1308,8 @@ describe('Migration', () => {
   });
   describe('.down', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should replace forward stepping caller', async () => {
       const collectionName = 'TestsCollection';
@@ -1195,11 +1338,16 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method async up() {
-          spyUp();
+        @method static up() {
+          return async () => {}
+        }
+        @method static down() {
+          return spyDown;
         }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -1211,10 +1359,10 @@ describe('Migration', () => {
       assert.isTrue(spyDown.called);
     });
   });
-  describe('.migrate', () => {
+  describe('#migrate', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run steps in forward direction', async () => {
       const collectionName = 'TestsCollection';
@@ -1245,28 +1393,31 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method async change() {
+        @method static change() {
           this.reversible(async function ({ up, down }) {
             await up(spyReversibleUp);
-            await this.createCollection('TEST_COLLECTION');
+            await down(async () => {});
           });
+          this.createCollection('TEST_COLLECTION');
           this.addField('collectionName', 'TEST_FIELD', 'number');
         }
-        @method createCollection() {
-          spyCreateCollection();
+        @method async createCollection(... args) {
+          await spyCreateCollection(... args);
         }
-        @method addField() {
-          spyAddField();
+        @method async addField(... args) {
+          await spyAddField(... args);
         }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
-      await migration.migrate(BaseMigration.NS.UP);
+      await migration.migrate(UP);
       assert.isTrue(spyReversibleUp.called);
       assert.isTrue(spyCreateCollection.calledAfter(spyReversibleUp));
       assert.isTrue(spyAddField.calledAfter(spyCreateCollection));
@@ -1278,7 +1429,7 @@ describe('Migration', () => {
       const KEY = 'TEST_MIGRATION_025';
       facade = LeanES.NS.Facade.getInstance(KEY);
       const spyReversibleDown = sinon.spy(async function () { });
-      const spyCreateCollection = sinon.spy(async function () { });
+      const spyDropCollection = sinon.spy(async function () { });
       const spyRenameIndex = sinon.spy(async function () { });
       const spyRemoveField = sinon.spy(async function () { });
 
@@ -1303,38 +1454,41 @@ describe('Migration', () => {
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method async change() {
+        @method static change() {
           this.reversible(async function ({ up, down }) {
+            await up(async () => {});
             await down(spyReversibleDown);
-            await this.createCollection('TEST_COLLECTION');
           });
-          this.removeField('collectionName', 'TEST_FIELD', 'number');
+          this.createCollection('TEST_COLLECTION');
+          this.addField('collectionName', 'TEST_FIELD', 'number');
           this.renameIndex('collectionName', 'TEST_INDEX_3', 'TEST_INDEX_4');
         }
-        @method createCollection() {
-          spyCreateCollection();
+        @method async dropCollection(... args) {
+          await spyDropCollection(... args);
         }
-        @method renameIndex() {
-          spyRenameIndex();
+        @method async renameIndex(... args) {
+          await spyRenameIndex(... args);
         }
-        @method removeField() {
-          spyRemoveField();
+        @method async removeField(... args) {
+          await spyRemoveField(... args);
         }
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
       const migration = BaseMigration.new({
         type: 'Test::BaseMigration'
       }, collection);
-      await migration.migrate(BaseMigration.NS.DOWN);
+      await migration.migrate(DOWN);
       assert.isTrue(spyRenameIndex.called);
       assert.isTrue(spyRemoveField.calledAfter(spyRenameIndex));
-      assert.isTrue(spyReversibleDown.calledAfter(spyRemoveField));
-      assert.isTrue(spyCreateCollection.calledAfter(spyReversibleDown));
-      assert.equal(spyCreateCollection.args[0][0], 'TEST_COLLECTION');
-      assert.deepEqual(spyRemoveField.args[0], ['collectionName', 'TEST_FIELD', 'number']);
+      assert.isTrue(spyDropCollection.calledAfter(spyRemoveField));
+      assert.isTrue(spyReversibleDown.calledAfter(spyDropCollection));
+      assert.equal(spyDropCollection.args[0][0], 'TEST_COLLECTION');
+      assert.deepEqual(spyRemoveField.args[0], ['collectionName', 'TEST_FIELD']);
       assert.deepEqual(spyRenameIndex.args[0], ['collectionName', 'TEST_INDEX_4', 'TEST_INDEX_3']);
     });
   });

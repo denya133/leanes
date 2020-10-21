@@ -44,7 +44,9 @@ describe('Record', () => {
           }
           @attribute({ type: 'string' }) test;
         }
-        const collection = TestsCollection.new(collectionName, {
+        const collection = TestsCollection.new();
+        collection.setName(collectionName);
+        collection.setData({
           delegate: 'TestRecord'
         });
         facade.registerProxy(collection);
@@ -128,7 +130,9 @@ describe('Record', () => {
           }
           @attribute({ type: 'string' }) test;
         }
-        const collection = TestsCollection.new(collectionName, {
+        const collection = TestsCollection.new();
+        collection.setName(collectionName);
+        collection.setData({
           delegate: 'TestRecord'
         });
         facade.registerProxy(collection);
@@ -243,23 +247,11 @@ describe('Record', () => {
             return TestRecord;
           }
           @attribute({ type: 'string' }) test;
-          @computed({ type: 'string' }) get string() {
-            return ;
-          }
-          @computed({ type: 'number' }) get number() {
-            return ;
-          }
-          @computed({ type: 'boolean' }) get boolean() {
-            return ;
-          }
-          @computed({ type: 'date' }) get date() {
-            return ;
+          @computed({ type: 'string' }) get computedTestProp() {
+            return this.test;
           }
         }
-        assert.isTrue('string' in TestRecord.computeds, 'Computed property `string` did not defined');
-        assert.isTrue('number' in TestRecord.computeds, 'Computed property `number` did not defined');
-        assert.isTrue('boolean' in TestRecord.computeds, 'Computed property `boolean` did not defined');
-        assert.isTrue('date' in TestRecord.computeds, 'Computed property `date` did not defined');
+        assert.isTrue('computedTestProp' in TestRecord.computeds, 'Computed property `computedTestProp` did not defined');
       }).to.not.throw(Error);
     });
   });
@@ -298,7 +290,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -345,7 +339,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -394,7 +390,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -444,7 +442,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -492,7 +492,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -539,7 +541,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -588,7 +592,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -638,7 +644,9 @@ describe('Record', () => {
         @attribute({ type: 'number' }) test;
         @attribute({ type: 'boolean' }) has;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -697,7 +705,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -774,7 +784,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) name;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -830,7 +842,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -891,7 +905,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -958,7 +974,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1025,7 +1043,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1227,7 +1247,9 @@ describe('Record', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1270,7 +1292,9 @@ describe('Record', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1316,7 +1340,9 @@ describe('Record', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1361,7 +1387,9 @@ describe('Record', () => {
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1407,7 +1435,9 @@ describe('Record', () => {
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1456,7 +1486,9 @@ describe('Record', () => {
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1502,7 +1534,9 @@ describe('Record', () => {
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);

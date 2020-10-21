@@ -1,12 +1,12 @@
-console.log('>>>>QQQQ 12-12+1');
+// console.log('>>>>QQQQ 12-12+1');
 import type { ApplicationInterface } from '../../interfaces/ApplicationInterface';
-console.log('>>>>QQQQ 12-12+2');
+// console.log('>>>>QQQQ 12-12+2');
 import type {
   LegacyResponseInterface, AxiosResponse, Config
 } from '../../types/RequestT';
 
 export default (Module) => {
-  console.log('>>>>QQQQ 12-12+3');
+  // console.log('>>>>QQQQ 12-12+3');
   const {
     LIGHTWEIGHT,
     APPLICATION_MEDIATOR, //APPLICATION_SWITCH,
@@ -17,7 +17,7 @@ export default (Module) => {
     Utils: { uuid }
   } = Module.NS;
   const { PipeAwareModule } = Pipes.NS;
-  console.log('>>>>QQQQ 12-12+4');
+  // console.log('>>>>QQQQ 12-12+4');
 
   @initialize
   @module(Module)
@@ -42,8 +42,8 @@ export default (Module) => {
       this.facade.startup(this);
     }
 
-    @method finish(): void {
-      this.facade.remove();
+    @method async finish(): void {
+      await this.facade.remove();
     }
 
     @method async migrate(opts?: {until: ?string}): Promise<void> {
@@ -102,19 +102,19 @@ export default (Module) => {
     // }
 
     constructor(name: string, ApplicationFacade: Class<Facade>, symbol: ?Symbol) {
-      console.log('>>>>QQQQ 12-12+5');
+      // console.log('>>>>QQQQ 12-12+5');
       const isLightweight = symbol === LIGHTWEIGHT;
       if (isLightweight) {
-        console.log('>>>>QQQQ 12-12+6');
+        // console.log('>>>>QQQQ 12-12+6');
         super(ApplicationFacade.getInstance(`${name}|>${uuid.v4()}`));
-        console.log('>>>>QQQQ 12-12+7');
+        // console.log('>>>>QQQQ 12-12+7');
       } else {
-        console.log('>>>>QQQQ 12-12+8');
+        // console.log('>>>>QQQQ 12-12+8');
         super(ApplicationFacade.getInstance(name));
-        console.log('>>>>QQQQ 12-12+9');
+        // console.log('>>>>QQQQ 12-12+9');
       }
       this.isLightweight = isLightweight;
-      console.log('>>>>QQQQ 12-12+10');
+      // console.log('>>>>QQQQ 12-12+10');
     }
   }
 }

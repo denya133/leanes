@@ -1,6 +1,6 @@
 import type { FacadeInterface } from '../interfaces/FacadeInterface';
 import type { NotifierInterface } from '../interfaces/NotifierInterface';
-// import { injectable, inject} from "inversify";
+import { injectable, decorate } from "inversify";
 
 export default (Module) => {
 
@@ -11,8 +11,10 @@ export default (Module) => {
     initialize, module, meta, property, method, nameBy
   } = Module.NS;
 
-  // @injectable
+  decorate(injectable(), CoreObject);
+
   @initialize
+  @injectable()
   @module(Module)
   class Notifier extends CoreObject implements NotifierInterface {
     @nameBy static  __filename = __filename;
@@ -76,6 +78,10 @@ export default (Module) => {
 
     @method initializeNotifier(asKey: string): void {
       this._multitonKey = asKey;
+    }
+
+    constructor() {
+      super();
     }
   }
 }

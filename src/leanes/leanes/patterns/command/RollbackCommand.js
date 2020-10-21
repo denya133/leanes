@@ -4,8 +4,9 @@ import type { NotificationInterface } from '../../../patternes';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR, STOPPED_ROLLBACK, MIGRATIONS,
-    SimpleCommand,
+    APPLICATION_MEDIATOR, STOPPED_ROLLBACK, MIGRATIONS, DOWN,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
     initialize, module, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
@@ -17,7 +18,8 @@ export default (Module) => {
   @mixin(ConfigurableMixin)
   class RollbackCommand<
     D = RecordInterface
-  > extends SimpleCommand {
+  > extends Command {
+  // > extends SimpleCommand {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
@@ -60,7 +62,7 @@ export default (Module) => {
       executedMigrations = executedMigrations.slice(0, (options.steps || 1));
       for (const executedMigration of executedMigrations) {
         try {
-          await executedMigration.migrate(Module.NS.Migration.DOWN);
+          await executedMigration.migrate(DOWN);
           await executedMigration.destroy();
         } catch (error) {
           err = error;

@@ -1,24 +1,27 @@
-import type { CommandInterface } from '../interfaces/CommandInterface';
-import type { NotificationInterface } from '../interfaces/NotificationInterface';
+import type { AdapterInterface } from '../interfaces/AdapterInterface';
 import { injectable } from "inversify";
 
 
 export default (Module) => {
 
   const {
-    Notifier,
+    CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, module, meta, method, property, nameBy
   } = Module.NS;
 
   @initialize
   @injectable()
   @module(Module)
-  class SimpleCommand extends Notifier implements CommandInterface {
+  class Adapter extends CoreObject implements AdapterInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @method execute(aoNotification: NotificationInterface): void {}
+    @property _cleanType = 'adapter';
+
+    @method onRegister(): void  { return; }
+
+    @method async onRemove(): void { return; }
 
     @method static async restoreObject() {
       assert.fail(`restoreObject method not supported for ${this.name}`);

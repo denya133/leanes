@@ -13,12 +13,12 @@ describe('GenerateAutoincrementIdMixin', () => {
   describe('.generateId', () => {
     var facade;
     facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should generate id for itemsusing autoincrement', async () => {
       const KEY = 'FACADE_TEST_AUTOINCREMENT_ID_001';
-      const facade = LeanES.NS.Facade.getInstance(KEY);initialize;
+      facade = LeanES.NS.Facade.getInstance(KEY);initialize;
       class Test extends LeanES {
         @nameBy static  __filename = 'Test';
         @meta static object = {};
@@ -29,9 +29,9 @@ describe('GenerateAutoincrementIdMixin', () => {
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
-        @method init() {
-          this.super(...arguments);
-          this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -77,12 +77,15 @@ describe('GenerateAutoincrementIdMixin', () => {
           await data;
         }
       }
-      facade.registerProxy(Queryable.new(KEY, []));
+      const col = Queryable.new();
+      col.setName(KEY);
+      col.setData([]);
+      facade.registerProxy(col);
       const collection = facade.retrieveProxy(KEY);
       let j;
       for (let i = j = 1; j <= 10; i = ++j) {
         const {id} = await collection.create({
-          type: 'TestRecord'
+          type: 'Test::TestRecord'
         });
         assert.equal(i, id);
       }

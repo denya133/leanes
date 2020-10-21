@@ -29,8 +29,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -42,7 +42,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       assert.instanceOf(collection, HttpCollection);
@@ -53,9 +55,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should make simple request', async () => {
       const collectionName = 'TestsCollection';
@@ -74,8 +76,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -87,31 +89,33 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
-      const data = await collection.sendRequest({
-        method: 'GET',
-        url: 'http://localhost:8000',
-        options: {
-          json: true,
+      const data = await collection.sendRequest(
+        'GET',
+        'http://localhost:8000',
+        {
+          responseType: 'json',
           headers: {}
         }
-      });
+      );
       assert.equal(data.status, 200);
-      assert.equal((ref = data.body) != null ? ref.message : void 0, 'OK');
+      assert.equal(data.body != null ? data.body.message : void 0, 'OK');
     });
   });
-  describe('.requestToHash, .makeRequest', () => {
+  describe('.requestHashToArguments, .makeRequest', () => {
     let facade = null;
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should make simple request', async () => {
       const collectionName = 'TestsCollection';
@@ -130,9 +134,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -143,20 +147,22 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
-      const hash = collection.requestToHash({
+      const hash = collection.requestHashToArguments({
         method: 'GET',
         url: 'http://localhost:8000',
         headers: {},
         data: null
       });
-      assert.equal(hash.method, 'GET', 'Method is incorrect');
-      assert.equal(hash.url, 'http://localhost:8000', 'URL is incorrect');
-      assert.equal((ref = hash.options) != null ? ref.json : void 0, true, 'JSON option is not set');
+      assert.equal(hash[0], 'GET', 'Method is incorrect');
+      assert.equal(hash[1], 'http://localhost:8000', 'URL is incorrect');
+      assert.equal(hash[2].responseType, 'json', 'JSON option is not set');
       const data = await collection.makeRequest({
         method: 'GET',
         url: 'http://localhost:8000',
@@ -164,40 +170,41 @@ describe('ThinHttpCollectionMixin', () => {
         data: null
       });
       assert.equal(data.status, 200, 'Request received not OK status');
-      assert.equal(data != null ? (ref1 = data.body) != null ? ref1.message : void 0 : void 0, 'OK', 'Incorrect body');
+      assert.equal(data.body.message, 'OK', 'Incorrect body');
     });
   });
   describe('.methodForRequest', () => {
     it('should get method name from request params', () => {
       const collectionName = 'TestsCollection';
 
-      @LeanES.NS.initialize
+      @initialize
       class Test extends LeanES {
-        @LeanES.NS.nameBy static __filename = 'Test';
-        @LeanES.NS.meta static object = {};
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.module(Test)
+      @initialize
+      @moduleD(Test)
       class TestRecord extends LeanES.NS.Record {
-        @LeanES.NS.nameBy static __filename = 'TestRecord';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.attribute({ type: 'string' }) test;
-        @LeanES.NS.method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        @nameBy static __filename = 'TestRecord';
+        @meta static object = {};
+        @attribute({ type: 'string' }) test;
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.mixin(LeanES.NS.QueryableCollectionMixin)
-      @LeanES.NS.mixin(LeanES.NS.HttpCollectionMixin)
-      @LeanES.NS.module(Test)
+      @initialize
+      @mixin(LeanES.NS.ThinHttpCollectionMixin)
+      @moduleD(Test)
       class HttpCollection extends LeanES.NS.Collection {
-        @LeanES.NS.nameBy static __filename = 'HttpCollection';
-        @LeanES.NS.meta static object = {};
+        @nameBy static __filename = 'HttpCollection';
+        @meta static object = {};
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let method = collection.methodForRequest({
@@ -248,9 +255,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -263,7 +270,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlPrefix('Test', 'Tests');
@@ -290,9 +299,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -305,7 +314,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.makeURL('Test', null, null, true);
@@ -338,9 +349,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -353,7 +364,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.pathForType('Type');
@@ -380,8 +393,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -395,7 +408,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTakeAll('Test', {});
@@ -420,8 +435,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -435,7 +450,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTake('Test', '123');
@@ -460,8 +477,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -475,7 +492,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForPush('Test', {});
@@ -500,8 +519,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -515,7 +534,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRemove('Test', '123');
@@ -540,8 +561,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -555,7 +576,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForOverride('Test', {}, '123');
@@ -580,8 +603,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -598,7 +621,9 @@ describe('ThinHttpCollectionMixin', () => {
           return '';
         }
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.buildURL('Test', {}, null, 'takeAll', {
@@ -637,8 +662,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -655,7 +680,9 @@ describe('ThinHttpCollectionMixin', () => {
           return `TEST_${recordName != null ? recordName : 'RECORD_NAME'}_${id != null ? id : 'RECORD_ID'}_${JSON.stringify(snapshot) != null ? JSON.stringify(snapshot) : 'SNAPSHOT'}_${JSON.stringify(query) != null ? JSON.stringify(query) : 'QUERY'}`;
         }
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRequest({
@@ -727,12 +754,14 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -744,9 +773,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
+      facade.registerProxy(collection);
       collection.initializeNotifier(KEY);
       let headers = collection.headersForRequest({
         requestType: 'takeAll',
@@ -809,8 +841,8 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
@@ -824,7 +856,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let data = collection.dataForRequest({
@@ -868,12 +902,14 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
@@ -885,7 +921,9 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -972,9 +1010,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should put data into collection', async () => {
       const collectionName = 'TestsCollection';
@@ -993,9 +1031,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1008,13 +1046,15 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       const spyPush = sinon.spy(collection, 'push');
       assert.instanceOf(collection, HttpCollection);
-      record = await collection.create({
+      const record = await collection.create({
         test: 'test1'
       });
       assert.equal(record, spyPush.args[0][0]);
@@ -1025,9 +1065,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove data from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1046,9 +1086,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1061,10 +1101,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         test: 'test1'
@@ -1079,9 +1121,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get data item by id from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1100,9 +1142,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1115,10 +1157,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         test: 'test1'
@@ -1137,9 +1181,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get data items by id list from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1158,9 +1202,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1173,10 +1217,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const originalRecords = [];
       for (let i = 1; i <= 5; i++) {
@@ -1191,9 +1237,9 @@ describe('ThinHttpCollectionMixin', () => {
       assert.equal(originalRecords.length, recordDuplicates.length);
       const count = originalRecords.length;
       let k;
-      for (i = k = 1; (1 <= count ? k <= count : k >= count); i = 1 <= count ? ++k : --k) {
+      for (let i = k = 1; (1 <= count ? k <= count : k >= count); i = 1 <= count ? ++k : --k) {
         const ref1 = TestRecord.attributes;
-        for (l = 0; l < ref1.length; l++) {
+        for (let l = 0; l < ref1.length; l++) {
           const attribute = ref1[l];
           assert.equal(originalRecords[i][attribute], recordDuplicates[i][attribute]);
         }
@@ -1205,9 +1251,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get all data items from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1226,9 +1272,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1241,10 +1287,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const originalRecords = [];
       for (let i = 1; i <= 5; i++) {
@@ -1273,9 +1321,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should replace data item by id in collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1294,9 +1342,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1309,10 +1357,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         test: 'test1'
@@ -1331,9 +1381,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should test if item is included in the collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1352,9 +1402,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1367,10 +1417,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         test: 'test1'
@@ -1385,9 +1437,9 @@ describe('ThinHttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should count items in the collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1406,9 +1458,9 @@ describe('ThinHttpCollectionMixin', () => {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
@@ -1421,10 +1473,12 @@ describe('ThinHttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const count = 11;
       let j;

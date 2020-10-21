@@ -1,5 +1,4 @@
-import type { CommandInterface } from '../interfaces/CommandInterface';
-import type { NotificationInterface } from '../interfaces/NotificationInterface';
+import type { CaseInterface } from '../interfaces/CaseInterface';
 import { injectable } from "inversify";
 
 
@@ -8,17 +7,19 @@ export default (Module) => {
   const {
     Notifier,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, module, meta, method, property, nameBy
   } = Module.NS;
 
   @initialize
   @injectable()
   @module(Module)
-  class SimpleCommand extends Notifier implements CommandInterface {
+  class Case extends Notifier implements CaseInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @method execute(aoNotification: NotificationInterface): void {}
+    @property _cleanType = 'case';
+
+    @method execute(): any {}
 
     @method static async restoreObject() {
       assert.fail(`restoreObject method not supported for ${this.name}`);

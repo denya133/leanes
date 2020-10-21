@@ -1,3 +1,5 @@
+// import "reflect-metadata";
+// import { injectable } from "inversify";
 import assign from './utils/assign';
 import copy from './utils/copy';
 import filter from './utils/filter';
@@ -159,12 +161,19 @@ class ES extends _ES.prototype.Module {
 // console.log('?>?>?> CoreObject111', ES.prototype.CoreObject);
 
 ES.prototype.CoreObject.constructor = ES.prototype.Proto;
+// _ES.prototype.CoreObject.constructor = ES.prototype.Proto;
 ES.prototype.MetaObject.constructor = ES.prototype.Proto;
 
 ES.prototype.Proto.Module = ES;
 ES.prototype.CoreObject.Module = ES;
+// _ES.prototype.CoreObject.Module = ES;
 ES.prototype.MetaObject.Module = ES;
-
+// Reflect.defineProperty(ES.prototype, 'CoreObject', {
+//   configurable: false,
+//   enumerable: true,
+//   writable: false,
+//   value: injectable(_ES.prototype.CoreObject)
+// });
 // require('./statemachine/HookedObject').default(ES);
 import HookedObjectTF from './statemachine/HookedObject';
 // require('./statemachine/State').default(ES);
@@ -210,5 +219,4 @@ export type {StateInterface} from './interfaces/StateInterface';
 export type {StateMachineInterface} from './interfaces/StateMachineInterface';
 export type {RecoverableStaticInterface} from './interfaces/RecoverableStaticInterface';
 
-console.log('?>?>?>00');
 export default ES;

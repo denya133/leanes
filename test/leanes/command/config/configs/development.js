@@ -2,7 +2,7 @@ module.exports = {
    port: {
      description: 'port',
      type: 'number',
-     default: 8888
+     default: 8887
    },
    version: {
      description: 'version',
