@@ -96,9 +96,15 @@ file:
   - './test/es/decorators/decorator-test.js'
   - './test/es/decorators/module-test.js'
   - './test/es/decorators/resolver-test.js'
+  - './test/es/decorators/initializeMixin-test.js'
+  - './test/es/decorators/meta-test.js'
+  - './test/es/decorators/initialize-test.js'
+  - './test/es/decorators/constant-test.js'
+  - './test/es/decorators/chains-test.js'
+  - './test/es/decorators/freeze-test.js'
   - './test/leanes/decorators/action-test.js'
   - './test/leanes/decorators/attribute-test.js'
-  # - './test/leanes/decorators/computed-test.js'
+  - './test/leanes/decorators/computed-test.js'
 full-trace: true
 growl: true
 recursive: false

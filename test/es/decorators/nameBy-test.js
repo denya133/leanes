@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, property, nameBy, meta
+  initialize, nameBy, meta
 } = LeanES.NS;
 
 describe('nameBy', () => {

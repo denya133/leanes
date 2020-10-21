@@ -2,7 +2,6 @@ const { expect, assert } = require('chai');
 const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  CoreObject,
   initialize, module: moduleD, machine, nameBy, meta
 } = LeanES.NS;
 

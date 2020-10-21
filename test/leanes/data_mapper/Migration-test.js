@@ -5,7 +5,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const {
   UP, DOWN,
   Migration,
-  initialize, module: moduleD, nameBy, meta, constant, method, attribute, mixin, computed
+  initialize, module: moduleD, nameBy, meta, constant, method, mixin,
 } = LeanES.NS;
 
 describe('Migration', () => {

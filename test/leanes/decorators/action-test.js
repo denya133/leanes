@@ -2,7 +2,7 @@ const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   CoreObject,
-  initialize, module: moduleD, nameBy, meta, decorator, action
+  initialize, module: moduleD, nameBy, meta, action
 } = LeanES.NS;
 
 describe('action', () => {

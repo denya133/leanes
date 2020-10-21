@@ -3,7 +3,7 @@ const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   CoreObject,
-  initialize, module: moduleD, mixin, nameBy, meta, machine
+  initialize, module: moduleD, nameBy, meta
 } = LeanES.NS;
 
 describe('mixin', () => {
