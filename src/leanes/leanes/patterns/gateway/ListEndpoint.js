@@ -1,12 +1,12 @@
 /*
 This file is part of LeanRC.
 
-LeanRC is free software: you can redistribute it and/or modify,
-it under the terms of the GNU Leser General Public License as published by
+LeanRC is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-LeanRC is destributed in the hope that it will be useful,
+LeanRC is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
@@ -21,8 +21,8 @@ export default (Module) => {
   const {
     Endpoint,
     CrudEndpointMixin,
-    initialize, module, mixin,
-    Utils: { stasuses, joi }
+    initialize, module, meta, property, method, nameBy, mixin,
+    Utils: { stasuses }
   } = Module.NS;
 
   const UNAUTHORIZED = stasuses('unauthorized');
@@ -31,22 +31,26 @@ export default (Module) => {
   @initialize
   @mixin(CrudEndpointMixin)
   @module(Module)
-  class LengthEndpoint extends Endpoint {
+  class ListEndpoint extends Endpoint {
     constructor() {
       super(...arguments);
       this.pathParam('v', this.versionSchema);
-      this.response(joi.number(), `
-        The length of ${this.listEntityName} collection.
+      this.queryParam('query', this.querySchema, `
+        The query for finding
+        ${this.listEntityName}.
+      `);
+      this.response(this.listSchema, `
+        The ${this.listEntityName}.
       `);
       this.error(UNAUTHORIZED);
       this.error(UPGRADE_REQUIRED);
       this.summary(`
-        Length of ${this.listEntityName} collecton.
+        List of filtered ${this.listEntityName}.
       `);
       this.description(`
-        Retrieves a length of
-        ${this.listEntityName} collection.
-      `);
+        Retrieves a list of filtered
+        ${this.listEntityName} by using query.
+      `)
     }
   }
 }
