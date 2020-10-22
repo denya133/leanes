@@ -1,7 +1,8 @@
 const { expect, assert } = require('chai');
+const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, initializeMixin, nameBy, meta
+  initialize, initializeMixin, nameBy, meta, method
 } = LeanES.NS;
 
 describe('initializeMixin', () => {
@@ -19,13 +20,25 @@ describe('initializeMixin', () => {
     });
     it('should decorator `freeze` without error', () => {
       expect(() => {
+        let test = null;
+        const TestMixin = ((BaseClass) => {
+          @initializeMixin
+          class Mixin extends BaseClass {
+            @meta static object = {};
 
-        @initialize
-        @initializeMixin
-        class Test extends LeanES {
-          @nameBy static __filename = 'Test';
-          @meta static object = {};
-        }
+            @method static onInitialize(...args) {
+              super.onInitialize(...args);
+            }
+
+            @method static onInitializeMixin(...args) {
+              super.onInitializeMixin(...args);
+              test = 42;
+            }
+          }
+          return Mixin;
+        });
+        TestMixin(LeanES.NS.CoreObject);
+        assert.equal(test, 42);
       }).to.not.throw(Error);
     });
   });
