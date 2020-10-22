@@ -21,7 +21,6 @@ export default (Module) => {
   const {
     CoreObject,
     initialize, module, meta, property, method, nameBy, mixin,
-    Utils: { uuid }
   } = Module.NS;
 
   @initialize
