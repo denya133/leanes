@@ -21,7 +21,7 @@ export default (Module) => {
   const {
     Endpoint,
     CrudEndpointMixin,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, module, mixin,
     Utils: { stasuses }
   } = Module.NS;
 

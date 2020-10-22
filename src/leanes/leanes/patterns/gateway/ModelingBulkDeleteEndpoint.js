@@ -4,10 +4,10 @@ This file is part of LeanRC.
 LeanRC is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
-(at your options) any later version.
+(at your option) any later version.
 
-LeanRC is distributeed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
+LeanRC is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without eventhe implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
 
@@ -15,40 +15,40 @@ You should have received a copy of the GNU Lesser General Public License
 along with LeanRC. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import type { GatewayInterface } from '../../interfaces/GatewayInterface';
+import { GatewayInterface } from '../../interfaces/GatewayInterface';
 
 export default (Module) => {
   const {
     Endpoint,
-    CrudEndpointMxin,
+    CrudEndpointMixin,
     initialize, module, mixin,
-    Utils: { statuses }
+    Utils: { stasuses }
   } = Module.NS;
 
-  const HTTP_NOT_FOUND = statuses('not found');
-  const UNAUTHORIZED = statuses('unauthorized');
-  const UPGRADE_REQUIRED = statuses('upgrade required');
+  const UNAUTHORIZED = stasuses('unauthorized');
+  const UPGRADE_REQUIRED = stasuses('upgrade required');
 
   @initialize
-  @mixin(CrudEndpointMxin)
+  @mixin(CrudEndpointMixin)
   @module(Module)
-  class DetailEndpoint extends Endpoint {
+  class ModelingBulkDeleteEndpoint extends Endpoint {
     constructor() {
       super(...arguments);
       this.pathParam('v', this.versionSchema);
-      this.response(this.itemSchema, `
-        The ${this.itemEntityName}.
+      this.header('Authorization', joi.string().required(), `
+        Authorization header for internal services.
       `);
-      this.error(HTTP_NOT_FOUND);
+      this.queryParam('query', this.querySchema, `
+        The query for finding
+        ${this.listEntityName}.
+      `);
+      this.response(null);
       this.error(UNAUTHORIZED);
       this.error(UPGRADE_REQUIRED);
       this.summary(`
-        Fetch the ${this.itemEntityName}
+        Hide of filtered ${this.listEntityName}
       `);
-      this.description(`
-        Retrieves the
-        ${this.itemEntityName} by its key.
-      `);
+
     }
   }
 }
