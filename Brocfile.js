@@ -63,7 +63,7 @@ let js = new Rollup(appRoot, {
           "@babel/plugin-transform-flow-strip-types",
           ["@babel/plugin-proposal-decorators", { "legacy": true }],
           ["@babel/plugin-proposal-class-properties", { "loose": true }],
-          'transform-class-properties',
+          // 'transform-class-properties',
         ],
       }),
       globals({

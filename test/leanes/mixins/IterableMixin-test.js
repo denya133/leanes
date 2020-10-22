@@ -29,9 +29,9 @@ describe('IterableMixin', () => {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
 
@@ -78,9 +78,9 @@ describe('IterableMixin', () => {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize
@@ -149,9 +149,9 @@ describe('IterableMixin', () => {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize
@@ -221,9 +221,9 @@ describe('IterableMixin', () => {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize
@@ -290,9 +290,9 @@ describe('IterableMixin', () => {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize

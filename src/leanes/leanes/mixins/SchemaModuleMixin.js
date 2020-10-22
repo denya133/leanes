@@ -24,7 +24,10 @@ export default (Module) => {
 
       @constant get MIGRATION_NAMES() {
         const MClass = this.constructor;
-        return MClass[cpoMigrationsNames] != null ? MClass[cpoMigrationsNames] : MClass[cpoMigrationsNames] = _.orderBy(Object.keys(MClass[cphMigrationsMap]));
+        // console.log('SchemaModuleMixin::MIGRATION_NAMES', MClass, MClass[cphMigrationsMap]);
+        return MClass[cpoMigrationsNames] != null
+          ? MClass[cpoMigrationsNames]
+          : MClass[cpoMigrationsNames] = _.orderBy(Object.keys(MClass[cphMigrationsMap] || {}));
       }
 
       @method static requireMigrations(): void {

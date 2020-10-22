@@ -59,7 +59,6 @@ file:
   - './test/leanes/mixins/MemoryConfigurationMixin-test.js'
   - './test/leanes/mixins/LoggingJunctionMixin-test.js'
   - './test/leanes/mixins/DelayableMixin-test.js'
-  # - './test/leanes/mixins/SchemaModuleMixin-test.js' # TODO: needs corrections in SchemaModuleMixin
   - './test/leanes/mixins/GenerateAutoincrementIdMixin-test.js'
   - './test/leanes/mixins/HttpSerializerMixin-test.js'
   - './test/leanes/mixins/IterableMixin-test.js'
@@ -84,9 +83,7 @@ file:
   - './test/leanes/command/DelayedJobScript-test.js'
   - './test/leanes/command/LogMessageCommand-test.js'
   - './test/leanes/command/Script-test.js'
-  # - './test/leanes/command/RollbackCommand-test.js'
   - './test/leanes/command/Resource-test.js'
-  # - './test/leanes/command/MigrateCommand-test.js'
   - './test/es/decorators/method-test.js'
   - './test/es/decorators/property-test.js'
   - './test/es/decorators/util-test.js'
@@ -105,6 +102,9 @@ file:
   - './test/leanes/decorators/action-test.js'
   - './test/leanes/decorators/attribute-test.js'
   - './test/leanes/decorators/computed-test.js'
+  - './test/leanes/mixins/SchemaModuleMixin-test.js' # TODO: needs corrections in SchemaModuleMixin
+  - './test/leanes/command/MigrateCommand-test.js'
+  - './test/leanes/command/RollbackCommand-test.js'
 full-trace: true
 growl: true
 recursive: false

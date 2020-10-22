@@ -7,8 +7,8 @@ export default (Module) => {
 
   @initialize
   @moduleD(Module)
-  class FirstMigration extends Module.NS.TestMigration {
-    @nameBy static __filename = 'FirstMigration';
+  class Migration2 extends Module.NS.Migration {
+    @nameBy static  __filename = 'Migration2';
     @meta static object = {};
     @method static change() {}
   }

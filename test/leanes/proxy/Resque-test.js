@@ -344,8 +344,8 @@ describe('Resque', () => {
           this.jobs[id] = { name, scriptName, data, delayUntil };
           return id;
         }
-        @method init(...args) {
-          this.super(...args);
+        constructor(...args) {
+          super(...args);
           this.jobs = {};
         }
       }

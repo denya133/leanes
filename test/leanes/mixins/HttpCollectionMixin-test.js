@@ -179,35 +179,37 @@ describe('HttpCollectionMixin', () => {
     it('should get method name from request params', () => {
       const collectionName = 'TestsCollection';
 
-      @LeanES.NS.initialize
+      @initialize
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.module(Test)
+      @initialize
+      @moduleD(Test)
       class TestRecord extends LeanES.NS.Record {
-        @LeanES.NS.nameBy static __filename = 'TestRecord';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.attribute({ type: 'string' }) test;
-        @LeanES.NS.method init() {
-          this.super(...arguments);
+        @nameBy static __filename = 'TestRecord';
+        @meta static object = {};
+        @attribute({ type: 'string' }) test;
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.mixin(LeanES.NS.QueryableCollectionMixin)
-      @LeanES.NS.mixin(LeanES.NS.HttpCollectionMixin)
-      @LeanES.NS.module(Test)
+      @initialize
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @mixin(LeanES.NS.HttpCollectionMixin)
+      @moduleD(Test)
       class HttpCollection extends LeanES.NS.Collection {
-        @LeanES.NS.nameBy static __filename = 'HttpCollection';
-        @LeanES.NS.meta static object = {};
+        @nameBy static __filename = 'HttpCollection';
+        @meta static object = {};
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      });
+      });      
       let method = collection.methodForRequest({
         requestType: 'query',
         recordName: 'TestRecord'
@@ -292,7 +294,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlPrefix('Test', 'Tests');
@@ -335,7 +339,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.makeURL('Test', null, null, true);
@@ -384,7 +390,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.pathForType('Type');
@@ -427,7 +435,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForQuery('Test', {});
@@ -468,7 +478,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForPatchBy('Test', {});
@@ -509,7 +521,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRemoveBy('Test', {});
@@ -550,7 +564,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTakeAll('Test', {});
@@ -591,7 +607,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTakeBy('Test', {});
@@ -632,7 +650,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTake('Test', '123');
@@ -673,7 +693,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForPush('Test', {});
@@ -714,7 +736,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRemove('Test', '123');
@@ -755,7 +779,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForOverride('Test', {}, '123');
@@ -799,7 +825,9 @@ describe('HttpCollectionMixin', () => {
           return '';
         }
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.buildURL('Test', {}, null, 'query', {
@@ -873,7 +901,9 @@ describe('HttpCollectionMixin', () => {
           return `TEST_${recordName != null ? recordName : 'RECORD_NAME'}_${id != null ? id : 'RECORD_ID'}_${JSON.stringify(snapshot) != null ? JSON.stringify(snapshot) : 'SNAPSHOT'}_${JSON.stringify(query) != null ? JSON.stringify(query) : 'QUERY'}`;
         }
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRequest({
@@ -997,7 +1027,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       collection.initializeNotifier(KEY);
@@ -1118,7 +1150,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let data = collection.dataForRequest({
@@ -1222,7 +1256,9 @@ describe('HttpCollectionMixin', () => {
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
