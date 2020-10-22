@@ -20,34 +20,39 @@ export default (Module) => {
     Endpoint,
     CrudEndpointMxin,
     initialize, module, meta, property, method, nameBy, mixin,
-    Utils: { statuses, joi }
+    Utils: { statuses }
   } = Module.NS;
 
+  const HTTP_CONFLICT = statuses('conflict');
   const UNAUTHORIZED = statuses('unauthorized');
   const UPGRADE_REQUIRED = statuses('upgrade required');
 
   @initialize
   @mixin(CrudEndpointMxin)
   @module(Module)
-  class CountEndpoint extends Endpoint {
+  class CreateEndpoint extends Endpoint {
     constructor() {
       super(...arguments);
       this.pathParam('v', this.versionShema);
-      this.queryParam('query', this.querySchema, `
-        The query for counting
-        ${this.listEntityName}.
+      this.body(this.itemSchema.required(), `
+        The ${this.itemEntityName} to create.
+      `)
+      this.response(201, this.itemSchema, `
+        The created ${this.itemEntityName}.
       `);
-      this.response(joi.numner(), `
-        The count of ${this.listEntityName}
-      `);
+      this.error(HTTP_CONFLICT, `
+        The ${this.itemEntityName} already
+        exists.
+      `)
       this.error(UNAUTHORIZED);
       this.error(UPGRADE_REQUIRED);
       this.summary(`
-        Count of filtered ${this.listEntityName}
+        Create a new ${this.itemEntityName}
       `);
       this.description(`
-        Retrieves a count of filtered
-        ${this.listEntityName} by using query.
+        Creates a new ${this.itemEntityName}
+        from the request body and
+        returns the saved document.
       `);
     }
   }
