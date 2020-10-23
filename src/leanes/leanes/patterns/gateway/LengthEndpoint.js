@@ -1,8 +1,8 @@
 /*
 This file is part of LeanRC.
 
-LeanRC is free software: you can redistribute it and/or modify,
-it under the terms of the GNU Leser General Public License as published by
+LeanRC is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
@@ -15,7 +15,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with LeanRC. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { GatewayInterface } from '../../interfaces/GatewayInterface';
+import type { GatewayInterface } from '../../interfaces/GatewayInterface';
 
 export default (Module) => {
   const {
@@ -41,7 +41,7 @@ export default (Module) => {
       this.error(UNAUTHORIZED);
       this.error(UPGRADE_REQUIRED);
       this.summary(`
-        Length of ${this.listEntityName} collecton.
+        Length of ${this.listEntityName} collecton
       `);
       this.description(`
         Retrieves a length of

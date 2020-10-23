@@ -15,7 +15,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with LeanRC. If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { GatewayInterface } from '../../interfaces/GatewayInterface';
+import type { GatewayInterface } from '../../interfaces/GatewayInterface';
 
 export default (Module) => {
   const {
@@ -45,7 +45,7 @@ export default (Module) => {
       this.error(UNAUTHORIZED);
       this.error(UPGRADE_REQUIRED);
       this.summary(`
-        List of filtered ${this.listEntityName}.
+        List of filtered ${this.listEntityName}
       `);
       this.description(`
         Retrieves a list of filtered

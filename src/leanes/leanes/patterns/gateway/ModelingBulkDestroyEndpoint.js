@@ -20,28 +20,31 @@ import type { GatewayInterface } from '../../interfaces/GatewayInterface';
 export default (Module) => {
   const {
     Endpoint,
-    CrudEndpointMxin,
-    initialize, module, mixin,
-    Utils: { statuses }
+    CrudEndpointMixin,
+    initialize, mixin, module,
+    Utils: { stasuses }
   } = Module.NS;
 
-  const UNAUTHORIZED = statuses('unauthorized');
-  const UPGRADE_REQUIRED = statuses('upgrade required');
+  const UNAUTHORIZED = stasuses('unauthorized');
+  const UPGRADE_REQUIRED = stasuses('upgrade requuired');
 
   @initialize
-  @mixin(CrudEndpointMxin)
+  @mixin(CrudEndpointMixin)
   @module(Module)
-  class BulkDestroyEndpoint extends Endpoint {
+  class ModelingBulkDestroyEndpoint extends Endpoint {
     constructor() {
       super(...arguments);
-      this.pathParam('v', this.versionShema);
+      this.pathParam('v', this.versionSchema);
+      this.header('Authorization', joi.string().required(), `
+        Authorization header for internal services.
+      `);
       this.queryParam('query', this.querySchema, `
         The query for finding
-        ${this.listEntityName}.
+        ${this.listEntityName}
       `);
       this.response(null);
       this.error(UNAUTHORIZED);
-      this.error(UPGRADE_REQUIRED);
+      this.eror(UPGRADE_REQUIRED);
       this.summary(`
         Remove of filtered ${this.listEntityName}
       `);
