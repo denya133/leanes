@@ -25,13 +25,13 @@ export default (Module) => {
     Utils: { statuses, joi }
   } = Module.NS;
 
-  const UNAUTHORIZED = statuses('unauthorized');
+  const UNAUTHORIZED = statuses('unathorized');
   const UPGRADE_REQUIRED = statuses('upgrade required');
 
   @initialize
   @mixin(CrudEndpointMixin)
   @module(Module)
-  class ModelingListEndpoint extends Endpoint {
+  class ModelingQueryEndpoint extends Endpoint {
     @nameBy static __filename = __filename;
     @meta static object = {};
 
@@ -39,23 +39,21 @@ export default (Module) => {
       super(...arguments);
       this.pathParam('v', this.versionSchema);
       this.header('Authorization', joi.string().required(), `
-        Authorization header for internal services.
+        Authorization header is required.
       `);
-      this.queryParam('query', this.querySchema, `
-        The query for finding
-        ${this.listEntityName}.
+      this.body(this.executeQuerySchema, `
+        The query for execute.
       `);
-      this.response(this.listSchema, `
-        The ${this.listEntityName}.
+      this.response(joi.array().items(joi.any()), `
+        Any result.
       `);
       this.error(UNAUTHORIZED);
       this.error(UPGRADE_REQUIRED);
       this.summary(`
-        List of filtered ${this.listEntityName}
+        Execute some query
       `);
       this.description(`
-        Retrieves a list of filtered
-        ${this.listEntityName} by using query.
+        This endpoint will been used from HttpCollectionMixin
       `);
     }
   }
