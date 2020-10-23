@@ -4,13 +4,13 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, method, nameBy, property,
+    initialize, partOf, meta, method, nameBy, property,
     Utils: { joi }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Transform extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};

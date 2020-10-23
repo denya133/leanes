@@ -211,7 +211,7 @@ export default (NS) => {
         instance = this.new();
       } else {
         const vcClass = acModule.prototype[replica.class];
-        (vcClass: RecoverableStaticInterface<acModule, CoreObject>);
+        (vcClass: $Rest<RecoverableStaticInterface<acModule, CoreObject>>);
         instance = await vcClass.restoreObject(acModule, replica);
       }
       return instance;

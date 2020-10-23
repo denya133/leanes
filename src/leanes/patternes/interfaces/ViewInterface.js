@@ -9,13 +9,13 @@ export interface ViewInterface {
 
   removeObserver(asNotificationName: string, aoNotifyContext: ControllerInterface | MediatorInterface): void;
 
-  notifyObservers(aoNotification: NotificationInterface): void;
+  notifyObservers(aoNotification: NotificationInterface): ?Promise<void>;
 
   registerMediator(aoMediator: MediatorInterface): void;
 
   retrieveMediator(asMediatorName: string): ?MediatorInterface;
 
-  removeMediator(asMediatorName: string): ?MediatorInterface;
+  removeMediator(asMediatorName: string): Promise<?MediatorInterface>;
 
   hasMediator(asMediatorName: string): boolean;
 }

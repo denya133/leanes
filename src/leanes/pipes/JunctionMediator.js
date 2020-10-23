@@ -6,13 +6,13 @@ export default (Module) => {
   const {
     Mediator, Junction,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
   const { INPUT, OUTPUT } = Junction;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class JunctionMediator extends Mediator {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -52,8 +52,8 @@ export default (Module) => {
       }
     }
 
-    @method handlePipeMessage(aoMessage: PipeMessageInterface): void {
-      return this.send(aoMessage.getType(), aoMessage);
+    @method async handlePipeMessage(aoMessage: PipeMessageInterface): Promise<void> {
+      await this.send(aoMessage.getType(), aoMessage);
     }
 
     @method static async restoreObject() {

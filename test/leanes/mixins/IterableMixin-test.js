@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant, method, property
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant, method, property
 } = LeanES.NS;
 
 describe('IterableMixin', () => {
@@ -24,7 +24,7 @@ describe('IterableMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -38,7 +38,7 @@ describe('IterableMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -73,7 +73,7 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -86,7 +86,7 @@ describe('IterableMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -144,7 +144,7 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -157,7 +157,7 @@ describe('IterableMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -216,7 +216,7 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -229,7 +229,7 @@ describe('IterableMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -285,7 +285,7 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -298,7 +298,7 @@ describe('IterableMixin', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};

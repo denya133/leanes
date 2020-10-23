@@ -3,12 +3,12 @@ import type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
 export default (Module) => {
   const {
     Pipe,
-    initialize, module, meta, method, nameBy
+    initialize, partOf, meta, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class TeeMerge extends Pipe {
     @nameBy static  __filename = __filename;
     @meta static object = {};

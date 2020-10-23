@@ -6,13 +6,13 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _ }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Cursor<
     C = null, D = {}, T = D[]
   > extends CoreObject implements CursorInterface<C, D> {

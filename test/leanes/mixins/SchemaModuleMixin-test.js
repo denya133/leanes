@@ -4,7 +4,7 @@ const assert = chai.assert;
 const sinon = require('sinon');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant
 } = LeanES.NS;
 
 describe('SchemaModuleMixin', () => {

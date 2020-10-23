@@ -19,22 +19,22 @@ export default (Module) => {
     Proxy, Serializer, Objectizer,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Collection<
-    D = RecordInterface, R = RecordStaticInterface
+    D = RecordInterface, R = $Rest<RecordStaticInterface>
   > extends Proxy implements CollectionInterface<D>, SerializableInterface<D> {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @property get delegate(): RecordStaticInterface {
-      let delegate: ?(string | Function | RecordStaticInterface) = undefined;
+    @property get delegate(): $Rest<RecordStaticInterface> {
+      let delegate: ?(string | Function | $Rest<RecordStaticInterface>) = undefined;
       const proxyData = this.getData();
       delegate = proxyData != null ? proxyData.delegate : undefined;
       if (_.isString(delegate)) {
@@ -167,7 +167,7 @@ export default (Module) => {
     }
 
     @method setData(ahData: ?{
-      delegate: (string | Function | RecordStaticInterface),
+      delegate: (string | Function | $Rest<RecordStaticInterface>),
       serializer?: (string | Function | Class<Serializer>),
       objectizer?: (string | Function | Class<Objectizer>)
     }) {

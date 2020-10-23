@@ -9,14 +9,14 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _ }
   } = Module.NS;
 
   // let container = new Container();
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Model extends CoreObject implements ModelInterface {
     @nameBy static __filename = __filename;
     @meta static object = {};
@@ -84,7 +84,7 @@ export default (Module) => {
       return Model._instanceMap[asKey];
     }
 
-    @method static async removeModel(asKey: string): void {
+    @method static async removeModel(asKey: string): Promise<void> {
       const voModel = Model._instanceMap[asKey];
       if (voModel != null) {
         for (const asProxyName of Reflect.ownKeys(voModel._proxyMap)) {
@@ -124,7 +124,7 @@ export default (Module) => {
       return this.registerProxy(...args);
     }
 
-    @method async removeProxy(asProxyName: string): ?ProxyInterface {
+    @method async removeProxy(asProxyName: string): Promise<?ProxyInterface> {
       const voProxy = this._proxyMap[asProxyName];
       // const voProxy = container.get(asProxyName);
       delete this._proxyMap[asProxyName];
@@ -202,7 +202,7 @@ export default (Module) => {
       return (this._classNames[asKey] != null);
     }
 
-    @method async removeAdapter(asKey: string): void {
+    @method async removeAdapter(asKey: string): Promise<void> {
       if (this.hasAdapter(asKey)) {
         delete this._classNames[asKey];
         if (this._container.isBound(`Factory<${asKey}>`)) {

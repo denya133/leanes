@@ -15,13 +15,13 @@ const splice = [].splice;
 export default (Module) => {
   const {
     HookedObject,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _ }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Event extends HookedObject implements EventInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

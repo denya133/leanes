@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, attribute
+  initialize, partOf, nameBy, meta, attribute
 } = LeanES.NS;
 
 describe('attribute', () => {
@@ -16,7 +16,7 @@ describe('attribute', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -37,7 +37,7 @@ describe('attribute', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -58,7 +58,7 @@ describe('attribute', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};

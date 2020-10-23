@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, method
+  initialize, partOf, nameBy, meta, constant, mixin, method
 } = LeanES.NS;
 
 describe('MemoryExecutorMixin', () => {
@@ -22,7 +22,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -49,7 +49,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -76,7 +76,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -104,7 +104,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -132,7 +132,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -188,7 +188,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -253,7 +253,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -261,7 +261,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -306,7 +306,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -314,7 +314,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -364,7 +364,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -372,7 +372,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -422,7 +422,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -430,7 +430,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -482,7 +482,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -490,7 +490,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -541,7 +541,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -549,7 +549,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -585,7 +585,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -593,7 +593,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
@@ -636,7 +636,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -644,14 +644,14 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.Script {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
@@ -702,7 +702,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -710,7 +710,7 @@ describe('MemoryExecutorMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryExecutorMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryResqueExecutor extends LeanES.NS.Mediator {
         @nameBy static __filename = 'MemoryResqueExecutor';
         @meta static object = {};

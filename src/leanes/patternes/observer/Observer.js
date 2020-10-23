@@ -9,12 +9,12 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
   @initialize
   // @injectable()
-  @module(Module)
+  @partOf(Module)
   class Observer extends CoreObject implements ObserverInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -45,8 +45,8 @@ export default (Module) => {
       return object === this._context;
     }
 
-    @method notifyObserver(notification: NotificationInterface): void {
-      this.getNotifyMethod().call(this.getNotifyContext(), notification);
+    @method async notifyObserver(notification: NotificationInterface): Promise<void> {
+      await this.getNotifyMethod().call(this.getNotifyContext(), notification);
     }
 
     @method static async restoreObject() {

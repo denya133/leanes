@@ -7,13 +7,13 @@ export default (Module) => {
     // SimpleCommand,
     Command,
     ConfigurableMixin,
-    initialize, module, meta, method, nameBy, mixin,
+    initialize, partOf, meta, method, nameBy, mixin,
     Utils: { _ }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Script extends Command implements ScriptInterface {
   // class Script extends SimpleCommand implements ScriptInterface {

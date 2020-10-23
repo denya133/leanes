@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method
+  initialize, partOf, nameBy, meta, constant, mixin, property, method
 } = LeanES.NS;
 
 describe('Resque', () => {
@@ -16,7 +16,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -36,7 +36,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -57,7 +57,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -100,7 +100,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -155,7 +155,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -203,7 +203,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -258,7 +258,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -314,7 +314,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -381,7 +381,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -442,7 +442,7 @@ describe('Resque', () => {
         @constant ROOT = `${__dirname}/config/root`;
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};

@@ -3,7 +3,7 @@ const _ = require('lodash');
 const EventEmitter = require('events');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, method
+  initialize, partOf, nameBy, meta, constant, method
 } = LeanES.NS;
 
 describe('DelayedJobScript', () => {
@@ -31,14 +31,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
@@ -48,14 +48,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
@@ -95,14 +95,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
@@ -112,14 +112,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
@@ -158,14 +158,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
@@ -175,14 +175,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
@@ -221,14 +221,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
@@ -238,14 +238,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};

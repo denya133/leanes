@@ -8,19 +8,19 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
   decorate(injectable(), CoreObject);
 
   @initialize
   @injectable()
-  @module(Module)
+  @partOf(Module)
   class Notifier extends CoreObject implements NotifierInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @property static MULTITON_MSG: 'multitonKey for this Notifier not yet initialized!'
+    @property static MULTITON_MSG: string = 'multitonKey for this Notifier not yet initialized!';
 
     // ipsMultitonKey = PointerT(Notifier.protected({
     @property _multitonKey: ?string = null;
@@ -62,14 +62,14 @@ export default (Module) => {
       return Module.NS.Facade.getInstance(this._multitonKey);
     }
 
-    @method sendNotification(asName: string, aoBody: ?any, asType: ?string): void {
+    @method async sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void> {
       if (this.facade != null) {
-        this.facade.sendNotification(asName, aoBody, asType);
+        await this.facade.sendNotification(asName, aoBody, asType);
       }
     }
 
-    @method send() {
-      return this.sendNotification(... arguments);
+    @method async send(): Promise<void> {
+      await this.sendNotification(... arguments);
     }
 
     @method async run(scriptName: string, data?: any): Promise<?any> {

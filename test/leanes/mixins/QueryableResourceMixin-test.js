@@ -14,7 +14,7 @@ describe('QueryableResourceMixin', () => {
   describe('.list', () => {
     it('should list of resource items', async () => {
       const {
-        initialize, module: moduleD, nameBy, meta, mixin, constant, method, attribute, property
+        initialize, partOf, nameBy, meta, mixin, constant, method, attribute, property
       } = LeanES.NS;
       const KEY = 'TEST_RESOURCE_QUERYABLE_001';
       facade = LeanES.NS.Facade.getInstance(KEY);
@@ -32,14 +32,14 @@ describe('QueryableResourceMixin', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -51,7 +51,7 @@ describe('QueryableResourceMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableResourceMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -61,7 +61,7 @@ describe('QueryableResourceMixin', () => {
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestCollection';
         @meta static object = {};
@@ -141,7 +141,7 @@ describe('QueryableResourceMixin', () => {
       facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};

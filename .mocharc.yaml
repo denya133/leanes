@@ -91,7 +91,7 @@ file:
   - './test/es/decorators/machine-test.js'
   - './test/es/decorators/mixin-test.js'
   - './test/es/decorators/decorator-test.js'
-  - './test/es/decorators/module-test.js'
+  - './test/es/decorators/partOf-test.js'
   - './test/es/decorators/resolver-test.js'
   - './test/es/decorators/initializeMixin-test.js'
   - './test/es/decorators/meta-test.js'

@@ -5,13 +5,13 @@ export default (Module) => {
     // SimpleCommand,
     Command,
     Application,
-    initialize, module, meta, method, nameBy
+    initialize, partOf, meta, method, nameBy
   } = Module.NS;
   const { LOGGER_PROXY } = Application;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class LogMessageCommand extends Command {
   // class LogMessageCommand extends SimpleCommand {
     @nameBy static  __filename = __filename;

@@ -31,7 +31,7 @@ export default (Module) => {
         return interests;
       }
 
-      @method handleNotification(note: NotificationInterface) {
+      @method async handleNotification(note: NotificationInterface): Promise<void> {
         let level;
         switch (note.getName()) {
           case SEND_TO_LOG:
@@ -56,17 +56,17 @@ export default (Module) => {
                 break;
             }
             const logMessage = LogMessage.new(level, this._multitonKey, note.getBody());
-            this._junction.sendMessage(STDLOG, logMessage);
+            await this._junction.sendMessage(STDLOG, logMessage);
             break;
           case LogFilterMessage.SET_LOG_LEVEL:
             const logLevel = note.getBody();
             const setLogLevelMessage = LogFilterMessage.new(SET_PARAMS, logLevel);
-            this._junction.sendMessage(STDLOG, setLogLevelMessage);
+            await this._junction.sendMessage(STDLOG, setLogLevelMessage);
             const changedLevelMessage = LogMessage.new(CHANGE, this._multitonKey, `Changed Log Level to: ${LogMessage.LEVELS[logLevel]}`);
-            this._junction.sendMessage(STDLOG, changedLevelMessage);
+            await this._junction.sendMessage(STDLOG, changedLevelMessage);
             break;
           default:
-            super.handleNotification(note);
+            await super.handleNotification(note);
         }
       }
     }

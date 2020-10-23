@@ -5,7 +5,7 @@ const assert = chai.assert;
 const LeanES = require("../../src/leanes/index.js").default;
 const {
   CoreObject, Proto,
-  initialize, module:moduleD, nameBy, meta
+  initialize, partOf, nameBy, meta
 } = LeanES.NS;
 
 describe('CoreObject', () => {
@@ -22,7 +22,7 @@ describe('CoreObject', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class SubTest extends CoreObject {
         }
         const subTest = new SubTest()
@@ -39,7 +39,7 @@ describe('CoreObject', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class SubTest extends CoreObject {
         }
         expect(SubTest.new()).to.be.an.instanceof(SubTest);
@@ -69,7 +69,7 @@ describe('CoreObject', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class SubTest extends CoreObject {
       }
 
@@ -100,7 +100,7 @@ describe('CoreObject', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class SubTest extends CoreObject {
       }
 
@@ -123,7 +123,7 @@ describe('CoreObject', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class MyClass extends Test.NS.CoreObject {
       }
 
@@ -147,8 +147,10 @@ describe('CoreObject', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class MyClass extends Test.NS.CoreObject {
+        @nameBy static  __filename = 'MyClass';
+        @meta static object = {};
       }
 
       const voRestored = await Test.restoreObject(Test, {type: 'instance', class: 'MyClass'})
@@ -180,11 +182,11 @@ describe('CoreObject', () => {
         @meta static object = {};
       }
 
-      @moduleD(Test)
+      @partOf(Test)
       class SubTest extends CoreObject {
       }
 
-      @moduleD(Test)
+      @partOf(Test)
       class SubSubTest extends SubTest {
       }
 

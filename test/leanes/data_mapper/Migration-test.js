@@ -5,7 +5,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const {
   UP, DOWN,
   Migration,
-  initialize, module: moduleD, nameBy, meta, constant, method, mixin,
+  initialize, partOf, nameBy, meta, constant, method, mixin,
 } = LeanES.NS;
 
 describe('Migration', () => {
@@ -29,14 +29,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -75,14 +75,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -139,14 +139,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -199,14 +199,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -254,14 +254,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -320,14 +320,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -384,14 +384,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -448,14 +448,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -503,14 +503,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -558,14 +558,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -613,14 +613,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -668,14 +668,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -723,14 +723,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -778,14 +778,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -833,14 +833,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -905,14 +905,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -969,7 +969,7 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -981,7 +981,7 @@ describe('Migration', () => {
       };
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1033,7 +1033,7 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -1042,7 +1042,7 @@ describe('Migration', () => {
       const spyExecute = sinon.spy(async function () { });
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1086,7 +1086,7 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -1095,7 +1095,7 @@ describe('Migration', () => {
       const spyChange = sinon.spy(() => { });
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1137,14 +1137,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1204,14 +1204,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1274,14 +1274,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1327,14 +1327,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1382,14 +1382,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
@@ -1443,14 +1443,14 @@ describe('Migration', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};

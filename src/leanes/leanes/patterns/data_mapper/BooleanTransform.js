@@ -4,13 +4,13 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, joi }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class BooleanTransform extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -27,7 +27,7 @@ export default (Module) => {
       return this.serializeSync(...args);
     }
 
-    @method static normalizeSync(serialized?: boolean | string | number): boolean {
+    @method static normalizeSync(serialized: ?(boolean | string | number)): boolean {
       var type;
       type = typeof serialized;
       if (type === "boolean") {
@@ -41,11 +41,11 @@ export default (Module) => {
       }
     }
 
-    @method static serializeSync(deserialized?: boolean | string | number): boolean {
+    @method static serializeSync(deserialized: ?(boolean | string | number)): boolean {
       return Boolean(deserialized);
     }
 
-    @method static objectize(deserialized?: boolean | string | number): boolean {
+    @method static objectize(deserialized: ?(boolean | string | number)): boolean {
       return Boolean(deserialized);
     }
 

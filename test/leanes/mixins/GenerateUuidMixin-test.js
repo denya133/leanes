@@ -3,7 +3,7 @@ const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin
 } = LeanES.NS;
 
 describe('GenerateUuidIdMixin', () => {
@@ -16,7 +16,7 @@ describe('GenerateUuidIdMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -24,7 +24,7 @@ describe('GenerateUuidIdMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'TestCollection';
         @meta static object = {};

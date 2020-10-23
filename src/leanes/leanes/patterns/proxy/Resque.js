@@ -7,13 +7,13 @@ export default (Module) => {
     Proxy,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { uuid }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Resque extends Proxy implements ResqueInterface {
     @nameBy static  __filename = __filename;

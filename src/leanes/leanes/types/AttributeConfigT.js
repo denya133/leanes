@@ -21,6 +21,6 @@ export type AttributeConfigT = {
     'array' |
     'hash'
   ),
-  transform: () => TransformStaticInterface,
+  transform: () => $Rest<TransformStaticInterface>,
   validate: () => JoiT
 }

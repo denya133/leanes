@@ -16,19 +16,19 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
   // let container = new Container();
 
   @initialize
   // @injectable()
-  @module(Module)
+  @partOf(Module)
   class Facade extends CoreObject implements FacadeInterface {
     @nameBy static __filename = __filename;
     @meta static object = {};
 
-    @property static MULTITON_MSG: "Facade instance for this multiton key already constructed!"
+    @property static MULTITON_MSG: string = "Facade instance for this multiton key already constructed!";
 
     // ipoModel = PointerT(Facade.protected({
     @property _model: ?ModelInterface = null;
@@ -98,7 +98,7 @@ export default (Module) => {
       return Facade._instanceMap[asKey];
     }
 
-    @method async remove(): void {
+    @method async remove(): Promise<void> {
       await Module.NS.Model.removeModel(this._multitonKey);
       await Module.NS.Controller.removeController(this._multitonKey);
       await Module.NS.View.removeView(this._multitonKey);
@@ -126,7 +126,7 @@ export default (Module) => {
       this._controller.lazyRegisterCommand(asNotificationName, asClassName);
     }
 
-    @method async removeCommand(asNotificationName: string): void {
+    @method async removeCommand(asNotificationName: string): Promise<void> {
       await this._controller.removeCommand(asNotificationName);
     }
 
@@ -150,7 +150,7 @@ export default (Module) => {
       return this._controller.hasCase(asKey)
     }
 
-    @method async removeCase(asKey: string): void {
+    @method async removeCase(asKey: string): Promise<void> {
       await this._controller.removeCase(asKey)
     }
 
@@ -166,7 +166,7 @@ export default (Module) => {
       return this._controller.hasSuite(asKey)
     }
 
-    @method async removeSuite(asKey: string): void {
+    @method async removeSuite(asKey: string): Promise<void> {
       await this._controller.removeSuite(asKey)
     }
 
@@ -194,7 +194,7 @@ export default (Module) => {
       return this._model.getProxy(...args);
     }
 
-    @method async removeProxy(asProxyName: string): ?ProxyInterface {
+    @method async removeProxy(asProxyName: string): Promise<?ProxyInterface> {
       return await this._model.removeProxy(asProxyName);
     }
 
@@ -210,7 +210,7 @@ export default (Module) => {
       return this._model.getAdapter(asProxyName);
     }
 
-    @method async removeAdapter(asKey: string): void {
+    @method async removeAdapter(asKey: string): Promise<void> {
       await this._model.removeAdapter(asKey);
     }
 
@@ -238,7 +238,7 @@ export default (Module) => {
       return this._view.getMediator(...args);
     }
 
-    @method async removeMediator(asMediatorName: string): ?MediatorInterface {
+    @method async removeMediator(asMediatorName: string): Promise<?MediatorInterface> {
       if (this._view) {
         return await this._view.removeMediator(asMediatorName);
       }
@@ -250,18 +250,18 @@ export default (Module) => {
       }
     }
 
-    @method notifyObservers(aoNotification: NotificationInterface): void {
+    @method async notifyObservers(aoNotification: NotificationInterface): Promise<void> {
       if (this._view) {
-        this._view.notifyObservers(aoNotification);
+        await this._view.notifyObservers(aoNotification);
       }
     }
 
-    @method sendNotification(asName: string, aoBody: ?any, asType: ?string): void {
-      this.notifyObservers(Module.NS.Notification.new(asName, aoBody, asType));
+    @method async sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void> {
+      await this.notifyObservers(Module.NS.Notification.new(asName, aoBody, asType));
     }
 
-    @method send(...args): void {
-      return this.sendNotification(...args);
+    @method async send(...args): Promise<void> {
+      await this.sendNotification(...args);
     }
 
     @method async run(scriptName: string, data?: any): Promise<?any> {
@@ -285,7 +285,7 @@ export default (Module) => {
       return !!Facade._instanceMap[key];
     }
 
-    @method static async removeCore(key: string): void {
+    @method static async removeCore(key: string): Promise<void> {
       if (!Facade._instanceMap[key]) {
         return;
       }

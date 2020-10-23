@@ -3,7 +3,7 @@ const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   CoreObject,
-  initialize, module: moduleD, mixin, nameBy, meta, machine
+  initialize, partOf, mixin, nameBy, meta, machine
 } = LeanES.NS;
 
 describe('mixin', () => {
@@ -20,7 +20,7 @@ describe('mixin', () => {
       @initialize
       @mixin(LeanES.NS.StateMachineMixin)
       @machine('default', spySMConfig)
-      @moduleD(Test)
+      @partOf(Test)
       class SubTest extends CoreObject {
         @nameBy static __filename = 'SubTest';
         @meta static object = {};
@@ -38,7 +38,7 @@ describe('mixin', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class SubTest extends CoreObject {
           @nameBy static __filename = 'SubTest';
           @meta static object = {};
@@ -59,7 +59,7 @@ describe('mixin', () => {
         @initialize
         @mixin('testMixin')
         @machine('default', spySMConfig)
-        @moduleD(Test)
+        @partOf(Test)
         class SubTest extends CoreObject {
           @nameBy static __filename = 'SubTest';
           @meta static object = {};

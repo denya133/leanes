@@ -13,7 +13,7 @@ export default (Module) => {
     class Mixin extends BaseClass {
       @meta static object = {};
 
-      @method async normalize(acRecord: TransformStaticInterface, ahPayload: ?any): Promise<RecordInterface> {
+      @method async normalize(acRecord: $Rest<TransformStaticInterface>, ahPayload: ?any): Promise<RecordInterface> {
         if (_.isString(ahPayload)) {
           ahPayload = JSON.parse(ahPayload);
         }

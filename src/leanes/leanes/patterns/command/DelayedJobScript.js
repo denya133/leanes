@@ -6,12 +6,12 @@ export default (Module) => {
     Proto,
     Script,
     assert,
-    initialize, module, meta, method, nameBy
+    initialize, partOf, meta, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class DelayedJobScript extends Script {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -31,7 +31,7 @@ export default (Module) => {
           break;
         case 'instance':
           const vcInstanceClass = ApplicationModule.NS[replica.class];
-          (vcInstanceClass: RecoverableStaticInterface<Module, vcInstanceClass>);
+          (vcInstanceClass: $Rest<RecoverableStaticInterface<Module, vcInstanceClass>>);
           replicated = await vcInstanceClass.restoreObject(ApplicationModule, replica);
           await replicated[methodName](...args);
           break;

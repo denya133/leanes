@@ -7,13 +7,13 @@ export default (Module) => {
   const {
     ObjectTransform,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, inflect, moment }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class ComplexObjectTransform extends ObjectTransform {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -31,7 +31,7 @@ export default (Module) => {
       return [vsModuleName, vsRecordName];
     }
 
-    @method static findRecordByName(asName: string): TransformStaticInterface {
+    @method static findRecordByName(asName: string): $Rest<TransformStaticInterface> {
       const [ vsModuleName, vsRecordName ] = this.parseRecordName(asName);
       return this.Module.NS[vsRecordName];
     }

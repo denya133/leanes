@@ -3,14 +3,14 @@ const { Builder } = require('xml2js');
 module.exports = function (Module) {
   const {
     TestRenderer,
-    initialize, module: moduleD, nameBy, meta, method,
+    initialize, partOf, nameBy, meta, method,
     Utils: { _, assign }
   } = Module.NS;
 
 
 
   @initialize
-  @moduleD(Module)
+  @partOf(Module)
   class XmlRenderer extends TestRenderer {
     @nameBy static __filename = 'XmlRenderer';
     @meta static object = {};

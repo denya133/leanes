@@ -2,7 +2,7 @@ const { expect, assert } = require('chai');
 const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, machine, nameBy, meta
+  initialize, partOf, machine, nameBy, meta
 } = LeanES.NS;
 
 describe('machine', () => {
@@ -17,7 +17,7 @@ describe('machine', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         @machine('42', spySMConfig)
         class MyClass extends LeanES.NS.CoreObject {
           @meta static object = {};

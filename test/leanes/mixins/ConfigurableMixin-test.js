@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, meta, method, property, mixin, attribute, constant
+  initialize, partOf, nameBy, meta, method, property, mixin, attribute, constant
 } = LeanES.NS;
 
 describe('ConfigurableMixin', () => {
@@ -20,7 +20,7 @@ describe('ConfigurableMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestConfiguration extends LeanES.NS.Configuration {
         @nameBy static  __filename = 'TestConfiguration';
         @meta static object = {};
@@ -32,7 +32,7 @@ describe('ConfigurableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ConfigurableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestConfigurable extends LeanES.NS.Proxy {
         @nameBy static  __filename = 'TestConfigurable';
         @meta static object = {};

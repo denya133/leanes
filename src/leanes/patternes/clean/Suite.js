@@ -7,12 +7,12 @@ export default (Module) => {
   const {
     Notifier,
     assert,
-    initialize, module, meta, method, property, nameBy
+    initialize, partOf, meta, method, property, nameBy
   } = Module.NS;
 
   @initialize
   @injectable()
-  @module(Module)
+  @partOf(Module)
   class Suite extends Notifier implements SuiteInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

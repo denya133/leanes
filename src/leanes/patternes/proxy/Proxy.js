@@ -5,12 +5,12 @@ export default (Module) => {
   const {
     // APPLICATION_MEDIATOR,
     Notifier,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
   @initialize
   @injectable()
-  @module(Module)
+  @partOf(Module)
   class Proxy extends Notifier implements ProxyInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -44,9 +44,9 @@ export default (Module) => {
 
     @method onRegister(): void  { return; }
 
-    @method async onRemove(): void { return; }
+    @method async onRemove(): Promise<void> { return; }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): ProxyInterface {
+    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<ProxyInterface> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const facade = acModule.NS.ApplicationFacade.getInstance(replica.multitonKey);
         const proxy = facade.retrieveProxy(replica.proxyName);
@@ -56,7 +56,7 @@ export default (Module) => {
       }
     }
 
-    @method static async replicateObject(instance: ProxyInterface): object {
+    @method static async replicateObject(instance: ProxyInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
       replica.proxyName = instance.getProxyName();

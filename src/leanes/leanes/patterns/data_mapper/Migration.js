@@ -6,12 +6,12 @@ export default (Module) => {
     UP, DOWN, SUPPORTED_TYPES, REVERSE_MAP, NON_OVERRIDDEN,
     Record,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, assign, forEach }
   } = Module.NS;
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Migration extends Record implements MigrationInterface<REVERSE_MAP, SUPPORTED_TYPES, UP, DOWN> {
     @nameBy static  __filename = __filename;
     @meta static object = {};

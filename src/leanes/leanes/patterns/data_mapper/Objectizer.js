@@ -6,14 +6,14 @@ import type { ObjectizerInterface } from '../../interfaces/ObjectizerInterface';
 export default (Module) => {
   const {
     CoreObject,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Objectizer<
-    R = RecordStaticInterface, D = RecordInterface
+    R = $Rest<RecordStaticInterface>, D = RecordInterface
   > extends CoreObject implements ObjectizerInterface<R, D> {
     @nameBy static  __filename = __filename;
     @meta static object = {};

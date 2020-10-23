@@ -5,7 +5,7 @@ const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Proxy,
-  initialize, module:moduleD, nameBy, meta, method, property
+  initialize, partOf, nameBy, meta, method, property
 } = LeanES.NS;
 
 describe('Proxy', () => {

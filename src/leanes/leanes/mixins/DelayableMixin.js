@@ -42,7 +42,7 @@ export default (Module) => {
             }
             const ApplicationModule = this.ApplicationModule;
             const Proto = target.constructor;
-            (Proto: RecoverableStaticInterface<Module, Proto>);
+            (Proto: $Rest<RecoverableStaticInterface<Module, Proto>>);
             return async (...args) => {
               const data = {
                 moduleName: target.moduleName(),
@@ -67,7 +67,7 @@ export default (Module) => {
               throw new Error(`Method \`${name}\` absent in class ${target.name}.prototype`);
             }
             vcClass = target.constructor;
-            (vcClass: RecoverableStaticInterface<Module, vcClass>);
+            (vcClass: $Rest<RecoverableStaticInterface<Module, vcClass>>);
             return async (...args) => {
               const data = {
                 moduleName: target.moduleName(),

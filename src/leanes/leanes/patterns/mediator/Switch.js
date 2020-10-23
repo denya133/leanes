@@ -51,13 +51,13 @@ export default (Module) => {
     Context, ResourceRenderer,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect, genRandomAlphaNumbers, statuses }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Switch extends Mediator implements SwitchInterface {
     @nameBy static  __filename = __filename;

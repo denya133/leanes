@@ -6,12 +6,12 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Pipe extends CoreObject implements PipeFittingInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -34,8 +34,8 @@ export default (Module) => {
       return disconnectedFitting;
     }
 
-    @method write(aoMessage: PipeMessageInterface): boolean {
-      return this._output && this._output.write(aoMessage) || true;
+    @method async write(aoMessage: PipeMessageInterface): Promise<boolean> {
+      return this._output && await this._output.write(aoMessage) || true;
     }
 
     @method static async restoreObject() {

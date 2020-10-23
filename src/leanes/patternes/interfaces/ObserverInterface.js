@@ -12,5 +12,5 @@ export interface ObserverInterface {
 
   compareNotifyContext(object: any): boolean;
 
-  notifyObserver(notification: NotificationInterface): void;
+  notifyObserver(notification: NotificationInterface): ?Promise<void>;
 }

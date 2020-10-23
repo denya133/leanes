@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
 } = LeanES.NS;
 
 
@@ -20,7 +20,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -43,7 +43,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -73,7 +73,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -105,7 +105,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -131,7 +131,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -157,7 +157,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -185,7 +185,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -245,7 +245,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -285,7 +285,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -325,7 +325,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -367,7 +367,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -406,7 +406,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -444,7 +444,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -482,7 +482,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
@@ -520,7 +520,7 @@ describe('MemoryResqueMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};

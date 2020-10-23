@@ -4,7 +4,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const Cursor = LeanES.NS.Cursor;
 const {
   Record,
-  initialize, module:moduleD, nameBy, meta, method, property, mixin, attribute
+  initialize, partOf, nameBy, meta, method, property, mixin, attribute
 } = LeanES.NS;
 
 
@@ -19,7 +19,7 @@ describe('Cursor', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static  __filename = 'TestRecord';
           @meta static object = {};
@@ -28,7 +28,7 @@ describe('Cursor', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class MemoryCollection extends LeanES.NS.Collection {
           @nameBy static  __filename = 'MemoryCollection';
           @meta static object = {};
@@ -56,7 +56,7 @@ describe('Cursor', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static  __filename = 'TestRecord';
           @meta static object = {};
@@ -65,7 +65,7 @@ describe('Cursor', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class MemoryCollection extends LeanES.NS.Collection {
           @nameBy static  __filename = 'MemoryCollection';
           @meta static object = {};
@@ -92,7 +92,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -102,7 +102,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -150,7 +150,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -160,7 +160,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -194,7 +194,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -204,7 +204,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -254,7 +254,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -264,7 +264,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -310,7 +310,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -320,7 +320,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -364,7 +364,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -374,7 +374,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -425,7 +425,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -435,7 +435,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -487,7 +487,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -497,7 +497,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -546,7 +546,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -556,7 +556,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -599,7 +599,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -609,7 +609,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -650,7 +650,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -660,7 +660,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};

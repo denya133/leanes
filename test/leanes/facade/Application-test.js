@@ -2,7 +2,7 @@ const { assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   FacadeInterface,
-  initialize, module:moduleD, nameBy, meta, method, property
+  initialize, partOf, nameBy, meta, method, property
 } = LeanES.NS;
 
 describe('Application', () => {
@@ -19,7 +19,7 @@ describe('Application', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationFacade extends LeanES.NS.Facade {
         @nameBy static  __filename = 'ApplicationFacade';
         @meta static object = {};
@@ -34,11 +34,11 @@ describe('Application', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Application extends LeanES.NS.Application {
         @nameBy static  __filename = 'Application';
         @meta static object = {};
-        @property static get NAME(): String {
+        @property static get NAME(): string {
           return 'TestApplication1';
         }
         constructor() {
@@ -61,7 +61,7 @@ describe('Application', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationFacade extends LeanES.NS.Facade {
         @nameBy static  __filename = 'ApplicationFacade';
         @meta static object = {};
@@ -76,11 +76,11 @@ describe('Application', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Application extends LeanES.NS.Application {
         @nameBy static  __filename = 'Application';
         @meta static object = {};
-        @property static get NAME(): String {
+        @property static get NAME(): string {
           return 'TestApplication2';
         }
         constructor() {

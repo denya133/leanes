@@ -6,7 +6,7 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   RecordInterface, QueryInterface, CursorInterface, CollectionInterface,
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant, method, property
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant, method, property
 } = LeanES.NS;
 
 describe('GenerateAutoincrementIdMixin', () => {
@@ -25,7 +25,7 @@ describe('GenerateAutoincrementIdMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -38,7 +38,7 @@ describe('GenerateAutoincrementIdMixin', () => {
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.GenerateAutoincrementIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Queryable';
         @meta static object = {};

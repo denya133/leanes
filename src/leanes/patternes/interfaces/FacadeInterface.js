@@ -3,11 +3,11 @@ import type { MediatorInterface } from './MediatorInterface';
 import type { NotificationInterface } from './NotificationInterface';
 
 export interface FacadeInterface {
-  remove(): void;
+  remove(): Promise<void>;
 
   registerCommand(asNotificationName: string, aCommand: Class<*>): void;
 
-  removeCommand(asNotificationName: string): void;
+  removeCommand(asNotificationName: string): Promise<void>;
 
   hasCommand(asNotificationName: string): boolean;
 
@@ -15,7 +15,7 @@ export interface FacadeInterface {
 
   retrieveProxy(asProxyName: string): ?ProxyInterface;
 
-  removeProxy(asProxyName: string): ?ProxyInterface;
+  removeProxy(asProxyName: string): Promise<?ProxyInterface>;
 
   hasProxy(asProxyName: string): boolean;
 
@@ -23,11 +23,11 @@ export interface FacadeInterface {
 
   retrieveMediator(asMediatorName: string): ?MediatorInterface;
 
-  removeMediator(asMediatorName: string): ?MediatorInterface;
+  removeMediator(asMediatorName: string): Promise<?MediatorInterface>;
 
   hasMediator(asMediatorName: string): boolean;
 
-  notifyObservers(aoNotification: NotificationInterface): void;
+  notifyObservers(aoNotification: NotificationInterface): Promise<void>;
 
-  sendNotification(asName: string, aoBody: ?any, asType: ?string): void;
+  sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void>;
 }

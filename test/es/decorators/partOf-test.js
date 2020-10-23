@@ -3,7 +3,7 @@ const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   CoreObject,
-  initialize, module: moduleD, nameBy, meta
+  initialize, partOf, nameBy, meta
 } = LeanES.NS;
 
 describe('mixin', () => {
@@ -18,14 +18,14 @@ describe('mixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class SubTest extends CoreObject {
         @nameBy static __filename = 'SubTest';
         @meta static object = {};
       }
       assert.equal(SubTest.metaObject.target.Module, Test);
     });
-    it('Target for `module` decorator must be a Class(fail)', () => {
+    it('Target for `partOf` decorator must be a Class(fail)', () => {
       expect(() => {
         @initialize
         class Test extends LeanES {
@@ -37,7 +37,7 @@ describe('mixin', () => {
         class SubTest extends CoreObject {
           @nameBy static __filename = 'SubTest';
           @meta static object = {};
-          @moduleD(Test) object = {}
+          @partOf(Test) object = {}
         }
       }).to.throw(Error);
     });

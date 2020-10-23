@@ -7,12 +7,12 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class TeeSplit extends CoreObject implements PipeFittingInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -54,13 +54,13 @@ export default (Module) => {
       return voRemoved;
     }
 
-    @method write(aoMessage: PipeMessageInterface): boolean {
+    @method async write(aoMessage: PipeMessageInterface): Promise<boolean> {
       let vbSuccess = true;
-      this._outputs.forEach(function(aoOutput) {
-        if (!aoOutput.write(aoMessage)) {
+      for (const voOutput of this._outputs) {
+        if (!(await voOutput.write(aoMessage))) {
           return vbSuccess = false;
         }
-      });
+      }
       return vbSuccess;
     }
 

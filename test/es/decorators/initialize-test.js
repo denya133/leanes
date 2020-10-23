@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, nameBy, meta, module:moduleD
+  initialize, nameBy, meta, partOf
 } = LeanES.NS;
 
 describe('initialize', () => {
@@ -25,7 +25,7 @@ describe('initialize', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class SubTest extends LeanES.NS.CoreObject {
           @nameBy static __filename = 'SubTest';
           @meta static object = {};

@@ -5,12 +5,12 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class PipeListener extends CoreObject implements PipeFittingInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -29,8 +29,8 @@ export default (Module) => {
       return null;
     }
 
-    @method write(aoMessage: PipeMessageInterface): boolean {
-      this._listener.call(this._context, aoMessage);
+    @method async write(aoMessage: PipeMessageInterface): Promise<boolean> {
+      await this._listener.call(this._context, aoMessage);
       return true;
     }
 

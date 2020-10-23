@@ -5,13 +5,13 @@ export default (Module) => {
   const {
     ArrayTransform,
     assert,
-    initialize, module, meta, method, nameBy,
+    initialize, partOf, meta, method, nameBy,
     Utils: { _, inflect, moment }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class ComplexArrayTransform extends ArrayTransform {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -29,7 +29,7 @@ export default (Module) => {
       return [vsModuleName, vsRecordName];
     }
 
-    @method static findRecordByName(asName: string): TransformStaticInterface {
+    @method static findRecordByName(asName: string): $Rest<TransformStaticInterface> {
       const [ vsModuleName, vsRecordName ] = this.parseRecordName(asName);
       return this.Module.NS[vsRecordName];
     }

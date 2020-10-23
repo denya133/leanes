@@ -1,7 +1,7 @@
 const {expect, assert} = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, meta, mixin, constant, method
+  initialize, partOf, nameBy, meta, mixin, constant, method
 } = LeanES.NS;
 
 describe('DelayableMixin', () => {
@@ -22,7 +22,7 @@ describe('DelayableMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestClass';
         @meta static object = {};
@@ -32,7 +32,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static  __filename = 'TestResque';
         @meta static object = {};
@@ -40,7 +40,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.DelayableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestTest extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestTest';
         @meta static object = {};
@@ -97,7 +97,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static  __filename = 'TestResque';
         @meta static object = {};
@@ -106,7 +106,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.DelayableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestTest extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestTest';
         @meta static object = {};
@@ -168,7 +168,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static  __filename = 'TestResque';
         @meta static object = {};
@@ -177,7 +177,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.DelayableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestTest extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestTest';
         @meta static object = {};

@@ -4,7 +4,7 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Cursor,
-  initialize, module: moduleD, nameBy, meta, mixin, constant, method, attribute, property
+  initialize, partOf, nameBy, meta, mixin, constant, method, attribute, property
 } = LeanES.NS;
 
 describe('QueryableCollectionMixin', () => {
@@ -19,7 +19,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -53,7 +53,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -90,7 +90,7 @@ describe('QueryableCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -103,7 +103,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -172,7 +172,7 @@ describe('QueryableCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -185,7 +185,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static __filename = 'Queryable';
         @meta static object = {};
@@ -260,7 +260,7 @@ describe('QueryableCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -273,7 +273,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -363,7 +363,7 @@ describe('QueryableCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -376,7 +376,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -479,7 +479,7 @@ describe('QueryableCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -492,7 +492,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -593,7 +593,7 @@ describe('QueryableCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -607,7 +607,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -715,7 +715,7 @@ describe('QueryableCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -729,7 +729,7 @@ describe('QueryableCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Queryable extends LeanES.NS.Collection {
         @nameBy static __filename = 'Test';
         @meta static object = {};

@@ -7,12 +7,12 @@ export default (Module) => {
     // APPLICATION_MEDIATOR,
     Notifier,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
   @initialize
   @injectable()
-  @module(Module)
+  @partOf(Module)
   class Mediator extends Notifier implements MediatorInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -62,13 +62,13 @@ export default (Module) => {
 
     @method listNotificationInterests(): Array { return []; }
 
-    @method handleNotification(aoNotification: NotificationInterface): void { return; }
+    @method handleNotification(aoNotification: NotificationInterface): ?Promise<void> { return; }
 
     @method onRegister(): void  { return; }
 
-    @method async onRemove(): void { return; }
+    @method async onRemove(): Promise<void> { return; }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): MediatorInterface {
+    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<MediatorInterface> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const facade = acModule.NS.ApplicationFacade.getInstance(replica.multitonKey);
         const mediator = facade.retrieveMediator(replica.mediatorName);
@@ -78,7 +78,7 @@ export default (Module) => {
       }
     }
 
-    @method static async replicateObject(instance: MediatorInterface): object {
+    @method static async replicateObject(instance: MediatorInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
       replica.mediatorName = instance.getMediatorName();

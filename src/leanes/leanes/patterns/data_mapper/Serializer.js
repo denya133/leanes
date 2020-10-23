@@ -6,12 +6,12 @@ import type { TransformStaticInterface } from '../../interfaces/TransformStaticI
 export default (Module) => {
   const {
     CoreObject,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Serializer<
     D = RecordInterface
   > extends CoreObject implements SerializerInterface<D> {
@@ -20,13 +20,13 @@ export default (Module) => {
 
     @property collection: CollectionInterface<D> = null;
 
-    @method async normalize(acRecord: TransformStaticInterface, ahPayload: ?any): Promise<D> {
+    @method async normalize(acRecord: $Rest<TransformStaticInterface>, ahPayload: ?any): Promise<D> {
       (acRecord)
       return await acRecord.normalize(ahPayload, this.collection);
     }
 
     @method async serialize(aoRecord: ?D, options: ?object = null): Promise<?any> {
-      const vcRecord: TransformStaticInterface = aoRecord.constructor;
+      const vcRecord: $Rest<TransformStaticInterface> = aoRecord.constructor;
       return await vcRecord.serialize(aoRecord, options);
     }
 

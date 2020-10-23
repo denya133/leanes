@@ -21,6 +21,6 @@ export type ComputedOptionsT = {
     'array' |
     'hash'
   ),
-  transform?: () => TransformStaticInterface,
+  transform?: () => $Rest<TransformStaticInterface>,
   validate?: () => JoiT
 }

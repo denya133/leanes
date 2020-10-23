@@ -6,7 +6,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const {
   APPLICATION_MEDIATOR,
   NotificationInterface, Controller, Command, Notification,
-  initialize, module:moduleD, nameBy, meta, method, property
+  initialize, partOf, nameBy, meta, method, property
 } = LeanES.NS;
 import { Container } from 'inversify';
 
@@ -65,7 +65,7 @@ describe('Controller', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestCommand extends Command {
         @nameBy static  __filename = 'TestCommand';
         @meta static object = {};
@@ -75,7 +75,7 @@ describe('Controller', () => {
         }
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Application extends Test.NS.CoreObject {
         @nameBy static  __filename = 'Application';
         @meta static object = {};

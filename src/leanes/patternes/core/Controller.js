@@ -11,7 +11,7 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _ }
   } = Module.NS;
 
@@ -19,7 +19,7 @@ export default (Module) => {
 
   @initialize
   // @injectable()
-  @module(Module)
+  @partOf(Module)
   class Controller extends CoreObject implements ControllerInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -80,7 +80,7 @@ export default (Module) => {
       return Controller._instanceMap[asKey];
     }
 
-    @method static async removeController(asKey: string): void {
+    @method static async removeController(asKey: string): Promise<void> {
       const voController = Controller._instanceMap[asKey]
       if (voController != null) {
         for (const asNotificationName of Reflect.ownKeys(voController._commandMap)) {
@@ -200,7 +200,7 @@ export default (Module) => {
       // return (container.get(asNotificationName) != null) || (this._classNames[asNotificationName] != null);
     }
 
-    @method async removeCommand(asNotificationName: string): void {
+    @method async removeCommand(asNotificationName: string): Promise<void> {
       if (this.hasCommand(asNotificationName)) {
         this._view.removeObserver(asNotificationName, this);
         // this._commandMap[asNotificationName] = undefined;
@@ -230,7 +230,7 @@ export default (Module) => {
       return (this._classNames[asKey] != null);
     }
 
-    @method async removeCase(asKey: string): void {
+    @method async removeCase(asKey: string): Promise<void> {
       if (this.hasCase(asKey)) {
         delete this._classNames[asKey];
         if (this._container.isBound(`Factory<${asKey}>`)) {
@@ -278,7 +278,7 @@ export default (Module) => {
       return (this._classNames[asKey] != null);
     }
 
-    @method async removeSuite(asKey: string): void {
+    @method async removeSuite(asKey: string): Promise<void> {
       if (this.hasSuite(asKey)) {
         delete this._classNames[asKey];
         if (this._container.isBound(`Factory<${asKey}>`)) {

@@ -2,11 +2,11 @@
 
 export default (Module) => {
   const {
-    initialize, module: moduleD, nameBy, meta, method
+    initialize, partOf, nameBy, meta, method
   } = Module.NS;
 
   @initialize
-  @moduleD(Module)
+  @partOf(Module)
   class Migration2 extends Module.NS.Migration {
     @nameBy static  __filename = 'Migration2';
     @meta static object = {};

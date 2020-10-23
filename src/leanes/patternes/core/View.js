@@ -11,19 +11,19 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _ }
   } = Module.NS;
 
   // let container = new Container();
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class View extends CoreObject implements ViewInterface {
     @nameBy static __filename = __filename;
     @meta static object = {};
 
-    static MULTITON_MSG: "View instance for this multiton key already constructed!"
+    @property static MULTITON_MSG: string = "View instance for this multiton key already constructed!";
 
     // iphMediatorMap = PointerT(View.protected({
     @property _mediatorMap: {[key: string]: ?MediatorInterface} = null;
@@ -81,7 +81,7 @@ export default (Module) => {
       return View._instanceMap[asKey];
     }
 
-    @method static async removeView(asKey: string): void {
+    @method static async removeView(asKey: string): Promise<void> {
       const voView = View._instanceMap[asKey];
       if (voView != null) {
         for (const asMediatorName of Reflect.ownKeys(voView._mediatorMap)) {
@@ -117,16 +117,18 @@ export default (Module) => {
       }
     }
 
-    @method notifyObservers(aoNotification: NotificationInterface): void {
+    @method async notifyObservers(aoNotification: NotificationInterface): Promise<void> {
       const vsNotificationName = aoNotification.getName();
       const vlObservers = this._observerMap[vsNotificationName];
       if (vlObservers != null) {
         const vlNewObservers = [...vlObservers];
+        const promises = [];
         for (const voObserver of vlNewObservers) {
           // ((voObserver) => {
-          voObserver.notifyObserver(aoNotification);
+          promises.push(voObserver.notifyObserver(aoNotification));
           // })(voObserver);
         }
+        await Promise.all(promises);
       }
     }
 
@@ -194,7 +196,7 @@ export default (Module) => {
       return this.retrieveMediator(...args);
     }
 
-    @method async removeMediator(asMediatorName: string): ?MediatorInterface {
+    @method async removeMediator(asMediatorName: string): Promise<?MediatorInterface> {
       const voMediator = this._mediatorMap[asMediatorName];
       // const voMediator = container.get(asMediatorName);
       if (voMediator == null) {

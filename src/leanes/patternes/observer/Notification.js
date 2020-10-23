@@ -6,12 +6,12 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
   @initialize
   // @injectable()
-  @module(Module)
+  @partOf(Module)
   class Notification extends CoreObject implements NotificationInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

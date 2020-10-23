@@ -4,7 +4,7 @@ import type { ProxyInterface } from './ProxyInterface';
 export interface ModelInterface {
   registerProxy(aoProxy: ProxyInterface): void;
 
-  removeProxy(asProxyName: string): ?ProxyInterface;
+  removeProxy(asProxyName: string): Promise<?ProxyInterface>;
 
   retrieveProxy(asProxyName: string): ?ProxyInterface;
 

@@ -5,7 +5,7 @@ const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   APPLICATION_MEDIATOR,
-  initialize, module:moduleD, nameBy, meta, method, property, resolver
+  initialize, partOf, nameBy, meta, method, property, resolver
 } = LeanES.NS;
 
 describe('Facade', () => {
@@ -66,7 +66,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestCommand extends LeanES.NS.Command {
         @nameBy static  __filename = 'TestCommand';
         @meta static object = {};
@@ -77,7 +77,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Application extends Test.NS.CoreObject {
         @nameBy static  __filename = 'Application';
         @meta static object = {};
@@ -181,7 +181,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestProxy extends LeanES.NS.Proxy {
         @nameBy static  __filename = 'TestProxy';
         @meta static object = {};
@@ -192,7 +192,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Application extends Test.NS.CoreObject {
         @nameBy static  __filename = 'Application';
         @meta static object = {};
@@ -490,7 +490,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationFacade extends LeanES.NS.Facade {
         @nameBy static  __filename = 'ApplicationFacade';
         @meta static object = {};
@@ -509,18 +509,18 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static  __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.Application {
         @nameBy static  __filename = 'TestApplication';
         @meta static object = {};
-        @property static get NAME(): String {
+        @property static get NAME(): string {
           return KEY;
         }
 
@@ -531,7 +531,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class PrepareViewCommand extends LeanES.NS.Command {
         @nameBy static  __filename = 'PrepareViewCommand';
         @meta static object = {};
@@ -569,7 +569,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationFacade extends LeanES.NS.Facade {
         @nameBy static  __filename = 'ApplicationFacade';
         @meta static object = {};
@@ -588,18 +588,18 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static  __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.Application {
         @nameBy static  __filename = 'TestApplication';
         @meta static object = {};
-        @property static get NAME(): String {
+        @property static get NAME(): string {
           return KEY;
         }
         constructor() {
@@ -609,7 +609,7 @@ describe('Facade', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class PrepareViewCommand extends LeanES.NS.Command {
         @nameBy static  __filename = 'PrepareViewCommand';
         @meta static object = {};

@@ -10,13 +10,13 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     Proxy,
     assert,
-    initialize, module, meta, method, nameBy,
+    initialize, partOf, meta, method, nameBy,
     Utils: { _ }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class ResourceRenderer extends Proxy implements ResourceRendererInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

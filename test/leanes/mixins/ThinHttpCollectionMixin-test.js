@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, mixin, constant, method, attribute, property
+  initialize, partOf, nameBy, meta, mixin, constant, method, attribute, property
 } = LeanES.NS;
 
 const commonServerInitializer = require('../../../test/common/server');
@@ -24,7 +24,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -37,7 +37,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -71,7 +71,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -84,7 +84,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -129,7 +129,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -142,7 +142,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -184,7 +184,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -197,7 +197,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -250,7 +250,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -263,7 +263,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -294,7 +294,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -307,7 +307,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -344,7 +344,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -357,7 +357,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -388,7 +388,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -401,7 +401,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -430,7 +430,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -443,7 +443,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -472,7 +472,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -485,7 +485,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -514,7 +514,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -527,7 +527,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -556,7 +556,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -569,7 +569,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -598,7 +598,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -611,7 +611,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -657,7 +657,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -670,7 +670,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -749,7 +749,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -766,7 +766,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -836,7 +836,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -849,7 +849,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -897,7 +897,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -914,7 +914,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1026,7 +1026,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1039,7 +1039,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1081,7 +1081,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1094,7 +1094,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1137,7 +1137,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1150,7 +1150,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1197,7 +1197,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1210,7 +1210,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1267,7 +1267,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1280,7 +1280,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1337,7 +1337,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1350,7 +1350,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1397,7 +1397,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1410,7 +1410,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1453,7 +1453,7 @@ describe('ThinHttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1466,7 +1466,7 @@ describe('ThinHttpCollectionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.ThinHttpCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};

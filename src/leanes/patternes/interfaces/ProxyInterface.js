@@ -9,5 +9,5 @@ export interface ProxyInterface {
 
   onRegister(): void;
 
-  onRemove(): void;
+  onRemove(): Promise<void>;
 }

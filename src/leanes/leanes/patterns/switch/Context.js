@@ -16,13 +16,13 @@ export default (Module) => {
     CoreObject,
     Request, Response,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, statuses }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Context extends CoreObject implements ContextInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

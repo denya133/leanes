@@ -7,13 +7,13 @@ export default (Module) => {
     PRODUCTION, DEVELOPMENT, ENV,
     Proxy,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, assign }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Configuration extends Proxy implements ConfigurationInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

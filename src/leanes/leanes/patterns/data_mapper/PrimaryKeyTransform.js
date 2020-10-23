@@ -4,13 +4,13 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, joi }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class PrimaryKeyTransform extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};

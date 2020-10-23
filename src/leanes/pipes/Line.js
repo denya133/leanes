@@ -4,13 +4,13 @@ import type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
 export default (Module) => {
   const {
     Pipe, PipeMessage, LineControlMessage,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
   const { NORMAL } = PipeMessage;
   const { SORT, FLUSH, FIFO } = LineControlMessage;
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Line extends Pipe {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -45,14 +45,14 @@ export default (Module) => {
     }
 
     // ipmFlush = PointerT(Line.protected({
-    @method _flush(): boolean {
+    @method async _flush(): Promise<boolean> {
       let voMessage;
       let vbSuccess = true;
       if (this._messages == null) {
         this._messages = [];
       }
       while ((voMessage = this._messages.shift()) != null) {
-        let ok = this._output.write(voMessage);
+        let ok = await this._output.write(voMessage);
         if (!ok) {
           vbSuccess = false;
         }
@@ -60,7 +60,7 @@ export default (Module) => {
       return vbSuccess;
     }
 
-    @method write(aoMessage: PipeMessageInterface): boolean {
+    @method async write(aoMessage: PipeMessageInterface): Promise<boolean> {
       let vbSuccess = true;
       let voOutputMessage = null;
       switch (aoMessage.getType()) {
@@ -68,7 +68,7 @@ export default (Module) => {
           this._store(aoMessage);
           break;
         case FLUSH:
-          vbSuccess = this._flush();
+          vbSuccess = await this._flush();
           break;
         case SORT:
         case FIFO:

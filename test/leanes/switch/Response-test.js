@@ -5,7 +5,7 @@ const EventEmitter = require('events');
 const { Readable } = require('stream');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
 } = LeanES.NS;
 
 describe('Response', () => {
@@ -30,14 +30,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -45,7 +45,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -121,14 +121,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -136,7 +136,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -212,14 +212,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -227,7 +227,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -304,14 +304,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -319,7 +319,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -396,14 +396,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -411,7 +411,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -489,14 +489,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -504,7 +504,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -581,14 +581,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -596,7 +596,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -676,14 +676,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -691,7 +691,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -771,14 +771,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -786,7 +786,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -880,14 +880,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -895,7 +895,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -976,14 +976,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -991,7 +991,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1069,14 +1069,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1084,7 +1084,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1178,14 +1178,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1193,7 +1193,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1276,14 +1276,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1291,7 +1291,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1372,14 +1372,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1387,7 +1387,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1466,14 +1466,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1481,7 +1481,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1562,14 +1562,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1577,7 +1577,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1662,14 +1662,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1677,7 +1677,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1767,14 +1767,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1782,7 +1782,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1864,14 +1864,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1879,7 +1879,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1978,14 +1978,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1993,7 +1993,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2073,14 +2073,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2088,7 +2088,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2221,14 +2221,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2236,7 +2236,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2327,21 +2327,21 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRequest extends LeanES.NS.Request {
         @nameBy static __filename = 'TestRequest';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2349,7 +2349,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2446,14 +2446,14 @@ describe('Response', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResponse extends LeanES.NS.Response {
         @nameBy static __filename = 'TestResponse';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2461,7 +2461,7 @@ describe('Response', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};

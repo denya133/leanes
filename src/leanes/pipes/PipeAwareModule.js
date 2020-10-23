@@ -17,13 +17,13 @@ export default (Module) => {
   const {
     CoreObject, JunctionMediator,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
   const { ACCEPT_INPUT_PIPE, ACCEPT_OUTPUT_PIPE } = JunctionMediator;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class PipeAwareModule extends CoreObject implements PipeAwareInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

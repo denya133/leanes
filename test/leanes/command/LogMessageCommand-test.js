@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   LogMessageCommand,
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
 } = LeanES.NS;
 
 describe('LogMessageCommand', () => {
@@ -27,7 +27,7 @@ describe('LogMessageCommand', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestProxy extends LeanES.NS.Proxy {
         @nameBy static __filename = 'TestProxy';
         @meta static object = {};

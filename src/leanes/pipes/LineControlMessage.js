@@ -3,12 +3,12 @@
 export default (Module) => {
   const {
     PipeMessage,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class LineControlMessage extends PipeMessage {
     @nameBy static  __filename = __filename;
     @meta static object = {};

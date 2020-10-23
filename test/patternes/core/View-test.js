@@ -7,7 +7,7 @@ const {
   APPLICATION_MEDIATOR,
   NotificationInterface,
   View, Controller, Notification, Observer, Mediator,
-  initialize, module:moduleD, nameBy, meta, method, property
+  initialize, partOf, nameBy, meta, method, property
 } = LeanES.NS;
 import { Container } from 'inversify';
 
@@ -38,7 +38,7 @@ describe('View', () => {
     it('should register new observer', () => {
       expect(() => {
         const view = View.getInstance('VIEW__TEST3', new Container());
-        const controller = Controller.getInstance('VIEW__TEST3');
+        const controller = Controller.getInstance('VIEW__TEST3', view._container);
         const notifyMethod = sinon.spy();
         notifyMethod.resetHistory();
         const observer = Observer.new(notifyMethod, controller);
@@ -53,7 +53,7 @@ describe('View', () => {
     it('should remove observer', () => {
       expect(() => {
         const view = View.getInstance('VIEW__TEST4', new Container());
-        const controller = Controller.getInstance('VIEW__TEST4');
+        const controller = Controller.getInstance('VIEW__TEST4', view._container);
         const notifyMethod = sinon.spy();
         notifyMethod.resetHistory();
         const observer = Observer.new(notifyMethod, controller);

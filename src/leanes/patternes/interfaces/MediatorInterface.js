@@ -10,9 +10,9 @@ export interface MediatorInterface {
 
   listNotificationInterests(): Array;
 
-  handleNotification(aoNotification: NotificationInterface): void;
+  handleNotification(aoNotification: NotificationInterface): ?Promise<void>;
 
   onRegister(): void;
 
-  onRemove(): void;
+  onRemove(): Promise<void>;
 }

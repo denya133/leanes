@@ -4,7 +4,7 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Record,
-  initialize, module: moduleD, nameBy, meta, constant, mixin, method, hasOne, belongsTo, relatedTo, hasMany
+  initialize, partOf, nameBy, meta, constant, mixin, method, hasOne, belongsTo, relatedTo, hasMany
 } = LeanES.NS;
 
 describe('RelationsMixin', () => {
@@ -28,7 +28,7 @@ describe('RelationsMixin', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestsCollection extends Test.NS.Collection {
           @nameBy static __filename = 'TestsCollection';
           @meta static object = {};
@@ -36,7 +36,7 @@ describe('RelationsMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.RelationsMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -68,7 +68,7 @@ describe('RelationsMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.RelationsMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -116,7 +116,7 @@ describe('RelationsMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.RelationsMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -147,7 +147,7 @@ describe('RelationsMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.RelationsMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -195,7 +195,7 @@ describe('RelationsMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.RelationsMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -226,7 +226,7 @@ describe('RelationsMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.RelationsMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -274,7 +274,7 @@ describe('RelationsMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.RelationsMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -322,7 +322,7 @@ describe('RelationsMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.RelationsMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class RelationRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'RelationRecord';
         @meta static object = {};
@@ -331,7 +331,7 @@ describe('RelationsMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.RelationsMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};

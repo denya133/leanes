@@ -13,14 +13,14 @@ export default (Module) => {
     CONFIGURATION,
     Pipes, Facade,
     ConfigurableMixin,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { uuid }
   } = Module.NS;
   const { PipeAwareModule } = Pipes.NS;
   // console.log('>>>>QQQQ 12-12+4');
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Application extends PipeAwareModule implements ApplicationInterface {
     @nameBy static  __filename = __filename;

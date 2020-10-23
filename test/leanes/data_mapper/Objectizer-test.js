@@ -6,7 +6,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const { joi } = LeanES.NS.Utils;
 const {
   Objectizer, Collection, Record,
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin
 } = LeanES.NS;
 
 describe('Objectizer', () => {
@@ -20,14 +20,14 @@ describe('Objectizer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -69,14 +69,14 @@ describe('Objectizer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -128,7 +128,7 @@ describe('Objectizer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
       class MyCollection extends LeanES.NS.Collection {
@@ -137,7 +137,7 @@ describe('Objectizer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class MyObjectizer extends LeanES.NS.Objectizer {
         @nameBy static  __filename = 'MyObjectizer';
         @meta static object = {};
@@ -178,7 +178,7 @@ describe('Objectizer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
       class MyCollection extends LeanES.NS.Collection {
@@ -187,7 +187,7 @@ describe('Objectizer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class MyObjectizer extends LeanES.NS.Objectizer {
         @nameBy static  __filename = 'MyObjectizer';
         @meta static object = {};

@@ -19,7 +19,7 @@ export default (Module) => {
     Command,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin, action, chains,
+    initialize, partOf, meta, property, method, nameBy, mixin, action, chains,
     Utils: { _, inflect, assign, statuses }
   } = Module.NS;
 
@@ -53,7 +53,7 @@ export default (Module) => {
       only: ['update']
     });
   })
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Resource<
     D = RecordInterface

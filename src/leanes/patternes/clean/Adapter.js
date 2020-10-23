@@ -7,12 +7,12 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, method, property, nameBy
+    initialize, partOf, meta, method, property, nameBy
   } = Module.NS;
 
   @initialize
   @injectable()
-  @module(Module)
+  @partOf(Module)
   class Adapter extends CoreObject implements AdapterInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -21,7 +21,7 @@ export default (Module) => {
 
     @method onRegister(): void  { return; }
 
-    @method async onRemove(): void { return; }
+    @method async onRemove(): Promise<void> { return; }
 
     @method static async restoreObject() {
       assert.fail(`restoreObject method not supported for ${this.name}`);

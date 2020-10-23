@@ -13,5 +13,5 @@ export interface ControllerInterface {
 
   hasCommand(asNotificationName: string): boolean;
 
-  removeCommand(asNotificationName: string): void;
+  removeCommand(asNotificationName: string): Promise<void>;
 }

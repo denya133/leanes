@@ -3,7 +3,7 @@ const _ = require('lodash');
 const sinon = require('sinon');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, map
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, map
 } = LeanES.NS;
 
 describe('ResourceRenderer', () => {
@@ -44,7 +44,7 @@ describe('ResourceRenderer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class MyConfiguration extends LeanES.NS.Configuration {
         @nameBy static __filename = 'MyConfiguration';
         @meta static object = {};
@@ -52,7 +52,7 @@ describe('ResourceRenderer', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableResourceMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -60,14 +60,14 @@ describe('ResourceRenderer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class FakeApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'FakeApplication';
         @meta static object = {};
@@ -82,7 +82,7 @@ describe('ResourceRenderer', () => {
       facade.registerMediator(mediator);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRenderer extends LeanES.NS.ResourceRenderer {
         @nameBy static __filename = 'TestRenderer';
         @meta static object = {};
@@ -137,7 +137,7 @@ describe('ResourceRenderer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRenderer extends LeanES.NS.ResourceRenderer {
         @nameBy static __filename = 'TestRenderer';
         @meta static object = {};

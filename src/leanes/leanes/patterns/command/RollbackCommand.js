@@ -8,13 +8,13 @@ export default (Module) => {
     // SimpleCommand,
     Command,
     ConfigurableMixin,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class RollbackCommand<
     D = RecordInterface

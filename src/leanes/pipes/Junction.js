@@ -4,13 +4,13 @@ export default (Module) => {
   const {
     CoreObject, PipeListener,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
   const splice = [].splice;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Junction extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -103,11 +103,11 @@ export default (Module) => {
       return vbSuccess;
     }
 
-    @method sendMessage(outputPipeName: string, message: PipeMessageInterface): boolean {
+    @method async sendMessage(outputPipeName: string, message: PipeMessageInterface): Promise<boolean> {
       let vbSuccess = false;
       if (this.hasOutputPipe(outputPipeName)) {
         const pipe = this._pipesMap[outputPipeName];
-        vbSuccess = pipe.write(message);
+        vbSuccess = await pipe.write(message);
       }
       return vbSuccess;
     }

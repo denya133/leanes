@@ -20,7 +20,7 @@ import mixin from './decorators/mixin';
 import patch from './decorators/patch';
 import plugin from './decorators/plugin';
 import meta from './decorators/meta';
-import module from './decorators/module';
+import partOf from './decorators/partOf';
 import nameBy from './decorators/nameBy';
 import constant from './decorators/constant';
 import util from './decorators/util';
@@ -135,7 +135,7 @@ class ES extends _ES.prototype.Module {
   @decorator patch = patch;
   @decorator plugin = plugin;
   @decorator meta = meta;
-  @decorator module = module;
+  @decorator partOf = partOf;
   @decorator nameBy = nameBy;
   @decorator constant = constant;
   @decorator util = util;

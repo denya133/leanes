@@ -6,12 +6,12 @@ const hasProp = {}.hasOwnProperty;
 export default (Module) => {
   const {
     CoreObject,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Queue extends CoreObject implements QueueInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

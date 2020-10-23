@@ -6,7 +6,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const {
   APPLICATION_MEDIATOR,
   Proxy, Model,
-  initialize, module:moduleD, nameBy, meta, method, property
+  initialize, partOf, nameBy, meta, method, property
 } = LeanES.NS;
 import { Container } from 'inversify';
 
@@ -75,7 +75,7 @@ describe('Model', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestProxy extends Proxy {
         @nameBy static  __filename = 'TestProxy';
         @meta static object = {};
@@ -84,7 +84,7 @@ describe('Model', () => {
         }
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Application extends Test.NS.CoreObject {
         @nameBy static  __filename = 'Application';
         @meta static object = {};

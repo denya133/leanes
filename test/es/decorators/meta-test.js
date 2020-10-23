@@ -2,7 +2,7 @@ const { expect, assert } = require('chai');
 const sinon = require("sinon");
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, meta, method
+  initialize, nameBy, meta, method
 } = LeanES.NS;
 
 describe('meta', () => {

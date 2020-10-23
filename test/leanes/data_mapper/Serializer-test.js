@@ -3,7 +3,7 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Record, Serializer,
-  initialize, module: moduleD, nameBy, meta, constant, method, attribute, mixin
+  initialize, partOf, nameBy, meta, constant, method, attribute, mixin
 } = LeanES.NS;
 
 describe('Serializer', () => {
@@ -17,14 +17,14 @@ describe('Serializer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -65,14 +65,14 @@ describe('Serializer', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -120,14 +120,14 @@ describe('Serializer', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MyCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MyCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class MySerializer extends Serializer {
         @nameBy static __filename = 'MySerializer';
         @meta static object = {};
@@ -168,14 +168,14 @@ describe('Serializer', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MyCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MyCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class MySerializer extends Serializer {
         @nameBy static __filename = 'MySerializer';
         @meta static object = {};

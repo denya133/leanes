@@ -4,7 +4,7 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Query,
-  initialize, module: moduleD, nameBy, meta, method, property, mixin, attribute, constant
+  initialize, partOf, nameBy, meta, method, property, mixin, attribute, constant
 } = LeanES.NS;
 
 

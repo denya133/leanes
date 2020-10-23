@@ -4,7 +4,7 @@ const EventEmitter = require('events');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Script,
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
 } = LeanES.NS;
 
 describe('Script', () => {
@@ -26,7 +26,7 @@ describe('Script', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.Script {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
@@ -55,7 +55,7 @@ describe('Script', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends Script {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
@@ -101,7 +101,7 @@ describe('Script', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends Script {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};

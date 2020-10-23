@@ -21,6 +21,6 @@ export type ComputedConfigT = {
     'array' |
     'hash'
   ),
-  transform: () => TransformStaticInterface,
+  transform: () => $Rest<TransformStaticInterface>,
   validate: () => JoiT
 }

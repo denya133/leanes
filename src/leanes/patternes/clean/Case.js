@@ -7,12 +7,12 @@ export default (Module) => {
   const {
     Notifier,
     assert,
-    initialize, module, meta, method, property, nameBy
+    initialize, partOf, meta, method, property, nameBy
   } = Module.NS;
 
   @initialize
   @injectable()
-  @module(Module)
+  @partOf(Module)
   class Case extends Notifier implements CaseInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

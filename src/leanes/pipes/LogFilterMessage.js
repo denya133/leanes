@@ -3,12 +3,12 @@ import type { PipeMessageInterface } from './interfaces/PipeMessageInterface';
 export default (Module) => {
   const {
     FilterControlMessage,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class LogFilterMessage extends FilterControlMessage {
     @nameBy static  __filename = __filename;
     @meta static object = {};

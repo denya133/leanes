@@ -7,13 +7,13 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _ }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Query extends CoreObject implements QueryInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};

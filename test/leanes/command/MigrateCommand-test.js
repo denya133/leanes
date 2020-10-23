@@ -6,7 +6,7 @@ const httpErrors = require('http-errors');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Resource,
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, resolver
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, resolver
 } = LeanES.NS;
 
 describe('MigrateCommand', () => {
@@ -33,7 +33,7 @@ describe('MigrateCommand', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -48,7 +48,7 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
@@ -84,14 +84,14 @@ describe('MigrateCommand', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestConfiguration extends LeanES.NS.Configuration {
         @nameBy static __filename = 'TestConfiguration';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -105,7 +105,7 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
@@ -159,7 +159,7 @@ describe('MigrateCommand', () => {
       });
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -173,14 +173,14 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestCommand extends LeanES.NS.MigrateCommand {
         @nameBy static __filename = 'TestCommand';
         @meta static object = {};
@@ -199,14 +199,14 @@ describe('MigrateCommand', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
@@ -233,7 +233,7 @@ describe('MigrateCommand', () => {
       const cphMigrationsMap = Symbol.for('~migrationsMap');
       const defineMigration = function (Module) {
         @initialize
-        @moduleD(Module)
+        @partOf(Module)
         class TestMigration extends LeanES.NS.Migration {
           @nameBy static __filename = 'TestMigration';
           @meta static object = {};
@@ -270,7 +270,7 @@ describe('MigrateCommand', () => {
       Test.requireMigrations();
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestConfiguration extends LeanES.NS.Configuration {
         @nameBy static __filename = 'TestConfiguration';
         @meta static object = {};
@@ -279,14 +279,14 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestCommand extends LeanES.NS.MigrateCommand {
         @nameBy static __filename = 'TestCommand';
         @meta static object = {};
@@ -304,14 +304,14 @@ describe('MigrateCommand', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
@@ -349,7 +349,7 @@ describe('MigrateCommand', () => {
       const trigger = new EventEmitter();
       const defineMigration = function (Module) {
         @initialize
-        @moduleD(Module)
+        @partOf(Module)
         class TestMigration extends LeanES.NS.Migration {
           @nameBy static __filename = 'TestMigration';
           @meta static object = {};
@@ -386,7 +386,7 @@ describe('MigrateCommand', () => {
       Test.requireMigrations();
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestConfiguration extends LeanES.NS.Configuration {
         @nameBy static __filename = 'TestConfiguration';
         @meta static object = {};
@@ -395,14 +395,14 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestCommand extends LeanES.NS.MigrateCommand {
         @nameBy static __filename = 'TestCommand';
         @meta static object = {};
@@ -425,14 +425,14 @@ describe('MigrateCommand', () => {
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
