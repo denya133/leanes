@@ -21,7 +21,7 @@ export default (Module) => {
   const {
     Endpoint,
     CrudEndpointMixin,
-    initialize, module, mixin,
+    initialize, module, mixin, nameBy, meta,
     Utils: { stasuses }
   } = Module.NS;
 
@@ -32,6 +32,9 @@ export default (Module) => {
   @mixin(CrudEndpointMixin)
   @module(Module)
   class ListEndpoint extends Endpoint {
+    @nameBy static __filename = __filename;
+    @meta static object = {};
+
     constructor() {
       super(...arguments);
       this.pathParam('v', this.versionSchema);

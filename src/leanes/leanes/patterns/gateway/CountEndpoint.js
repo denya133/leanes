@@ -21,7 +21,7 @@ export default (Module) => {
   const {
     Endpoint,
     CrudEndpointMxin,
-    initialize, module, mixin,
+    initialize, module, mixin, nameBy, meta,
     Utils: { statuses, joi }
   } = Module.NS;
 
@@ -32,6 +32,9 @@ export default (Module) => {
   @mixin(CrudEndpointMxin)
   @module(Module)
   class CountEndpoint extends Endpoint {
+    @nameBy static __filename = __filename;
+    @meta static object = {};
+
     constructor() {
       super(...arguments);
       this.pathParam('v', this.versionShema);

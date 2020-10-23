@@ -32,6 +32,9 @@ export default (Module) => {
   @initialize
   @module(Module)
   class DestroyEndpoint extends Endpoint {
+    @nameBy static __filename = __filename;
+    @meta static object = {};
+
     constructor() {
       super(...arguments);
       this.pathParam('v', this.versionSchema);

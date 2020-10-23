@@ -21,17 +21,18 @@ export default (Module) => {
   const {
     Endpoint,
     CrudEndpointMixin,
-    initialize, module, mixin, nameBy, meta,
-    Utils: { stasuses }
+    initialize, mixin, module, nameBy, meta,
+    Utils: { statuses, joi }
   } = Module.NS;
 
-  const UNAUTHORIZED = stasuses('unauthorized');
-  const UPGRADE_REQUIRED = stasuses('upgrade required');
+  const HTTP_NOT_FOUND = stasuses('not found');
+  const UNAUTHORIZED = statuses('unauthorized');
+  const UPGRADE_REQUIRED = statuses('upgrade required');
 
   @initialize
   @mixin(CrudEndpointMixin)
   @module(Module)
-  class ModelingBulkDeleteEndpoint extends Endpoint {
+  class ModelingDeleteEndpoint extends Endpoint {
     @nameBy static __filename = __filename;
     @meta static object = {};
 
@@ -41,19 +42,16 @@ export default (Module) => {
       this.header('Authorization', joi.string().required(), `
         Authorization header for internal services.
       `);
-      this.queryParam('query', this.querySchema, `
-        The query for finding
-        ${this.listEntityName}.
-      `);
-      this.response(null);
+      this.error(HTTP_NOT_FOUND);
       this.error(UNAUTHORIZED);
       this.error(UPGRADE_REQUIRED);
-      this.summary(`
-        Hide of filtered ${this.listEntityName}
+      this.response(null);
+      this.summary( `
+        Hide the ${this.itemEntityName}
       `);
       this.description(`
-        Hide a list of filtered
-        ${this.listEntityName} by using query.
+        Hide the ${this.itemEntityName}
+        from the database.
       `);
     }
   }
