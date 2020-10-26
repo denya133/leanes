@@ -167,7 +167,7 @@ export default (Module) => {
     }
 
     @method addMediator(...args) {
-      return this.registerMediator(...args);
+      return this.lazyRegisterMediator(...args);
     }
 
     @method retrieveMediator(asMediatorName: string): ?MediatorInterface {

@@ -171,7 +171,7 @@ export default (Module) => {
     }
 
     @method addCommand(...args) {
-      return this.registerCommand(...args);
+      return this.lazyRegisterCommand(...args);
     }
 
     @method lazyRegisterCommand(asNotificationName: string, asClassName: ?string): void {

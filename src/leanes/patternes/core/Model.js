@@ -121,7 +121,7 @@ export default (Module) => {
     }
 
     @method addProxy(...args) {
-      return this.registerProxy(...args);
+      return this.lazyRegisterProxy(...args);
     }
 
     @method async removeProxy(asProxyName: string): Promise<?ProxyInterface> {
