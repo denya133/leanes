@@ -78,20 +78,18 @@ describe('TeeSplit', () => {
     });
   });
   describe('.write', () => {
-    it('should send message into all connected pipes', () => {
-      expect(() => {
-        const voOutput1 = Pipe.new();
-        const spyWrite1 = sinon.spy(voOutput1, 'write');
-        const voOutput2 = Pipe.new();
-        const spyWrite2 = sinon.spy(voOutput2, 'write');
-        voOutput1.id = 1;
-        voOutput2.id = 2;
-        const split = TeeSplit.new(voOutput1, voOutput2);
-        const message = PipeMessage.new(PipeMessage.NORMAL);
-        split.write(message);
-        assert.isTrue(spyWrite1.called, 'Output 1 not receied message');
-        assert.isTrue(spyWrite2.called, 'Output 2 not receied message');
-      }).to.not.throw(Error);
+    it('should send message into all connected pipes', async () => {
+      const voOutput1 = Pipe.new();
+      const spyWrite1 = sinon.spy(voOutput1, 'write');
+      const voOutput2 = Pipe.new();
+      const spyWrite2 = sinon.spy(voOutput2, 'write');
+      voOutput1.id = 1;
+      voOutput2.id = 2;
+      const split = TeeSplit.new(voOutput1, voOutput2);
+      const message = PipeMessage.new(PipeMessage.NORMAL);
+      await split.write(message);
+      assert.isTrue(spyWrite1.called, 'Output 1 not receied message');
+      assert.isTrue(spyWrite2.called, 'Output 2 not receied message');
     });
   });
 });

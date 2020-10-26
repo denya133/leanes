@@ -4,15 +4,17 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 
+const hasProp = {}.hasOwnProperty;
+
 describe('QueryableResourceMixin', () => {
   let facade = null;
-  after(() => {
-    facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+  afterEach(async () => {
+    facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
   });
   describe('.list', () => {
     it('should list of resource items', async () => {
       const {
-        initialize, module: moduleD, nameBy, meta, mixin, constant, method, attribute, property
+        initialize, partOf, nameBy, meta, mixin, constant, method, attribute, property
       } = LeanES.NS;
       const KEY = 'TEST_RESOURCE_QUERYABLE_001';
       facade = LeanES.NS.Facade.getInstance(KEY);
@@ -23,18 +25,21 @@ describe('QueryableResourceMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -46,7 +51,7 @@ describe('QueryableResourceMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableResourceMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -56,7 +61,7 @@ describe('QueryableResourceMixin', () => {
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestCollection';
         @meta static object = {};
@@ -131,23 +136,30 @@ describe('QueryableResourceMixin', () => {
       }
 
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER'
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const COLLECTION_NAME = 'TestEntitiesCollection';
-      facade.registerProxy(TestCollection.new(COLLECTION_NAME, {
-        delegate: TestRecord,
+      const col = TestCollection.new();
+      col.setName(COLLECTION_NAME);
+      col.setData({
+        delegate: 'TestRecord',
         serializer: LeanES.NS.Serializer,
         data: []
-      }));
+      });
+      facade.registerProxy(col);
       const collection = facade.retrieveProxy(COLLECTION_NAME);
       await collection.create({
         test: 'test1',
@@ -174,9 +186,8 @@ describe('QueryableResourceMixin', () => {
       resource.initializeNotifier(KEY);
       context = Test.NS.Context.new(switchMediator, req, res);
       result = await resource.list(context);
-      console.log('/,./,./,./,./,./,./,./1111', result);
+      // console.log('/,./,./,./,./,./,./,./1111', result);
       assert.propertyVal(result.items[0], 'test', 'test2')
     })
   })
 })
-

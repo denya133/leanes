@@ -6,7 +6,7 @@ const httpErrors = require('http-errors');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Resource,
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, resolver
 } = LeanES.NS;
 
 describe('MigrateCommand', () => {
@@ -17,9 +17,13 @@ describe('MigrateCommand', () => {
     });
   });
   describe('.initializeNotifier', () => {
+    let facade = null;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
     it('should initialize command', () => {
       const KEY = 'TEST_MIGRATE_COMMAND_001';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -29,14 +33,14 @@ describe('MigrateCommand', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @property entityName = 'TestEntity';
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'TestRecord';
         }
       }
@@ -44,27 +48,33 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
       }
-      facade.registerProxy(TestMemoryCollection.new(LeanES.NS.MIGRATIONS, {
-        delegate: TestRecord,
+      const collection = TestMemoryCollection.new();
+      collection.setName(LeanES.NS.MIGRATIONS);
+      collection.setData({
+        delegate: 'TestRecord',
         serializer: LeanES.NS.Serializer
-      }));
+      });
+      facade.registerProxy(collection);
       const command = LeanES.NS.MigrateCommand.new();
       command.initializeNotifier(KEY);
       assert.equal(command.migrationsCollection, facade.retrieveProxy(LeanES.NS.MIGRATIONS));
       assert.isNotNull(command.migrationsCollection);
       assert.isDefined(command.migrationsCollection);
-      facade.remove();
     });
   });
   describe('.migrationsDir', () => {
+    let facade = null;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
     it('should get migrations directory path', () => {
       const KEY = 'TEST_MIGRATE_COMMAND_002';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -74,20 +84,20 @@ describe('MigrateCommand', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestConfiguration extends LeanES.NS.Configuration {
         @nameBy static __filename = 'TestConfiguration';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'TestRecord';
         }
       }
@@ -95,52 +105,67 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
       }
 
-      facade.registerProxy(TestMemoryCollection.new(LeanES.NS.MIGRATIONS, {
-        delegate: TestRecord,
+      const collection = TestMemoryCollection.new();
+      collection.setName(LeanES.NS.MIGRATIONS);
+      collection.setData({
+        delegate: 'TestRecord',
         serializer: LeanES.NS.Serializer
-      }));
-      facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
+      });
+      facade.registerProxy(collection);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
+      facade.registerProxy(configs);
       const command = LeanES.NS.MigrateCommand.new();
       command.initializeNotifier(KEY);
       const { migrationsDir } = command;
       assert.equal(migrationsDir, `${Test.NS.ROOT}/migrations`);
-      facade.remove();
     });
   });
   describe('.migrationNames', () => {
+    let facade = null;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
     it('should get migration names', () => {
       const KEY = 'TEST_MIGRATE_COMMAND_003';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
+
+      const cphMigrationsMap = Symbol.for('~migrationsMap');
 
       @initialize
       @mixin(LeanES.NS.SchemaModuleMixin)
+      @resolver(require, name => require(name))
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/config`;
+        @constant ROOT = `${__dirname}/config/root`;
       }
 
-      @initialize
-      @moduleD(Test)
-      class TestConfiguration extends LeanES.NS.Configuration {
-        @nameBy static __filename = 'TestConfiguration';
-        @meta static object = {};
-      }
+      Reflect.defineProperty(Test, cphMigrationsMap, {
+        enumerable: true,
+        writable: true,
+        value: {
+          '01_migration': `${__dirname}/config/root/migrations/01_migration`,
+          '02_migration': `${__dirname}/config/root/migrations/02_migration`,
+          '03_migration': `${__dirname}/config/root/migrations/03_migration`
+        }
+      });
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'TestRecord';
         }
       }
@@ -148,63 +173,76 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestCommand extends LeanES.NS.MigrateCommand {
         @nameBy static __filename = 'TestCommand';
         @meta static object = {};
       }
 
-      facade.registerProxy(TestMemoryCollection.new(LeanES.NS.MIGRATIONS, {
-        delegate: TestRecord,
+      const collection = TestMemoryCollection.new();
+      collection.setName(LeanES.NS.MIGRATIONS);
+      collection.setData({
+        delegate: 'TestRecord',
         serializer: LeanES.NS.Serializer
-      }));
-      facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
+      });
+      facade.registerProxy(collection);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
+      facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.setViewComponent(TestApplication.new());
+      facade.registerMediator(mediator);
       const command = TestCommand.new();
       command.initializeNotifier(KEY);
-      console.log(',.,.,.,.migrationNames', command.migrationNames);
       const migrationNames = command.migrationNames;
 
       assert.deepEqual(migrationNames, ['01_migration', '02_migration', '03_migration']);
-      facade.remove();
     });
   });
   describe('.migrate', () => {
+    let facade = null;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
     it('should run migrations', async () => {
       const KEY = 'TEST_MIGRATE_COMMAND_004';
       const facade = LeanES.NS.Facade.getInstance(KEY);
+      const cphMigrationsMap = Symbol.for('~migrationsMap');
       const defineMigration = function (Module) {
         @initialize
-        @moduleD(Module)
+        @partOf(Module)
         class TestMigration extends LeanES.NS.Migration {
           @nameBy static __filename = 'TestMigration';
           @meta static object = {};
           @method static findRecordByName() {
-            return Test.NS.TestMigration;
+            return TestMigration;
           }
-          @method init() {
-            this.super(...arguments);
+          @method static change() {}
+          constructor() {
+            super(...arguments);
             this.type = 'Test::TestMigration';
           }
         }
@@ -212,6 +250,7 @@ describe('MigrateCommand', () => {
 
       @initialize
       @mixin(LeanES.NS.SchemaModuleMixin)
+      @resolver(require, name => require(name))
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
@@ -219,8 +258,19 @@ describe('MigrateCommand', () => {
       }
       defineMigration(Test.Module);
 
+      Reflect.defineProperty(Test, cphMigrationsMap, {
+        enumerable: true,
+        writable: true,
+        value: {
+          '00000000000001_first_migration': `${__dirname}/config/root2/migrations/00000000000001_first_migration`,
+          '00000000000002_second_migration': `${__dirname}/config/root2/migrations/00000000000002_second_migration`,
+          '00000000000003_third_migration': `${__dirname}/config/root2/migrations/00000000000003_third_migration`
+        }
+      });
+      Test.requireMigrations();
+
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestConfiguration extends LeanES.NS.Configuration {
         @nameBy static __filename = 'TestConfiguration';
         @meta static object = {};
@@ -229,39 +279,47 @@ describe('MigrateCommand', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestMemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestMemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestCommand extends LeanES.NS.MigrateCommand {
         @nameBy static __filename = 'TestCommand';
         @meta static object = {};
       }
-
-      facade.registerProxy(TestMemoryCollection.new(LeanES.NS.MIGRATIONS, {
+      const collection = TestMemoryCollection.new();
+      collection.setName(LeanES.NS.MIGRATIONS);
+      collection.setData({
         delegate: Test.NS.TestMigration,
         serializer: LeanES.NS.Serializer
-      }));
-      facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
+      });
+      facade.registerProxy(collection);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
+      facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.setViewComponent(TestApplication.new());
+      facade.registerMediator(mediator);
       const command = TestCommand.new();
       command.initializeNotifier(KEY);
       const migrationNames = command.migrationNames;
@@ -269,7 +327,7 @@ describe('MigrateCommand', () => {
       await command.migrate({
         until: untilName
       });
-      const collectionData = facade.retrieveProxy(LeanES.NS.MIGRATIONS)[Symbol.for('~collection')];
+      const collectionData = facade.retrieveProxy(LeanES.NS.MIGRATIONS)._collection;
       for (let i = 0; i < migrationNames.length; i++) {
         const migrationName = migrationNames[i];
         assert.property(collectionData, migrationName);
@@ -277,102 +335,123 @@ describe('MigrateCommand', () => {
           break;
         }
       }
-      facade.remove();
     });
   });
   describe('.execute', () => {
+    let facade = null;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
     it('should run migrations via "execute"', async () => {
-       const KEY = 'TEST_MIGRATE_COMMAND_005';
-        const facade = LeanES.NS.Facade.getInstance(KEY);
-        const trigger = new EventEmitter();
-        const defineMigration = function (Module) {
-          @initialize
-          @moduleD(Module)
-          class TestMigration extends LeanES.NS.Migration {
-            @nameBy static __filename = 'TestMigration';
-            @meta static object = {};
-            @method static findRecordByName() {
-              return Test.NS.TestMigration;
-            }
-            @method init() {
-              this.super(...arguments);
-              this.type = 'TestMigration';
-            }
+      const KEY = 'TEST_MIGRATE_COMMAND_005';
+      const facade = LeanES.NS.Facade.getInstance(KEY);
+      const cphMigrationsMap = Symbol.for('~migrationsMap');
+      const trigger = new EventEmitter();
+      const defineMigration = function (Module) {
+        @initialize
+        @partOf(Module)
+        class TestMigration extends LeanES.NS.Migration {
+          @nameBy static __filename = 'TestMigration';
+          @meta static object = {};
+          @method static findRecordByName() {
+            return Test.NS.TestMigration;
           }
-        };
-
-        @initialize
-        @mixin(LeanES.NS.SchemaModuleMixin)
-        class Test extends LeanES {
-          @nameBy static __filename = 'Test';
-          @meta static object = {};
-          @constant ROOT = `${__dirname}/config/root2`;
-        }
-        defineMigration(Test.Module);
-
-        @initialize
-        @moduleD(Test)
-        class TestConfiguration extends LeanES.NS.Configuration {
-          @nameBy static __filename = 'TestConfiguration';
-          @meta static object = {};
-        }
-
-        @initialize
-        @mixin(LeanES.NS.MemoryCollectionMixin)
-        @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
-        class TestMemoryCollection extends LeanES.NS.Collection {
-          @nameBy static __filename = 'TestMemoryCollection';
-          @meta static object = {};
-        }
-
-        @initialize
-        @moduleD(Test)
-        class TestCommand extends LeanES.NS.MigrateCommand {
-          @nameBy static __filename = 'TestCommand';
-          @meta static object = {};
-          @method async migrate(options) {
-            const result = await this.super(options);
-            trigger.emit('MIGRATE', options);
-            return result;
+          @method static change() {}
+          constructor() {
+            super(...arguments);
+            this.type = 'Test::TestMigration';
           }
         }
-        facade.registerProxy(TestMemoryCollection.new(LeanES.NS.MIGRATIONS, {
-          delegate: Test.NS.TestMigration,
-          serializer: LeanES.NS.Serializer
-        }));
-        facade.registerProxy(TestConfiguration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT));
+      };
 
-        @initialize
-        @moduleD(Test)
-        class ApplicationMediator extends LeanES.NS.Mediator {
-          @nameBy static __filename = 'ApplicationMediator';
-          @meta static object = {};
-        }
+      @initialize
+      @mixin(LeanES.NS.SchemaModuleMixin)
+      @resolver(require, name => require(name))
+      class Test extends LeanES {
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/config/root2`;
+      }
+      defineMigration(Test.Module);
 
-        @initialize
-        @moduleD(Test)
-        class TestApplication extends LeanES.NS.CoreObject {
-          @nameBy static __filename = 'TestApplication';
-          @meta static object = {};
+      Reflect.defineProperty(Test, cphMigrationsMap, {
+        enumerable: true,
+        writable: true,
+        value: {
+          '00000000000001_first_migration': `${__dirname}/config/root2/migrations/00000000000001_first_migration`,
+          '00000000000002_second_migration': `${__dirname}/config/root2/migrations/00000000000002_second_migration`,
+          '00000000000003_third_migration': `${__dirname}/config/root2/migrations/00000000000003_third_migration`
         }
-        facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
-        const command = TestCommand.new();
-        command.initializeNotifier(KEY);
-        const untilName = '00000000000002_second_migration';
-        const promise = new Promise(function(resolve, reject) {
-          trigger.once('MIGRATE', function(options) {
-            resolve(options);
-          });
-        });
-        await command.execute(LeanES.NS.Notification.new(LeanES.NS.MIGRATE, {
-          until: untilName
-        }));
-        options = await promise;
-        assert.deepEqual(options, {
-          until: untilName
-        });
-        facade.remove();
+      });
+      Test.requireMigrations();
+
+      @initialize
+      @partOf(Test)
+      class TestConfiguration extends LeanES.NS.Configuration {
+        @nameBy static __filename = 'TestConfiguration';
+        @meta static object = {};
+      }
+
+      @initialize
+      @mixin(LeanES.NS.MemoryCollectionMixin)
+      @mixin(LeanES.NS.GenerateUuidIdMixin)
+      @partOf(Test)
+      class TestMemoryCollection extends LeanES.NS.Collection {
+        @nameBy static __filename = 'TestMemoryCollection';
+        @meta static object = {};
+      }
+
+      @initialize
+      @partOf(Test)
+      class TestCommand extends LeanES.NS.MigrateCommand {
+        @nameBy static __filename = 'TestCommand';
+        @meta static object = {};
+        @method async migrate(options) {
+          const result = await super.migrate(options);
+          trigger.emit('MIGRATE', options);
+          return result;
+        }
+      }
+      const collection = TestMemoryCollection.new();
+      collection.setName(LeanES.NS.MIGRATIONS);
+      collection.setData({
+        delegate: Test.NS.TestMigration,
+        serializer: LeanES.NS.Serializer
+      });
+      facade.registerProxy(collection);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
+      facade.registerProxy(configs);
+
+      @initialize
+      @partOf(Test)
+      class ApplicationMediator extends LeanES.NS.Mediator {
+        @nameBy static __filename = 'ApplicationMediator';
+        @meta static object = {};
+      }
+
+      @initialize
+      @partOf(Test)
+      class TestApplication extends LeanES.NS.CoreObject {
+        @nameBy static __filename = 'TestApplication';
+        @meta static object = {};
+      }
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.setViewComponent(TestApplication.new());
+      facade.registerMediator(mediator);
+      const command = TestCommand.new();
+      command.initializeNotifier(KEY);
+      const untilName = '00000000000002_second_migration';
+      const promise = new Promise((resolve) => trigger.once('MIGRATE', resolve));
+      await command.execute(LeanES.NS.Notification.new(LeanES.NS.MIGRATE, {
+        until: untilName
+      }));
+      const options = await promise;
+      assert.deepEqual(options, {
+        until: untilName
+      });
     });
   });
 });

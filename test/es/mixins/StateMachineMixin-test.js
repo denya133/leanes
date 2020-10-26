@@ -5,7 +5,7 @@ const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   CoreObject,
-  initialize, module:moduleD, nameBy, meta, mixin, machine
+  initialize, partOf, nameBy, meta, mixin, machine
 } = LeanES.NS;
 
 describe('StateMachineMixin', () => {
@@ -20,7 +20,7 @@ describe('StateMachineMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.StateMachineMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class MyClass extends LeanES.NS.CoreObject {
           @meta static object = {};
         }
@@ -42,7 +42,7 @@ describe('StateMachineMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.StateMachineMixin)
-        @moduleD(Test)
+        @partOf(Test)
         @machine('default', spySMConfig)
         class MyClass extends LeanES.NS.CoreObject {
           @meta static object = {};
@@ -64,7 +64,7 @@ describe('StateMachineMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.StateMachineMixin)
-      @moduleD(Test)
+      @partOf(Test)
       @machine('default', function () {
         this.beforeAllEvents('testBeforeAllEvents');
         this.afterAllTransitions('testAfterAllTransitions');
@@ -142,7 +142,7 @@ describe('StateMachineMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.StateMachineMixin)
-      @moduleD(Test)
+      @partOf(Test)
       @machine('default', function () {
         this.errorOnAllEvents('testErrorOnAllEvents');
         this.state('oldState', {

@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
 import type { PipeMessageInterface } from './interfaces/PipeMessageInterface';
 
@@ -7,12 +22,12 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class TeeSplit extends CoreObject implements PipeFittingInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -54,13 +69,13 @@ export default (Module) => {
       return voRemoved;
     }
 
-    @method write(aoMessage: PipeMessageInterface): boolean {
+    @method async write(aoMessage: PipeMessageInterface): Promise<boolean> {
       let vbSuccess = true;
-      this._outputs.forEach(function(aoOutput) {
-        if (!aoOutput.write(aoMessage)) {
+      for (const voOutput of this._outputs) {
+        if (!(await voOutput.write(aoMessage))) {
           return vbSuccess = false;
         }
-      });
+      }
       return vbSuccess;
     }
 

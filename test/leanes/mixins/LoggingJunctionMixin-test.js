@@ -4,7 +4,7 @@ const assert = chai.assert;
 const sinon = require('sinon');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant
 } = LeanES.NS;
 
 describe('LoggingJunctionMixin', () => {
@@ -19,12 +19,15 @@ describe('LoggingJunctionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.LoggingJunctionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(LeanES.NS.Pipes.NS.Junction.new());
       assert.instanceOf(mediator, LeanES.NS.Pipes.NS.JunctionMediator);
       assert.instanceOf(mediator._junction, LeanES.NS.Pipes.NS.Junction);
     });
@@ -40,12 +43,15 @@ describe('LoggingJunctionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.LoggingJunctionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      // const mediator = TestJunctionMediator.new('TEST_MEDIATOR', LeanES.NS.Pipes.NS.Junction.new());
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(LeanES.NS.Pipes.NS.Junction.new());
       assert.deepEqual(mediator.listNotificationInterests(), [
         LeanES.NS.Pipes.NS.JunctionMediator.ACCEPT_INPUT_PIPE,
         LeanES.NS.Pipes.NS.JunctionMediator.ACCEPT_OUTPUT_PIPE,
@@ -56,7 +62,7 @@ describe('LoggingJunctionMixin', () => {
     });
   });
   describe('handleNotification', () => {
-    it('should handle send-to-log notification (debug)', () => {
+    it('should handle send-to-log notification (debug)', async () => {
       const KEY = 'TEST_LOGGING_JUNCTION_MIXIN_001';
       const TEST_BODY = 'TEST_BODY';
       @initialize
@@ -68,28 +74,30 @@ describe('LoggingJunctionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.LoggingJunctionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(
         LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG,
         TEST_BODY,
         LeanES.NS.Pipes.NS.LogMessage.LEVELS[LeanES.NS.Pipes.NS.LogMessage.DEBUG]
       );
-      mediator.handleNotification(notification);
+      await mediator.handleNotification(notification);
       const [ vsOutputPipeName, voMessage ] = junction.sendMessage.args[0];
       assert.equal(vsOutputPipeName, LeanES.NS.Pipes.NS.PipeAwareModule.STDLOG);
       assert.propertyVal(voMessage, 'logLevel', LeanES.NS.Pipes.NS.LogMessage.DEBUG);
       assert.propertyVal(voMessage, 'sender', KEY);
       assert.propertyVal(voMessage, 'message', 'TEST_BODY');
     });
-    it('should handle send-to-log notification (error)', () => {
+    it('should handle send-to-log notification (error)', async () => {
       const KEY = 'TEST_LOGGING_JUNCTION_MIXIN_001';
       const TEST_BODY = 'TEST_BODY';
       @initialize
@@ -101,28 +109,30 @@ describe('LoggingJunctionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.LoggingJunctionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(
         LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG,
         TEST_BODY,
         LeanES.NS.Pipes.NS.LogMessage.LEVELS[LeanES.NS.Pipes.NS.LogMessage.ERROR]
       );
-      mediator.handleNotification(notification);
+      await mediator.handleNotification(notification);
       const [ vsOutputPipeName, voMessage ] = junction.sendMessage.args[0];
       assert.equal(vsOutputPipeName, LeanES.NS.Pipes.NS.PipeAwareModule.STDLOG);
       assert.propertyVal(voMessage, 'logLevel', LeanES.NS.Pipes.NS.LogMessage.ERROR);
       assert.propertyVal(voMessage, 'sender', KEY);
       assert.propertyVal(voMessage, 'message', 'TEST_BODY');
     });
-    it('should handle send-to-log notification (fatal)', () => {
+    it('should handle send-to-log notification (fatal)', async () => {
       const KEY = 'TEST_LOGGING_JUNCTION_MIXIN_001';
       const TEST_BODY = 'TEST_BODY';
       @initialize
@@ -134,27 +144,29 @@ describe('LoggingJunctionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.LoggingJunctionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(
         LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG,
         TEST_BODY,
         LeanES.NS.Pipes.NS.LogMessage.LEVELS[LeanES.NS.Pipes.NS.LogMessage.FATAL]);
-      mediator.handleNotification(notification);
+      await mediator.handleNotification(notification);
       const [ vsOutputPipeName, voMessage ] = junction.sendMessage.args[0];
       assert.equal(vsOutputPipeName, LeanES.NS.Pipes.NS.PipeAwareModule.STDLOG);
       assert.propertyVal(voMessage, 'logLevel', LeanES.NS.Pipes.NS.LogMessage.FATAL);
       assert.propertyVal(voMessage, 'sender', KEY);
       assert.propertyVal(voMessage, 'message', 'TEST_BODY');
     });
-    it('should handle send-to-log notification (warn)', () => {
+    it('should handle send-to-log notification (warn)', async () => {
       const KEY = 'TEST_LOGGING_JUNCTION_MIXIN_001';
       const TEST_BODY = 'TEST_BODY';
       @initialize
@@ -166,24 +178,26 @@ describe('LoggingJunctionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.LoggingJunctionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(LeanES.NS.Pipes.NS.LogMessage.SEND_TO_LOG, TEST_BODY, LeanES.NS.Pipes.NS.LogMessage.LEVELS[LeanES.NS.Pipes.NS.LogMessage.WARN]);
-      mediator.handleNotification(notification);
+      await mediator.handleNotification(notification);
       const [ vsOutputPipeName, voMessage ] = junction.sendMessage.args[0];
       assert.equal(vsOutputPipeName, LeanES.NS.Pipes.NS.PipeAwareModule.STDLOG);
       assert.propertyVal(voMessage, 'logLevel', LeanES.NS.Pipes.NS.LogMessage.WARN);
       assert.propertyVal(voMessage, 'sender', KEY);
       assert.propertyVal(voMessage, 'message', 'TEST_BODY');
     });
-    it('should handle set-to-log notification', () => {
+    it('should handle set-to-log notification', async () => {
       const KEY = 'TEST_LOGGING_JUNCTION_MIXIN_002';
       const TEST_LEVEL = LeanES.NS.Pipes.NS.LogMessage.NONE;
       @initialize
@@ -195,17 +209,19 @@ describe('LoggingJunctionMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.LoggingJunctionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestJunctionMediator extends LeanES.NS.Pipes.NS.JunctionMediator {
         @nameBy static  __filename = 'TestJunctionMediator';
         @meta static object = {};
       }
       const junction = LeanES.NS.Pipes.NS.Junction.new();
       sinon.spy(junction, 'sendMessage');
-      const mediator = TestJunctionMediator.new('TEST_MEDIATOR', junction);
+      const mediator = TestJunctionMediator.new();
+      mediator.setName('TEST_MEDIATOR');
+      mediator.setViewComponent(junction);
       mediator.initializeNotifier(KEY);
       const notification = LeanES.NS.Notification.new(LeanES.NS.Pipes.NS.LogFilterMessage.SET_LOG_LEVEL, TEST_LEVEL);
-      mediator.handleNotification(notification);
+      await mediator.handleNotification(notification);
       let [vsOutputPipeName, voMessage] = junction.sendMessage.args[0];
       assert.equal(vsOutputPipeName, LeanES.NS.Pipes.NS.PipeAwareModule.STDLOG);
       assert.equal(voMessage.getType(), LeanES.NS.Pipes.NS.FilterControlMessage.SET_PARAMS);

@@ -1,16 +1,31 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { PipeMessageInterface } from './interfaces/PipeMessageInterface';
 import type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
 
 export default (Module) => {
   const {
     Pipe, PipeMessage, LineControlMessage,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
   const { NORMAL } = PipeMessage;
   const { SORT, FLUSH, FIFO } = LineControlMessage;
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Line extends Pipe {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -45,14 +60,14 @@ export default (Module) => {
     }
 
     // ipmFlush = PointerT(Line.protected({
-    @method _flush(): boolean {
+    @method async _flush(): Promise<boolean> {
       let voMessage;
       let vbSuccess = true;
       if (this._messages == null) {
         this._messages = [];
       }
       while ((voMessage = this._messages.shift()) != null) {
-        let ok = this._output.write(voMessage);
+        let ok = await this._output.write(voMessage);
         if (!ok) {
           vbSuccess = false;
         }
@@ -60,7 +75,7 @@ export default (Module) => {
       return vbSuccess;
     }
 
-    @method write(aoMessage: PipeMessageInterface): boolean {
+    @method async write(aoMessage: PipeMessageInterface): Promise<boolean> {
       let vbSuccess = true;
       let voOutputMessage = null;
       switch (aoMessage.getType()) {
@@ -68,7 +83,7 @@ export default (Module) => {
           this._store(aoMessage);
           break;
         case FLUSH:
-          vbSuccess = this._flush();
+          vbSuccess = await this._flush();
           break;
         case SORT:
         case FIFO:

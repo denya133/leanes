@@ -4,7 +4,7 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Record,
-  initialize, module: moduleD, nameBy, meta, constant, method, attribute, mixin, computed
+  initialize, partOf, nameBy, meta, constant, method, attribute, mixin, computed
 } = LeanES.NS;
 
 describe('Record', () => {
@@ -28,14 +28,14 @@ describe('Record', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestsCollection extends Test.NS.Collection {
           @nameBy static __filename = 'TestsCollection';
           @meta static object = {};
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -44,7 +44,9 @@ describe('Record', () => {
           }
           @attribute({ type: 'string' }) test;
         }
-        const collection = TestsCollection.new(collectionName, {
+        const collection = TestsCollection.new();
+        collection.setName(collectionName);
+        collection.setData({
           delegate: 'TestRecord'
         });
         facade.registerProxy(collection);
@@ -69,14 +71,14 @@ describe('Record', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestsCollection extends Test.NS.Collection {
           @nameBy static __filename = 'TestsCollection';
           @meta static object = {};
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -112,14 +114,14 @@ describe('Record', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestsCollection extends Test.NS.Collection {
           @nameBy static __filename = 'TestsCollection';
           @meta static object = {};
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -128,7 +130,9 @@ describe('Record', () => {
           }
           @attribute({ type: 'string' }) test;
         }
-        const collection = TestsCollection.new(collectionName, {
+        const collection = TestsCollection.new();
+        collection.setName(collectionName);
+        collection.setData({
           delegate: 'TestRecord'
         });
         facade.registerProxy(collection);
@@ -155,14 +159,14 @@ describe('Record', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestsCollection extends Test.NS.Collection {
           @nameBy static __filename = 'TestsCollection';
           @meta static object = {};
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -189,14 +193,14 @@ describe('Record', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestsCollection extends Test.NS.Collection {
           @nameBy static __filename = 'TestsCollection';
           @meta static object = {};
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -228,14 +232,14 @@ describe('Record', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class TestsCollection extends Test.NS.Collection {
           @nameBy static __filename = 'TestsCollection';
           @meta static object = {};
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends Record {
           @nameBy static __filename = 'TestRecord';
           @meta static object = {};
@@ -243,23 +247,11 @@ describe('Record', () => {
             return TestRecord;
           }
           @attribute({ type: 'string' }) test;
-          @computed string(aoData) {
-            return aoData;
-          }
-          @computed number(aoData) {
-            return aoData;
-          }
-          @computed boolean(aoData) {
-            return aoData;
-          }
-          @computed date(aoData) {
-            return aoData;
+          @computed({ type: 'string' }) get computedTestProp() {
+            return this.test;
           }
         }
-        assert.isTrue('string' in TestRecord.computeds, 'Computed property `string` did not defined');
-        assert.isTrue('number' in TestRecord.computeds, 'Computed property `number` did not defined');
-        assert.isTrue('boolean' in TestRecord.computeds, 'Computed property `boolean` did not defined');
-        assert.isTrue('date' in TestRecord.computeds, 'Computed property `date` did not defined');
+        assert.isTrue('computedTestProp' in TestRecord.computeds, 'Computed property `computedTestProp` did not defined');
       }).to.not.throw(Error);
     });
   });
@@ -282,14 +274,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -298,7 +290,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -329,14 +323,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -345,7 +339,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -378,14 +374,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -394,7 +390,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -428,14 +426,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -444,7 +442,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -476,14 +476,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -492,7 +492,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -523,14 +525,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -539,7 +541,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -572,14 +576,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -588,7 +592,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -621,14 +627,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -638,7 +644,9 @@ describe('Record', () => {
         @attribute({ type: 'number' }) test;
         @attribute({ type: 'boolean' }) has;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -679,14 +687,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -697,7 +705,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -745,14 +755,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class BasicTestRecord extends Record {
         @nameBy static __filename = 'BasicTestRecord';
         @meta static object = {};
@@ -765,7 +775,7 @@ describe('Record', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends BasicTestRecord {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -774,7 +784,9 @@ describe('Record', () => {
         }
         @attribute({ type: 'string' }) name;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -812,14 +824,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -830,7 +842,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -873,14 +887,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -891,7 +905,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -940,14 +956,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -958,7 +974,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1007,14 +1025,14 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -1025,7 +1043,9 @@ describe('Record', () => {
         @attribute({ type: 'boolean' }) has;
         @attribute({ type: 'string' }) word;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1073,14 +1093,14 @@ describe('Record', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -1132,14 +1152,14 @@ describe('Record', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -1215,19 +1235,21 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1258,19 +1280,21 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1304,19 +1328,21 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1348,20 +1374,22 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1394,20 +1422,22 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1443,20 +1473,22 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1489,20 +1521,22 @@ describe('Record', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends Test.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
       }
-      const collection = TestsCollection.new(collectionName, {
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);

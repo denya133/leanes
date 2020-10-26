@@ -4,7 +4,7 @@ const LeanES = require("../../../src/leanes/index.js").default;
 const Cursor = LeanES.NS.Cursor;
 const {
   Record,
-  initialize, module:moduleD, nameBy, meta, method, property, mixin, attribute
+  initialize, partOf, nameBy, meta, method, property, mixin, attribute
 } = LeanES.NS;
 
 
@@ -19,7 +19,7 @@ describe('Cursor', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static  __filename = 'TestRecord';
           @meta static object = {};
@@ -28,12 +28,17 @@ describe('Cursor', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class MemoryCollection extends LeanES.NS.Collection {
           @nameBy static  __filename = 'MemoryCollection';
           @meta static object = {};
         }
-        const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        //   delegate: TestRecord
+        // });
+        const voMemoryCollection = MemoryCollection.new();
+        voMemoryCollection.setName('MemoryCollection');
+        voMemoryCollection.setData({
           delegate: TestRecord
         });
         const array = [{}, {}, {}];
@@ -51,7 +56,7 @@ describe('Cursor', () => {
         }
 
         @initialize
-        @moduleD(Test)
+        @partOf(Test)
         class TestRecord extends LeanES.NS.Record {
           @nameBy static  __filename = 'TestRecord';
           @meta static object = {};
@@ -60,12 +65,17 @@ describe('Cursor', () => {
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class MemoryCollection extends LeanES.NS.Collection {
           @nameBy static  __filename = 'MemoryCollection';
           @meta static object = {};
         }
-        const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+        //   delegate: TestRecord
+        // });
+        const voMemoryCollection = MemoryCollection.new();
+        voMemoryCollection.setName('MemoryCollection');
+        voMemoryCollection.setData({
           delegate: TestRecord
         });
         const cursor = Cursor.new();
@@ -82,7 +92,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -92,7 +102,7 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
@@ -115,7 +125,12 @@ describe('Cursor', () => {
           type: 'TestRecord'
         }
       ];
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const cursor = Cursor.new(voMemoryCollection, array);
@@ -135,7 +150,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -145,12 +160,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -174,7 +194,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -184,12 +204,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -229,7 +254,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -239,12 +264,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -280,7 +310,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -290,12 +320,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -329,7 +364,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -339,12 +374,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -385,7 +425,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -395,12 +435,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -442,7 +487,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -452,12 +497,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -496,7 +546,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -506,12 +556,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -544,7 +599,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -554,12 +609,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [
@@ -590,7 +650,7 @@ describe('Cursor', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -600,12 +660,17 @@ describe('Cursor', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'MemoryCollection';
         @meta static object = {};
       }
-      const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      // const voMemoryCollection = MemoryCollection.new('MemoryCollection', {
+      //   delegate: TestRecord
+      // });
+      const voMemoryCollection = MemoryCollection.new();
+      voMemoryCollection.setName('MemoryCollection');
+      voMemoryCollection.setData({
         delegate: TestRecord
       });
       const array = [

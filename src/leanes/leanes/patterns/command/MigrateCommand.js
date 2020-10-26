@@ -1,23 +1,40 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { CollectionInterface } from '../../interfaces/CollectionInterface';
 import type { RecordInterface } from '../../interfaces/RecordInterface';
 import type { NotificationInterface } from '../../../patternes';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR, STOPPED_MIGRATE, MIGRATIONS,
-    SimpleCommand,
+    APPLICATION_MEDIATOR, STOPPED_MIGRATE, MIGRATIONS, UP,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class MigrateCommand<
     D = RecordInterface
-  > extends SimpleCommand {
+  > extends Command {
+  // > extends SimpleCommand {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
@@ -63,7 +80,7 @@ export default (Module) => {
             voMigration = (await this.migrationsCollection.find(id));
             if (voMigration == null) {
               voMigration = vcMigration.new({id, type}, this.migrationsCollection);
-              await voMigration.migrate(Module.NS.Migration.UP);
+              await voMigration.migrate(UP);
               await voMigration.save();
             }
           } catch (error) {

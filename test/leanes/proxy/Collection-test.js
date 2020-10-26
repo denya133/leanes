@@ -4,7 +4,7 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Router,
-  initialize, module: moduleD, nameBy, meta, method, property, mixin, attribute, constant
+  initialize, partOf, nameBy, meta, method, property, mixin, attribute, constant
 } = LeanES.NS;
 
 describe('Collection', () => {
@@ -25,7 +25,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -34,7 +34,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -66,7 +66,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -75,7 +75,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -104,7 +104,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -113,7 +113,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -141,7 +141,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -150,7 +150,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -179,7 +179,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -188,14 +188,14 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestMediator extends LeanES.NS.Mediator {
   //       @nameBy static __filename = 'TestMediator';
   //       @meta static object = {};
@@ -234,7 +234,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -242,7 +242,7 @@ describe('Collection', () => {
 
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -257,8 +257,8 @@ describe('Collection', () => {
   // });
   describe('.build', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create record from delegate', async () => {
       const collectionName = 'TestsCollection';
@@ -271,21 +271,29 @@ describe('Collection', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
+
+        @attribute({ type: 'string' }) test = null;
+        @attribute({ type: 'number' }) data = null;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
-      const collection = TestsCollection.new(collectionName, {
+      // const collection = TestsCollection.new(collectionName, {
+      //   delegate: 'TestRecord'
+      // });
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -293,7 +301,6 @@ describe('Collection', () => {
         test: 'test',
         data: 123
       });
-      console.log('record>>>>>>>>>>>>>>>>>>>>>>>',record );
 
       assert.equal(record.test, 'test', 'Record.test is incorrect');
       assert.equal(record.data, 123, 'Record.data is incorrect');
@@ -315,7 +322,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -324,7 +331,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -358,7 +365,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -369,7 +376,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -403,7 +410,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -413,7 +420,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -447,7 +454,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -457,7 +464,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -490,7 +497,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -500,7 +507,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -533,7 +540,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -543,7 +550,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -584,7 +591,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -594,7 +601,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -630,7 +637,7 @@ describe('Collection', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestRecord extends LeanES.NS.Record {
   //       @nameBy static __filename = 'TestRecord';
   //       @meta static object = {};
@@ -641,7 +648,7 @@ describe('Collection', () => {
   //     @initialize
   //     @mixin(LeanES.NS.MemoryCollectionMixin)
   //     @mixin(LeanES.NS.GenerateUuidIdMixin)
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestsCollection extends LeanES.NS.Collection {
   //       @nameBy static __filename = 'TestsCollection';
   //       @meta static object = {};
@@ -663,8 +670,8 @@ describe('Collection', () => {
   // });
   describe('.normalize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should normalize record from data', async () => {
       const collectionName = 'TestsCollection';
@@ -681,7 +688,7 @@ describe('Collection', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -692,22 +699,29 @@ describe('Collection', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSerializer extends LeanES.NS.Serializer {
         @nameBy static __filename = 'TestSerializer';
         @meta static object = {};
+
+        @method async normalize(... args) {
+          return await spySerializerNormalize(... args)
+        }
       }
-      Reflect.defineProperty(TestSerializer, 'normalize', {
-        value: spySerializerNormalize
-      });
-      const collection = TestsCollection.new(collectionName, {
+      // const collection = TestsCollection.new(collectionName, {
+      //   delegate: TestRecord,
+      //   serializer: TestSerializer
+      // });
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: TestRecord,
         serializer: TestSerializer
       });
@@ -726,8 +740,8 @@ describe('Collection', () => {
   });
   describe('.serialize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should serialize record to data', async () => {
       const collectionName = 'TestsCollection';
@@ -744,7 +758,7 @@ describe('Collection', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -754,22 +768,29 @@ describe('Collection', () => {
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSerializer extends LeanES.NS.Serializer {
         @nameBy static __filename = 'TestSerializer';
         @meta static object = {};
+
+        @method async serialize(... args) {
+          return await spySerializerSerialize(... args)
+        }
       }
-      Reflect.defineProperty(TestSerializer, 'serialize', {
-        value: spySerializerSerialize
-      });
-      const collection = TestsCollection.new(collectionName, {
+      // const collection = TestsCollection.new(collectionName, {
+      //   delegate: TestRecord,
+      //   serializer: TestSerializer
+      // });
+      const collection = TestsCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: TestRecord,
         serializer: TestSerializer
       });

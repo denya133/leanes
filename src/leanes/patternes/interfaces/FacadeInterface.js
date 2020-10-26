@@ -1,13 +1,28 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { ProxyInterface } from './ProxyInterface';
 import type { MediatorInterface } from './MediatorInterface';
 import type { NotificationInterface } from './NotificationInterface';
 
 export interface FacadeInterface {
-  remove(): void;
+  remove(): Promise<void>;
 
   registerCommand(asNotificationName: string, aCommand: Class<*>): void;
 
-  removeCommand(asNotificationName: string): void;
+  removeCommand(asNotificationName: string): Promise<void>;
 
   hasCommand(asNotificationName: string): boolean;
 
@@ -15,7 +30,7 @@ export interface FacadeInterface {
 
   retrieveProxy(asProxyName: string): ?ProxyInterface;
 
-  removeProxy(asProxyName: string): ?ProxyInterface;
+  removeProxy(asProxyName: string): Promise<?ProxyInterface>;
 
   hasProxy(asProxyName: string): boolean;
 
@@ -23,11 +38,11 @@ export interface FacadeInterface {
 
   retrieveMediator(asMediatorName: string): ?MediatorInterface;
 
-  removeMediator(asMediatorName: string): ?MediatorInterface;
+  removeMediator(asMediatorName: string): Promise<?MediatorInterface>;
 
   hasMediator(asMediatorName: string): boolean;
 
-  notifyObservers(aoNotification: NotificationInterface): void;
+  notifyObservers(aoNotification: NotificationInterface): Promise<void>;
 
-  sendNotification(asName: string, aoBody: ?any, asType: ?string): void;
+  sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void>;
 }

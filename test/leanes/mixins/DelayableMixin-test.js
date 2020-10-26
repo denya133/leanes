@@ -1,14 +1,14 @@
 const {expect, assert} = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, meta, mixin, constant, method
+  initialize, partOf, nameBy, meta, mixin, constant, method
 } = LeanES.NS;
 
 describe('DelayableMixin', () => {
   describe('._delayJob', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should put job into delayed queue', async () => {
       const KEY = 'TEST_DELAYABLE_MIXIN_001';
@@ -22,7 +22,7 @@ describe('DelayableMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestClass';
         @meta static object = {};
@@ -32,7 +32,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static  __filename = 'TestResque';
         @meta static object = {};
@@ -40,12 +40,14 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.DelayableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestTest extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestTest';
         @meta static object = {};
       }
-      facade.registerProxy(TestResque.new(LeanES.NS.RESQUE));
+      const rq = TestResque.new();
+      rq.setName(LeanES.NS.RESQUE);
+      facade.registerProxy(rq);
       const resque = facade.retrieveProxy(LeanES.NS.RESQUE);
       await resque.create(LeanES.NS.DELAYED_JOBS_QUEUE, 4);
       const delayJobSymbol = TestTest.classMethods._delayJob;
@@ -80,8 +82,8 @@ describe('DelayableMixin', () => {
   });
   describe('.delay', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get delayed function wrapper', async () => {
       const KEY = 'TEST_DELAYABLE_MIXIN_002';
@@ -95,7 +97,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static  __filename = 'TestResque';
         @meta static object = {};
@@ -104,14 +106,16 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.DelayableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestTest extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestTest';
         @meta static object = {};
 
         @method static test () {}
       }
-      facade.registerProxy(TestResque.new(LeanES.NS.RESQUE));
+      const rq = TestResque.new();
+      rq.setName(LeanES.NS.RESQUE);
+      facade.registerProxy(rq);
       const resque = facade.retrieveProxy(LeanES.NS.RESQUE);
       await resque.create(LeanES.NS.DELAYED_JOBS_QUEUE, 4);
       const DELAY_UNTIL = Date.now();
@@ -148,8 +152,8 @@ describe('DelayableMixin', () => {
   });
   describe('.delay', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get delayed function wrapper', async () => {
       const KEY = 'TEST_DELAYABLE_MIXIN_003';
@@ -164,7 +168,7 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryResqueMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static  __filename = 'TestResque';
         @meta static object = {};
@@ -173,14 +177,16 @@ describe('DelayableMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.DelayableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestTest extends LeanES.NS.CoreObject {
         @nameBy static  __filename = 'TestTest';
         @meta static object = {};
 
         @method static test () {}
       }
-      facade.registerProxy(TestResque.new(LeanES.NS.RESQUE));
+      const rq = TestResque.new();
+      rq.setName(LeanES.NS.RESQUE);
+      facade.registerProxy(rq);
       const resque = facade.retrieveProxy(LeanES.NS.RESQUE);
       await resque.create(LeanES.NS.DELAYED_JOBS_QUEUE, 4);
       const DELAY_UNTIL = Date.now();

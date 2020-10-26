@@ -1,23 +1,40 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { CollectionInterface } from '../../interfaces/CollectionInterface';
 import type { RecordInterface } from '../../interfaces/RecordInterface';
 import type { NotificationInterface } from '../../../patternes';
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR, STOPPED_ROLLBACK, MIGRATIONS,
-    SimpleCommand,
+    APPLICATION_MEDIATOR, STOPPED_ROLLBACK, MIGRATIONS, DOWN,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class RollbackCommand<
     D = RecordInterface
-  > extends SimpleCommand {
+  > extends Command {
+  // > extends SimpleCommand {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
@@ -60,7 +77,7 @@ export default (Module) => {
       executedMigrations = executedMigrations.slice(0, (options.steps || 1));
       for (const executedMigration of executedMigrations) {
         try {
-          await executedMigration.migrate(Module.NS.Migration.DOWN);
+          await executedMigration.migrate(DOWN);
           await executedMigration.destroy();
         } catch (error) {
           err = error;

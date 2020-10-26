@@ -3,14 +3,14 @@ const { Feed } = require('feed');
 module.exports = function (Module) {
   const {
     TestRenderer,
-    initialize, module: moduleD, nameBy, meta, method,
+    initialize, partOf, nameBy, meta, method,
     Utils: { _, assign, uuid }
   } = Module.NS;
 
 
 
   @initialize
-  @moduleD(Module)
+  @partOf(Module)
   class AtomRenderer extends TestRenderer {
     @nameBy static __filename = 'AtomRenderer';
     @meta static object = {};

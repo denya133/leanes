@@ -3,7 +3,7 @@ const _ = require('lodash');
 const EventEmitter = require('events');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, method
+  initialize, partOf, nameBy, meta, constant, method
 } = LeanES.NS;
 
 describe('DelayedJobScript', () => {
@@ -15,8 +15,8 @@ describe('DelayedJobScript', () => {
   });
   describe('.body', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run delayed job script (class, sync)', async () => {
       const KEY = 'TEST_DELAYED_JOB_SCRIPT_001';
@@ -31,14 +31,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
@@ -48,20 +48,23 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.getViewComponent(TestApplication.new());
+      // facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      facade.registerMediator(mediator);
       const command = TestScript.new();
       command.initializeNotifier(KEY);
       const promise = new Promise(function (resolve, reject) {
@@ -92,36 +95,39 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
-        @method static test(...args) {
+        @method test(...args) {
           trigger.emit('RUN_SCRIPT', args);
         }
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.getViewComponent(TestApplication.new());
+      facade.registerMediator(mediator);
       const command = TestScript.new();
       command.initializeNotifier(KEY);
       const promise = new Promise(function (resolve, reject) {
@@ -152,14 +158,14 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
@@ -169,19 +175,22 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};
       }
-      facade.registerMediator(ApplicationMediator.new(LeanES.NS.APPLICATION_MEDIATOR, TestApplication.new()));
+      const mediator = ApplicationMediator.new();
+      mediator.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediator.getViewComponent(TestApplication.new());
+      facade.registerMediator(mediator);
       const command = TestScript.new();
       command.initializeNotifier(KEY);
       const promise = new Promise(function (resolve, reject) {
@@ -212,31 +221,31 @@ describe('DelayedJobScript', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestScript extends LeanES.NS.DelayedJobScript {
         @nameBy static __filename = 'TestScript';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestClass extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestClass';
         @meta static object = {};
-        @method static test(...args) {
+        @method test(...args) {
           trigger.emit('RUN_SCRIPT', args);
         }
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class ApplicationMediator extends LeanES.NS.Mediator {
         @nameBy static __filename = 'ApplicationMediator';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestApplication extends LeanES.NS.CoreObject {
         @nameBy static __filename = 'TestApplication';
         @meta static object = {};

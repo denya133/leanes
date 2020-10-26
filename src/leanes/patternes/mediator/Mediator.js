@@ -1,18 +1,33 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { MediatorInterface } from '../interfaces/MediatorInterface';
-// import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 export default (Module) => {
 
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     Notifier,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
-
   @initialize
-  @module(Module)
+  @injectable()
+  @partOf(Module)
   class Mediator extends Notifier implements MediatorInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -25,6 +40,10 @@ export default (Module) => {
 
     @method getMediatorName(): string {
       return this._mediatorName;
+    }
+
+    @method setName(asName: string): void {
+      this._mediatorName = asName;
     }
 
     @method getName(): string {
@@ -58,13 +77,13 @@ export default (Module) => {
 
     @method listNotificationInterests(): Array { return []; }
 
-    @method handleNotification(aoNotification: NotificationInterface): void { return; }
+    @method handleNotification(aoNotification: NotificationInterface): ?Promise<void> { return; }
 
     @method onRegister(): void  { return; }
 
-    @method onRemove(): void { return; }
+    @method async onRemove(): Promise<void> { return; }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): MediatorInterface {
+    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<MediatorInterface> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const facade = acModule.NS.ApplicationFacade.getInstance(replica.multitonKey);
         const mediator = facade.retrieveMediator(replica.mediatorName);
@@ -74,19 +93,16 @@ export default (Module) => {
       }
     }
 
-    @method static async replicateObject(instance: MediatorInterface): object {
+    @method static async replicateObject(instance: MediatorInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
       replica.mediatorName = instance.getMediatorName();
       return replica;
     }
 
-    constructor(asMediatorName: ?string, aoViewComponent: ?any) {
+    constructor() {
       super(... arguments);
-      this._mediatorName = asMediatorName || this.constructor.name;
-      if (aoViewComponent != null) {
-        this._viewComponent = aoViewComponent;
-      }
+      this._mediatorName = this.constructor.name;
     }
   }
 }

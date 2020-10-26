@@ -1,17 +1,32 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { PipeMessageInterface } from './interfaces/PipeMessageInterface';
 import type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
 
 export default (Module) => {
   const {
     Pipe, PipeMessage, FilterControlMessage,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
   const { NORMAL } = PipeMessage;
   const { FILTER, SET_PARAMS, SET_FILTER, BYPASS } = FilterControlMessage;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Filter extends Pipe {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -69,7 +84,7 @@ export default (Module) => {
       }));
     }
 
-    @method write(aoMessage: PipeMessageInterface): boolean {
+    @method async write(aoMessage: PipeMessageInterface): Promise<boolean> {
       let vbSuccess, voOutputMessage;
       vbSuccess = true;
       voOutputMessage = null;
@@ -81,7 +96,7 @@ export default (Module) => {
             } else {
               voOutputMessage = aoMessage;
             }
-            vbSuccess = this._output.write(voOutputMessage);
+            vbSuccess = await this._output.write(voOutputMessage);
           } catch (error) {
             console.log('>>>>>>>>>>>>>>> err', error);
             vbSuccess = false;
@@ -91,14 +106,14 @@ export default (Module) => {
           if (this._isTarget(aoMessage)) {
             this.setParams(aoMessage.getParams());
           } else {
-            vbSuccess = this._output.write(voOutputMessage);
+            vbSuccess = await this._output.write(voOutputMessage);
           }
           break;
         case SET_FILTER:
           if (this._isTarget(aoMessage)) {
             this.setFilter(aoMessage.getFilter());
           } else {
-            vbSuccess = this._output.write(voOutputMessage);
+            vbSuccess = await this._output.write(voOutputMessage);
           }
           break;
         case BYPASS:
@@ -106,11 +121,11 @@ export default (Module) => {
           if (this._isTarget(aoMessage)) {
             this._mode = aoMessage.getType();
           } else {
-            vbSuccess = this._output.write(voOutputMessage);
+            vbSuccess = await this._output.write(voOutputMessage);
           }
           break;
         default:
-          vbSuccess = this._output.write(outputMessage);
+          vbSuccess = await this._output.write(outputMessage);
       }
       return vbSuccess;
     }

@@ -2,6 +2,21 @@
   "props": true, "ignorePropertyModificationsFor": ["properties"]
 }] */
 
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { CollectionInterface } from '../../interfaces/CollectionInterface';
 import type { RecordInterface } from '../../interfaces/RecordInterface';
 import type { RecordStaticInterface } from '../../interfaces/RecordStaticInterface';
@@ -9,7 +24,6 @@ import type { CursorInterface } from '../../interfaces/CursorInterface';
 import type { SerializerInterface } from '../../interfaces/SerializerInterface';
 import type { ObjectizerInterface } from '../../interfaces/ObjectizerInterface';
 import type { SerializableInterface } from '../../interfaces/SerializableInterface';
-
 
 const hasProp = {}.hasOwnProperty;
 
@@ -19,22 +33,22 @@ export default (Module) => {
     Proxy, Serializer, Objectizer,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Collection<
-    D = RecordInterface, R = RecordStaticInterface
+    D = RecordInterface, R = $Rest<RecordStaticInterface>
   > extends Proxy implements CollectionInterface<D>, SerializableInterface<D> {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @property get delegate(): RecordStaticInterface {
-      let delegate: ?(string | Function | RecordStaticInterface) = undefined;
+    @property get delegate(): $Rest<RecordStaticInterface> {
+      let delegate: ?(string | Function | $Rest<RecordStaticInterface>) = undefined;
       const proxyData = this.getData();
       delegate = proxyData != null ? proxyData.delegate : undefined;
       if (_.isString(delegate)) {
@@ -166,16 +180,15 @@ export default (Module) => {
       return await this.serializer.serialize(aoRecord, ahOptions);
     }
 
-    constructor(proxyName: string, data: ?{
-      delegate: (string | Function | RecordStaticInterface),
+    @method setData(ahData: ?{
+      delegate: (string | Function | $Rest<RecordStaticInterface>),
       serializer?: (string | Function | Class<Serializer>),
       objectizer?: (string | Function | Class<Objectizer>)
     }) {
-      super(proxyName, data);
-      const proxyData = this.getData();
+      super.setData(... arguments);
       const NS = this.ApplicationModule.NS;
-      const serializer = proxyData != null ? proxyData.serializer : undefined;
-      const objectizer = proxyData != null ? proxyData.objectizer : undefined;
+      const serializer = ahData != null ? ahData.serializer : undefined;
+      const objectizer = ahData != null ? ahData.objectizer : undefined;
       const SerializerClass = serializer == null ?
         Serializer
       :
@@ -204,6 +217,13 @@ export default (Module) => {
             objectizer;
       this.serializer = SerializerClass.new(this);
       this.objectizer = ObjectizerClass.new(this);
+      return ahData;
+    }
+
+    constructor() {
+      super(... arguments);
+      this.serializer = Serializer.new(this);
+      this.objectizer = Objectizer.new(this);
     }
   }
 }

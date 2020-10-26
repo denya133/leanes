@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { ConfigurationInterface } from '../../interfaces/ConfigurationInterface';
 
 const hasProp = {}.hasOwnProperty;
@@ -7,13 +22,13 @@ export default (Module) => {
     PRODUCTION, DEVELOPMENT, ENV,
     Proxy,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, assign }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Configuration extends Proxy implements ConfigurationInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -66,7 +81,6 @@ export default (Module) => {
       // const manifest = require(manifestPath);
       // const manifestPath = './manifest.json';
       const manifest = this.ApplicationModule.require(manifestPath);
-      console.log('>?>?>??? manifest', manifestPath, manifest);
       this._name = manifest.name;
       this._description = manifest.description;
       this._license = manifest.license;
@@ -77,7 +91,6 @@ export default (Module) => {
       // const configFromFile = require(filePath).default;
       // const filePath = `./configs/${this.environment}`;
       const configFromFile = this.ApplicationModule.require(filePath);
-      console.log('>?>???? config', filePath, configFromFile);
       const configs = assign({}, configFromManifest, configFromFile);
       for (const key in configs) {
         if (!hasProp.call(configs, key)) continue;

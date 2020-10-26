@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { SerializerInterface } from '../../interfaces/SerializerInterface';
 import type { CollectionInterface } from '../../interfaces/CollectionInterface';
 import type { RecordInterface } from '../../interfaces/RecordInterface';
@@ -6,12 +21,12 @@ import type { TransformStaticInterface } from '../../interfaces/TransformStaticI
 export default (Module) => {
   const {
     CoreObject,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Serializer<
     D = RecordInterface
   > extends CoreObject implements SerializerInterface<D> {
@@ -20,13 +35,13 @@ export default (Module) => {
 
     @property collection: CollectionInterface<D> = null;
 
-    @method async normalize(acRecord: TransformStaticInterface, ahPayload: ?any): Promise<D> {
+    @method async normalize(acRecord: $Rest<TransformStaticInterface>, ahPayload: ?any): Promise<D> {
       (acRecord)
       return await acRecord.normalize(ahPayload, this.collection);
     }
 
     @method async serialize(aoRecord: ?D, options: ?object = null): Promise<?any> {
-      const vcRecord: TransformStaticInterface = aoRecord.constructor;
+      const vcRecord: $Rest<TransformStaticInterface> = aoRecord.constructor;
       return await vcRecord.serialize(aoRecord, options);
     }
 

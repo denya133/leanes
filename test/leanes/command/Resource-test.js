@@ -6,8 +6,10 @@ const httpErrors = require('http-errors');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   Resource,
-  initialize, module: moduleD, nameBy, meta, constant, mixin, property, method, attribute, action
+  initialize, partOf, nameBy, meta, constant, mixin, property, method, attribute, action
 } = LeanES.NS;
+
+const hasProp = {}.hasOwnProperty;
 
 describe('Resource', () => {
   describe('.new', () => {
@@ -28,7 +30,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -50,7 +52,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -72,7 +74,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -94,7 +96,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -107,8 +109,8 @@ describe('Resource', () => {
   });
   describe('.collection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get collection', () => {
       const TEST_FACADE = 'TEST_FACADE_001';
@@ -121,20 +123,20 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
         @property entityName = 'TestEntity';
       }
-      const facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
+      facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
       const resource = TestResource.new();
       resource.initializeNotifier(TEST_FACADE);
       const { collectionName } = resource;
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -142,7 +144,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestEntityRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestEntityRecord';
         @meta static object = {};
@@ -151,12 +153,14 @@ describe('Resource', () => {
         @method static findRecordByName() {
           return TestEntityRecord;
         }
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestEntityRecord';
         }
       }
-      const boundCollection = TestsCollection.new(collectionName, {
+      const boundCollection = TestsCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
@@ -184,7 +188,7 @@ describe('Resource', () => {
   //     }
 
   //     @initialize
-  //     @moduleD(Test)
+  //     @partOf(Test)
   //     class TestResource extends LeanES.NS.Resource {
   //       @nameBy static __filename = 'TestResource';
   //       @meta static object = {};
@@ -241,7 +245,7 @@ describe('Resource', () => {
 
   //       @initialize
   //       @mixin(LeanES.NS.QueryableResourceMixin)
-  //       @moduleD(Test)
+  //       @partOf(Test)
   //       class TestResource extends LeanES.NS.Resource {
   //         @nameBy static __filename = 'TestResource';
   //         @meta static object = {};
@@ -304,7 +308,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -331,7 +335,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -367,7 +371,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -401,7 +405,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -432,12 +436,12 @@ describe('Resource', () => {
   });
   describe('.omitBody', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should clean body from unneeded properties', () => {
       const TEST_FACADE = 'TEST_FACADE_002';
-      const facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
+      facade = LeanES.NS.Facade.getInstance(TEST_FACADE);
 
       @initialize
       class Test extends LeanES {
@@ -447,7 +451,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -455,14 +459,14 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestEntityRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestEntityRecord';
         @meta static object = {};
@@ -474,7 +478,9 @@ describe('Resource', () => {
       const resource = TestResource.new();
       resource.initializeNotifier(TEST_FACADE);
       const { collectionName } = resource;
-      const boundCollection = TestsCollection.new(collectionName, {
+      const boundCollection = TestsCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
@@ -516,7 +522,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -557,12 +563,12 @@ describe('Resource', () => {
   });
   describe('.list', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should list of resource items', async () => {
       const KEY = 'TEST_RESOURCE_001';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -572,21 +578,23 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
-        @nameBy static __filename = 'Test';
+        @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @method static findRecordByName() {
-          return TestEntityRecord;
+          return TestRecord
         }
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -595,7 +603,7 @@ describe('Resource', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -610,11 +618,7 @@ describe('Resource', () => {
           LeanES.NS.Cursor.new(this, data);
         }
         @method push(aoRecord) {
-          const isExist = (id) => {
-            (_.find(this.getData().data, { id })) != null;
-          };
-          while (isExist(key = LeanES.NS.Utils.uuid.v4())) { }
-          aoRecord.id = key;
+          aoRecord.id = LeanES.NS.Utils.uuid.v4();
           const i = aoRecord.toJSON();
           this.getData().data.push(i);
           return aoRecord;
@@ -625,7 +629,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -671,27 +675,34 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const COLLECTION_NAME = 'TestEntitiesCollection';
-      facade.registerProxy(TestsCollection.new(COLLECTION_NAME, {
+      const col = TestsCollection.new();
+      col.setName(COLLECTION_NAME);
+      col.setData({
         delegate: 'TestRecord',
+        // serializer: LeanES.NS.Serializer,
         data: []
-      }));
+      });
+      facade.registerProxy(col);
       const collection = facade.retrieveProxy(COLLECTION_NAME);
       await collection.create({
         test: 'test1'
       });
-      console.log('>>>>>>>>>>>>>>>>>>>>>');
       await collection.create({
         test: 'test2'
       });
@@ -701,8 +712,8 @@ describe('Resource', () => {
       context.query = {
         query: '{}'
       };
-      ({ items, meta } = await resource.list(context));
-      assert.deepEqual(meta, {
+      const { items, meta: metaResult } = await resource.list(context);
+      assert.deepEqual(metaResult, {
         pagination: {
           limit: 'not defined',
           offset: 'not defined'
@@ -714,12 +725,12 @@ describe('Resource', () => {
   });
   describe('.detail', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get resource single item', async () => {
       const KEY = 'TEST_RESOURCE_002';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -728,21 +739,24 @@ describe('Resource', () => {
         @constant ROOT = `${__dirname}/config`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
+
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @method static findRecordByName() {
-          TestRecord;
+          return TestRecord;
         }
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -751,7 +765,7 @@ describe('Resource', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -763,12 +777,7 @@ describe('Resource', () => {
           return await LeanES.NS.Cursor.new(this, data);
         }
         @method push(aoRecord) {
-          const isExist = (id) => {
-            (_.find(this.getData().data, { id })) != null;
-          };
-          const key = LeanES.NS.Utils.uuid.v4()
-          while (isExist(key)) { }
-          aoRecord.id = key;
+          aoRecord.id = LeanES.NS.Utils.uuid.v4();
           const i = aoRecord.toJSON();
           this.getData().data.push(i);
           return aoRecord;
@@ -780,7 +789,7 @@ describe('Resource', () => {
             result.push(data);
           }
           const cursor = LeanES.NS.Cursor.new(this, result);
-          await cursor.first();
+          return await cursor.first();
         }
         @method async includes(id) {
           return await (_.find(this.getData().data, { id })) != null;
@@ -788,7 +797,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -832,26 +841,33 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
 
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const COLLECTION_NAME = 'TestEntitiesCollection';
-      facade.registerProxy(TestsCollection.new(COLLECTION_NAME, {
+      const col = TestsCollection.new();
+      col.setName(COLLECTION_NAME);
+      col.setData({
         delegate: 'TestRecord',
         serializer: () => {
           return LeanES.NS.Serializer;
         },
         data: []
-      }));
+      });
+      facade.registerProxy(col);
       const collection = facade.retrieveProxy(COLLECTION_NAME);
 
       await collection.create({
@@ -873,8 +889,8 @@ describe('Resource', () => {
   });
   describe('.create', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create resource single item', async () => {
       const KEY = 'TEST_RESOURCE_003';
@@ -887,21 +903,24 @@ describe('Resource', () => {
         @constant ROOT = `${__dirname}/config`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
+
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @method static findRecordByName() {
-          TestRecord;
+          return TestRecord;
         }
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -910,7 +929,7 @@ describe('Resource', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -922,12 +941,7 @@ describe('Resource', () => {
           return await LeanES.NS.Cursor.new(this, data);
         }
         @method push(aoRecord) {
-          const isExist = (id) => {
-            (_.find(this.getData().data, { id })) != null;
-          };
-          const key = LeanES.NS.Utils.uuid.v4()
-          while (isExist(key)) { }
-          aoRecord.id = key;
+          aoRecord.id = LeanES.NS.Utils.uuid.v4();
           const i = aoRecord.toJSON();
           this.getData().data.push(i);
           return aoRecord;
@@ -939,17 +953,21 @@ describe('Resource', () => {
             result.push(data);
           }
           const cursor = LeanES.NS.Cursor.new(this, result);
-          await cursor.first();
+          return await cursor.first();
         }
         @method async includes(id) {
           return await (_.find(this.getData().data, { id })) != null;
         }
       }
       const COLLECTION_NAME = 'TestEntitiesCollection';
-      facade.registerProxy(TestsCollection.new(COLLECTION_NAME, {
+      const col = TestsCollection.new();
+      col.setName(COLLECTION_NAME);
+      col.setData({
         delegate: 'TestRecord',
+        // serializer: LeanES.NS.Serializer,
         data: []
-      }));
+      });
+      facade.registerProxy(col);
       const collection = facade.retrieveProxy(COLLECTION_NAME);
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -976,11 +994,11 @@ describe('Resource', () => {
   });
   describe('.update', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should update resource single item', async () => {
-      const KEY = 'TEST_RESOURCE_004';
+      const KEY = 'TEST_RESOURCE_005';
       facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
@@ -990,21 +1008,24 @@ describe('Resource', () => {
         @constant ROOT = `${__dirname}/config`;
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
+
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @method static findRecordByName() {
-          TestRecord;
+          return TestRecord;
         }
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1013,7 +1034,7 @@ describe('Resource', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestCollection';
         @meta static object = {};
@@ -1025,12 +1046,7 @@ describe('Resource', () => {
           return await LeanES.NS.Cursor.new(this, data);
         }
         @method async push(aoRecord) {
-          const isExist = (id) => {
-            return (_.find(this.getData().data, { id })) != null;
-          };
-          const key = LeanES.NS.Utils.uuid.v4()
-          while (isExist(key)) { }
-          aoRecord.id = key;
+          aoRecord.id = LeanES.NS.Utils.uuid.v4();
           const i = aoRecord.toJSON();
           this.getData().data.push(i);
           return aoRecord;
@@ -1055,18 +1071,21 @@ describe('Resource', () => {
             result.push(data);
           }
           const cursor = LeanES.NS.Cursor.new(this, result);
-          await cursor.first();
+          return await cursor.first();
         }
         @method async includes(id) {
           return await (_.find(this.getData().data, { id })) != null;
         }
       }
       const COLLECTION_NAME = 'TestEntitiesCollection';
-      facade.registerProxy(TestCollection.new(COLLECTION_NAME, {
+      const col = TestCollection.new();
+      col.setName(COLLECTION_NAME);
+      col.setData({
         delegate: 'TestRecord',
         serializer: LeanES.NS.Serializer,
         data: []
-      }));
+      });
+      facade.registerProxy(col);
       const collection = facade.retrieveProxy(COLLECTION_NAME);
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -1099,18 +1118,17 @@ describe('Resource', () => {
         }
       };
       const result = await resource.update(ctx);
-      console.log('result', result);
 
       assert.propertyVal(result, 'test', 'test8');
     });
   });
   describe('.delete', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove resource single item', async () => {
-      const KEY = 'TEST_RESOURCE_005';
+      const KEY = 'TEST_RESOURCE_006';
       facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
@@ -1119,22 +1137,24 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @method static findRecordByName() {
-          TestRecord;
+          return TestRecord;
         }
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1143,7 +1163,7 @@ describe('Resource', () => {
 
       @initialize
       @mixin(LeanES.NS.QueryableCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestsCollection';
         @meta static object = {};
@@ -1155,12 +1175,7 @@ describe('Resource', () => {
           return await LeanES.NS.Cursor.new(this, data);
         }
         @method async push(aoRecord) {
-          const isExist = (id) => {
-            return (_.find(this.getData().data, { id })) != null;
-          };
-          const key = LeanES.NS.Utils.uuid.v4()
-          while (isExist(key)) { }
-          aoRecord.id = key;
+          aoRecord.id = LeanES.NS.Utils.uuid.v4();
           const i = aoRecord.toJSON();
           this.getData().data.push(i);
           return aoRecord;
@@ -1185,7 +1200,7 @@ describe('Resource', () => {
             result.push(data);
           }
           const cursor = LeanES.NS.Cursor.new(this, result);
-          await cursor.first();
+          return await cursor.first();
         }
         @method async includes(id) {
           return await (_.find(this.getData().data, { id })) != null;
@@ -1193,7 +1208,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1238,23 +1253,30 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER';
       }
 
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const COLLECTION_NAME = 'TestEntitiesCollection';
-      facade.registerProxy(TestsCollection.new(COLLECTION_NAME, {
+      const col = TestsCollection.new();
+      col.setName(COLLECTION_NAME);
+      col.setData({
         delegate: 'TestRecord',
         data: []
-      }));
+      });
+      facade.registerProxy(col);
       const collection = facade.retrieveProxy(COLLECTION_NAME);
 
       const resource = TestResource.new();
@@ -1267,112 +1289,93 @@ describe('Resource', () => {
         test_entity: record.id
       };
       const result = await resource.delete(context);
-      console.log('/............/', result);
       assert.isUndefined(result);
     });
   });
   describe('.execute', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should call execution', async () => {
       const KEY = 'TEST_RESOURCE_008';
       facade = LeanES.NS.Facade.getInstance(KEY);
 
-      @LeanES.NS.initialize
+      @initialize
       class Test extends LeanES {
-        @LeanES.NS.nameBy static __filename = 'Test';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.constant ROOT = `${__dirname}/config`;
+        @nameBy static __filename = 'Test';
+        @meta static object = {};
+        @constant ROOT = `${__dirname}/config`;
       }
 
-      @LeanES.NS.initialize
-      @module(Test)
+      @initialize
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
-        @LeanES.NS.nameBy static __filename = 'TestRecord';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.attribute({ type: 'string' }) test;
-        @LeanES.NS.method static findRecordByName() {
-          TestRecord;
+        @nameBy static __filename = 'TestRecord';
+        @meta static object = {};
+        @attribute({ type: 'string' }) test;
+        @method static findRecordByName() {
+          return TestRecord;
         }
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.mixin(LeanES.NS.QueryableResourceMixin)
-      @LeanES.NS.module(Test)
+      @initialize
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
-        @LeanES.NS.nameBy static __filename = 'TestResource';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.property entityName = 'TestEntity';
+        @nameBy static __filename = 'TestResource';
+        @meta static object = {};
+        @property entityName = 'TestEntity';
       }
 
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
-      @LeanES.NS.initialize
-      @LeanES.NS.module(Test)
+      @initialize
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
-        @LeanES.NS.nameBy static __filename = 'TestResque';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.property jobs = {};
-        @LeanES.NS.method getDelayed() {
+        @nameBy static __filename = 'TestResque';
+        @meta static object = {};
+        @property jobs = {};
+        @method getDelayed() {
           return [];
         }
-        @LeanES.NS.method init(...args) {
-          this.super(...args);
+        constructor(...args) {
+          super(...args);
           this.jobs = {};
         }
       }
 
-      const resque = TestResque.new(LeanES.NS.RESQUE, {
+      const resque = TestResque.new();
+      resque.setName(LeanES.NS.RESQUE);
+      resque.setData({
         data: []
       });
       facade.registerProxy(resque);
 
-      @LeanES.NS.initialize
-      @LeanES.NS.mixin(LeanES.NS.QueryableCollectionMixin)
-      @LeanES.NS.module(Test)
+      @initialize
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
-        @LeanES.NS.nameBy static __filename = 'TestsCollection';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.property jobs = {};
-        @LeanES.NS.method parseQuery(aoQuery) {
-          let voQuery = _.mapKeys(aoQuery, function (value, key) {
-            return key.replace(/^@LeanES.NS.doc\./, '');
-          });
-          voQuery = _.mapValues(voQuery, function (value, key) {
-            if (value['$eq'] != null) {
-              return value['$eq'];
-            } else {
-              value;
-            }
-          });
-          return {
-            $filter: voQuery
-          };
+        @nameBy static __filename = 'TestsCollection';
+        @meta static object = {};
+        @property jobs = {};
+        @method async takeAll() {
+          return await LeanES.NS.Cursor.new(this, this.getData().data);
         }
 
-        @LeanES.NS.method async executeQuery(aoParsedQuery) {
-          const data = _.filter(this.getData().data, aoParsedQuery.$filter);
-          await LeanES.NS.Cursor.new(this, data);
-        }
-
-        @LeanES.NS.method push(aoRecord) {
-          const isExist = (id) => {
-            return (_.find(this.getData().data, { id })) != null;
-          };
-          while (isExist(key = LeanES.NS.Utils.uuid.v4())) { }
-          aoRecord.id = key;
+        @method push(aoRecord) {
+          aoRecord.id = LeanES.NS.Utils.uuid.v4();
           const i = aoRecord.toJSON();
           this.getData().data.push(i);
           return aoRecord;
         }
 
-        @LeanES.NS.method remove(id) {
+        @method remove(id) {
           _.remove(this.getData().data, { id });
         }
-        @LeanES.NS.method async take(id) {
+        @method async take(id) {
           const result = [];
           const data = _.find(this.getData().data, { id })
           if (data != null) {
@@ -1382,16 +1385,16 @@ describe('Resource', () => {
           await cursor.first();
         }
 
-        @LeanES.NS.method includes(id) {
+        @method includes(id) {
           return (_.find(this.getData().data, { id })) != null;
         }
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.module(Test)
+      @initialize
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
-        @LeanES.NS.nameBy static __filename = 'TestRouter';
-        @LeanES.NS.meta static object = {};
+        @nameBy static __filename = 'TestRouter';
+        @meta static object = {};
       }
 
       class MyResponse extends EventEmitter {
@@ -1431,25 +1434,35 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
-      @LeanES.NS.initialize
-      @LeanES.NS.module(Test)
+      @initialize
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
-        @LeanES.NS.nameBy static __filename = 'TestSwitch';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.property routerName = 'TEST_SWITCH_ROUTER';
+        @nameBy static __filename = 'TestSwitch';
+        @meta static object = {};
+        @property routerName = 'TEST_SWITCH_ROUTER';
       }
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const COLLECTION_NAME = 'TestEntitiesCollection';
-      facade.registerProxy(TestsCollection.new(COLLECTION_NAME, {
+      const col = TestsCollection.new();
+      col.setName(COLLECTION_NAME);
+      col.setData({
         delegate: 'TestRecord',
         data: []
-      }));
-      facade.registerMediator(LeanES.NS.Mediator.new(LeanES.NS.APPLICATION_MEDIATOR, {
+      });
+      facade.registerProxy(col);
+      const mediatorM = LeanES.NS.Mediator.new();
+      mediatorM.setName(LeanES.NS.APPLICATION_MEDIATOR);
+      mediatorM.setViewComponent({
         context: {}
-      }));
+      });
+      facade.registerMediator(mediatorM);
       const collection = facade.retrieveProxy(COLLECTION_NAME);
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -1480,11 +1493,11 @@ describe('Resource', () => {
         result,
         resource: voResource
       } = body;
-      const { meta, items } = result;
-      assert.deepEqual(meta, {
+      const { meta:resultMeta, items } = result;
+      assert.deepEqual(resultMeta, {
         pagination: {
-          limit: 50,
-          offset: 0
+          limit: 'not defined',
+          offset: 'not defined'
         }
       });
       assert.deepEqual(voResource, resource);
@@ -1494,8 +1507,8 @@ describe('Resource', () => {
   });
   describe('.checkApiVersion', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check API version', async () => {
       const KEY = 'TEST_RESOURCE_001';
@@ -1507,11 +1520,13 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1520,7 +1535,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1565,17 +1580,21 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
         @property routerName = 'TEST_SWITCH_ROUTER'
       }
 
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       const resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -1614,7 +1633,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1673,7 +1692,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1737,7 +1756,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1791,11 +1810,11 @@ describe('Resource', () => {
   });
   describe('.checkOwner', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check if user is resource owner', async () => {
-      const KEY = 'TEST_RESOURCE_002';
+      const KEY = 'TEST_RESOURCE_003';
       facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
@@ -1804,11 +1823,13 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1816,7 +1837,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -1861,10 +1882,12 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -1872,21 +1895,21 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestEntityRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestEntityRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @attribute({ type: 'string' }) ownerId;
         @method static findRecordByName() {
-          TestEntityRecord;
+          return TestEntityRecord;
         }
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestCollection';
         @meta static object = {};
@@ -1894,7 +1917,9 @@ describe('Resource', () => {
       let resource = TestResource.new();
       resource.initializeNotifier(KEY);
       const { collectionName } = resource;
-      const boundCollection = TestCollection.new(collectionName, {
+      const boundCollection = TestCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
@@ -1908,7 +1933,9 @@ describe('Resource', () => {
         test: 'test',
         ownerId: 'ID123'
       });
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -1957,8 +1984,8 @@ describe('Resource', () => {
   });
   describe('.checkExistence', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check if entity exists', async () => {
       const KEY = 'TEST_RESOURCE_102';
@@ -1970,11 +1997,13 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -1982,7 +2011,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2027,10 +2056,12 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2038,21 +2069,21 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestEntityRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestEntityRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @attribute({ type: 'string' }) ownerId;
         @method static findRecordByName() {
-          TestEntityRecord;
+          return TestEntityRecord;
         }
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestCollection';
         @meta static object = {};
@@ -2060,7 +2091,9 @@ describe('Resource', () => {
       let resource = TestResource.new();
       resource.initializeNotifier(KEY);
       const { collectionName } = resource;
-      const boundCollection = TestCollection.new(collectionName, {
+      const boundCollection = TestCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
         delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
@@ -2074,7 +2107,9 @@ describe('Resource', () => {
         test: 'test',
         ownerId: 'ID123'
       });
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -2107,11 +2142,11 @@ describe('Resource', () => {
   });
   describe('.adminOnly', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should check if user is administrator', async () => {
-      const KEY = 'TEST_RESOURCE_003';
+      const KEY = 'TEST_RESOURCE_004';
       facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
@@ -2120,11 +2155,13 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -2132,7 +2169,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2177,10 +2214,12 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2188,21 +2227,21 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestEntityRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestEntityRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
         @attribute({ type: 'string' }) ownerId;
         @method static findRecordByName() {
-          TestEntityRecord;
+          return TestEntityRecord;
         }
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'TestCollection';
         @meta static object = {};
@@ -2210,8 +2249,10 @@ describe('Resource', () => {
       let resource = TestResource.new();
       resource.initializeNotifier(KEY);
       const { collectionName } = resource;
-      const boundCollection = TestCollection.new(collectionName, {
-        delegate: TestEntityRecord
+      const boundCollection = TestCollection.new();
+      boundCollection.setName(collectionName);
+      boundCollection.setData({
+        delegate: 'TestEntityRecord'
       });
       facade.registerProxy(boundCollection);
       await boundCollection.create({
@@ -2219,7 +2260,9 @@ describe('Resource', () => {
         test: 'test',
         ownerId: 'ID124'
       });
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -2262,8 +2305,8 @@ describe('Resource', () => {
   });
   describe('.doAction', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should run specified action', async () => {
       const KEY = 'TEST_RESOURCE_104';
@@ -2278,11 +2321,13 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -2290,18 +2335,20 @@ describe('Resource', () => {
         @method getDelayed() {
           return [];
         }
-        @method init(...args) {
-          this.super(...args);
+        constructor(...args) {
+          super(...args);
           this.jobs = {};
         }
       }
-      const resque = TestResque.new(LeanES.NS.RESQUE, {
+      const resque = TestResque.new();
+      resque.setName(LeanES.NS.RESQUE);
+      resque.setData({
         data: []
       });
       facade.registerProxy(resque);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -2311,7 +2358,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2355,10 +2402,12 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2366,7 +2415,9 @@ describe('Resource', () => {
       }
       let resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);
@@ -2378,8 +2429,8 @@ describe('Resource', () => {
   });
   describe('.saveDelayeds', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should save delayed jobs from cache into queue', async () => {
       const MULTITON_KEY = 'TEST_RESOURCE_105|>123456765432';
@@ -2391,11 +2442,13 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResque extends LeanES.NS.Resque {
         @nameBy static __filename = 'TestResque';
         @meta static object = {};
@@ -2428,18 +2481,20 @@ describe('Resource', () => {
           this.jobs[id] = { name, scriptName, data, delayUntil };
           return id;
         }
-        @method init(...args) {
-          this.super(...args);
+        constructor(...args) {
+          super(...args);
           this.jobs = {};
         }
       }
-      const resque = TestResque.new(LeanES.NS.RESQUE, {
+      const resque = TestResque.new();
+      resque.setName(LeanES.NS.RESQUE);
+      resque.setData({
         data: []
       });
       facade.registerProxy(resque);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -2481,8 +2536,8 @@ describe('Resource', () => {
   });
   describe('.writeTransaction', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should test if transaction is needed', async () => {
       const KEY = 'TEST_RESOURCE_106';
@@ -2495,11 +2550,13 @@ describe('Resource', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestResource extends LeanES.NS.Resource {
         @nameBy static __filename = 'TestResource';
         @meta static object = {};
@@ -2509,7 +2566,7 @@ describe('Resource', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRouter extends LeanES.NS.Router {
         @nameBy static __filename = 'TestRouter';
         @meta static object = {};
@@ -2554,10 +2611,12 @@ describe('Resource', () => {
         }
       };
       const res = new MyResponse();
-      facade.registerProxy(TestRouter.new('TEST_SWITCH_ROUTER'));
+      const router = TestRouter.new();
+      router.setName('TEST_SWITCH_ROUTER');
+      facade.registerProxy(router);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestSwitch extends LeanES.NS.Switch {
         @nameBy static __filename = 'TestSwitch';
         @meta static object = {};
@@ -2565,7 +2624,9 @@ describe('Resource', () => {
       }
       let resource = TestResource.new();
       resource.initializeNotifier(KEY);
-      facade.registerMediator(TestSwitch.new('TEST_SWITCH_MEDIATOR'));
+      const switchM = TestSwitch.new();
+      switchM.setName('TEST_SWITCH_MEDIATOR');
+      facade.registerMediator(switchM);
       const switchMediator = facade.retrieveMediator('TEST_SWITCH_MEDIATOR');
       resource = TestResource.new();
       resource.initializeNotifier(KEY);

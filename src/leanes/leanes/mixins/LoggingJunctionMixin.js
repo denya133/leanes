@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { NotificationInterface } from '../../patternes';
 
 export default (Module) => {
@@ -31,7 +46,7 @@ export default (Module) => {
         return interests;
       }
 
-      @method handleNotification(note: NotificationInterface) {
+      @method async handleNotification(note: NotificationInterface): Promise<void> {
         let level;
         switch (note.getName()) {
           case SEND_TO_LOG:
@@ -56,17 +71,17 @@ export default (Module) => {
                 break;
             }
             const logMessage = LogMessage.new(level, this._multitonKey, note.getBody());
-            this._junction.sendMessage(STDLOG, logMessage);
+            await this._junction.sendMessage(STDLOG, logMessage);
             break;
           case LogFilterMessage.SET_LOG_LEVEL:
             const logLevel = note.getBody();
             const setLogLevelMessage = LogFilterMessage.new(SET_PARAMS, logLevel);
-            this._junction.sendMessage(STDLOG, setLogLevelMessage);
+            await this._junction.sendMessage(STDLOG, setLogLevelMessage);
             const changedLevelMessage = LogMessage.new(CHANGE, this._multitonKey, `Changed Log Level to: ${LogMessage.LEVELS[logLevel]}`);
-            this._junction.sendMessage(STDLOG, changedLevelMessage);
+            await this._junction.sendMessage(STDLOG, changedLevelMessage);
             break;
           default:
-            super.handleNotification(note);
+            await super.handleNotification(note);
         }
       }
     }

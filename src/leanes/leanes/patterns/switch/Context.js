@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import accepts from 'accepts';
 import createError from 'http-errors';
 
@@ -16,13 +31,13 @@ export default (Module) => {
     CoreObject,
     Request, Response,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, statuses }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Context extends CoreObject implements ContextInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -76,12 +91,19 @@ export default (Module) => {
       if (!_.isError(err)) {
         err = new Error(`non-error thrown: ${err}`);
       }
-
+      let headerSent = false;
+      if (this.headerSent || !this.writable)
+        headerSent = err.headerSent = true;
       this.switch.getViewComponent().emit('error', err, this);
+      if (headerSent) return;
+
+      if (_.isFunction(this.res.getHeaderNames))
+        this.res.getHeaderNames().forEach((name) => {this.res.removeHeader(name)});
 
       const vlHeaderNames = Object.keys(this.res.headers || {});
 
       vlHeaderNames.forEach((name) => {
+        this.res.removeHeader(name);
         delete this.res.headers[name];
       });
 
@@ -108,7 +130,7 @@ export default (Module) => {
       this.status = err.status;
       const vsMessage = JSON.stringify(message);
       this.length = Buffer.byteLength(vsMessage);
-      this.body = vsMessage;
+      this.res.end(vsMessage);
     }
 
     // Request aliases
@@ -283,6 +305,14 @@ export default (Module) => {
       return this.response.headerSent;
     }
 
+    @method redirect(...args) {
+      return this.response.redirect(...args);
+    }
+
+    @method attachment(...args) {
+      return this.response.attachment(...args);
+    }
+
     @method 'set'(...args: [string | object]): ?any {
       return this.response.set(...args);
     }
@@ -291,12 +321,24 @@ export default (Module) => {
       return this.response.append(...args);
     }
 
+    @method vary(...args) {
+      return this.response.vary(...args);
+    }
+
     @method flushHeaders(...args): void {
       return this.response.flushHeaders(...args);
     }
 
     @method remove(...args: [string]): void {
       return this.response.remove(...args);
+    }
+
+    @property set lastModified(date: Date): ?string {
+      return this.response.lastModified = date;
+    }
+
+    @property set etag(value: string): ?string {
+      return this.response.etag = value;
     }
 
     @method static async restoreObject() {

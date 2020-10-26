@@ -1,14 +1,15 @@
-const LeanES = require("../../../src/leanes/index.js").default;
-const {
-  initialize, module: moduleD, nameBy, meta
-} = LeanES.NS;
 
-module.exports = function(Module) {
+
+export default (Module) => {
+  const {
+    initialize, partOf, nameBy, meta, method
+  } = Module.NS;
 
   @initialize
-  @moduleD(Module)
-  class  ThirdMigration extends Module.NS.TestMigration {
-    @nameBy static __filename = ' ThirdMigration';
+  @partOf(Module)
+  class ThirdMigration extends Module.NS.TestMigration {
+    @nameBy static __filename = 'ThirdMigration';
     @meta static object = {};
+    @method static change() {}
   }
-};
+}

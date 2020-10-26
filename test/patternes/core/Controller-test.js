@@ -5,15 +5,16 @@ const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   APPLICATION_MEDIATOR,
-  NotificationInterface, Controller, SimpleCommand, Notification,
-  initialize, module:moduleD, nameBy, meta, method, property
+  NotificationInterface, Controller, Command, Notification,
+  initialize, partOf, nameBy, meta, method, property
 } = LeanES.NS;
+import { Container } from 'inversify';
 
 describe('Controller', () => {
   describe('.getInstance', () => {
     it('should get new or exiciting instance of Controller', () => {
       expect(() => {
-        const controller = Controller.getInstance('TEST1');
+        const controller = Controller.getInstance('CONTROLLER__TEST1', new Container());
         if(!(controller instanceof Controller)) {
           throw new Error('The `controller` is not an instance of Controller');
         }
@@ -23,9 +24,9 @@ describe('Controller', () => {
   describe('.removeController', () => {
     it('should get new instance of Controller, remove it and get new one', () => {
       expect(() => {
-        const controller = Controller.getInstance('TEST2');
-        Controller.removeController('TEST2');
-        const newController = Controller.getInstance('TEST2');
+        const controller = Controller.getInstance('CONTROLLER__TEST2', new Container());
+        Controller.removeController('CONTROLLER__TEST2');
+        const newController = Controller.getInstance('CONTROLLER__TEST2', new Container());
         if(controller === newController) {
           throw new Error('Controller instance didn`t renewed')
         }
@@ -35,9 +36,9 @@ describe('Controller', () => {
   describe('.registerCommand', () => {
     it('should register new command', () => {
       expect(() => {
-        const controller = Controller.getInstance('TEST3');
+        const controller = Controller.getInstance('CONTROLLER__TEST3', new Container());
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
           @method execute() {}
@@ -48,7 +49,7 @@ describe('Controller', () => {
     });
   });
   describe('.lazyRegisterCommand', () => {
-    const INSTANCE_NAME = 'TEST999';
+    const INSTANCE_NAME = 'CONTROLLER__TEST999';
     before(() => {
       LeanES.NS.Facade.getInstance(INSTANCE_NAME);
     })
@@ -64,24 +65,27 @@ describe('Controller', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
-      class TestCommand extends SimpleCommand {
+      @partOf(Test)
+      class TestCommand extends Command {
         @nameBy static  __filename = 'TestCommand';
         @meta static object = {};
 
         @method execute() {
-            spy();
+          spy();
         }
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Application extends Test.NS.CoreObject {
         @nameBy static  __filename = 'Application';
         @meta static object = {};
       }
       const facade = Test.NS.Facade.getInstance(INSTANCE_NAME);
-      const controller = Controller.getInstance(INSTANCE_NAME);
-      facade.registerMediator(Test.NS.Mediator.new(APPLICATION_MEDIATOR, Application.new()));
+      const controller = facade._controller;
+      const mediator = Test.NS.Mediator.new();
+      mediator.setName(APPLICATION_MEDIATOR);
+      mediator.setViewComponent(Application.new());
+      facade.registerMediator(mediator);
       let notification = new Notification('TEST_COMMAND2');
       controller.lazyRegisterCommand(notification.getName(), 'TestCommand');
       assert(controller.hasCommand(notification.getName()));
@@ -98,11 +102,11 @@ describe('Controller', () => {
   describe('.executeCommand', () => {
     it('should register new command and call it', () => {
       expect(() => {
-        const controller = Controller.getInstance('TEST4');
+        const controller = Controller.getInstance('CONTROLLER__TEST4', new Container());
         const spy = sinon.spy();
         spy.resetHistory();
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
           @method execute() {
@@ -119,9 +123,9 @@ describe('Controller', () => {
   describe('.removeCommand', () => {
     it('should remove command if present', () => {
       expect(() => {
-        const controller = Controller.getInstance('TEST5');
+        const controller = Controller.getInstance('CONTROLLER__TEST5', new Container());
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
           @method execute() {}
@@ -136,9 +140,9 @@ describe('Controller', () => {
   describe('.hasCommand', () => {
     it('should has command', () => {
       expect(() => {
-        const controller = Controller.getInstance('TEST6');
+        const controller = Controller.getInstance('CONTROLLER__TEST6', new Container());
         @initialize
-        class TestCommand extends SimpleCommand {
+        class TestCommand extends Command {
           @nameBy static  __filename = 'TestCommand';
           @meta static object = {};
         }

@@ -6,14 +6,14 @@ const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
   RecordInterface,
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant, method, property
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant, method, property
 } = LeanES.NS;
 
 describe('HttpSerializerMixin', () => {
   describe('.normalize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it("should normalize object value", async () => {
       const KEY = 'TEST_HTTP_SERIALIZER_001';
@@ -26,14 +26,14 @@ describe('HttpSerializerMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -47,7 +47,7 @@ describe('HttpSerializerMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.HttpSerializerMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpSerializer extends LeanES.NS.Serializer {
         @nameBy static  __filename = 'HttpSerializer';
         @meta static object = {};
@@ -74,8 +74,8 @@ describe('HttpSerializerMixin', () => {
   });
   describe('.serialize', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it("should serialize Record.NS value", async () => {
       const KEY = 'TEST_HTTP_SERIALIZER_002';
@@ -88,14 +88,14 @@ describe('HttpSerializerMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class TestsCollection extends LeanES.NS.Collection {
         @nameBy static  __filename = 'TestsCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
@@ -109,7 +109,7 @@ describe('HttpSerializerMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.HttpSerializerMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpSerializer extends LeanES.NS.Serializer {
         @nameBy static  __filename = 'HttpSerializer';
         @meta static object = {};

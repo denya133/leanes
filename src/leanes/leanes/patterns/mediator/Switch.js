@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { NotificationInterface } from '../../../patternes';
 import type { SwitchInterface } from '../../interfaces/SwitchInterface';
 
@@ -12,6 +27,9 @@ import type {
 
 import pathToRegexp from 'path-to-regexp';
 import EventEmitter from 'events';
+import http from 'http';
+import onFinished from 'on-finished';
+import Stream from 'stream';
 
 const indexOf = [].indexOf;
 
@@ -35,7 +53,6 @@ const matches = (ctx: ContextInterface, methodName: string): boolean => {
   return false;
 };
 
-
 export default (Module) => {
   const {
     MIGRATIONS,
@@ -48,13 +65,13 @@ export default (Module) => {
     Context, ResourceRenderer,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect, genRandomAlphaNumbers, statuses }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Switch extends Mediator implements SwitchInterface {
     @nameBy static  __filename = __filename;
@@ -81,6 +98,7 @@ export default (Module) => {
     }
 
     @property routerName: string = APPLICATION_ROUTER;
+    @property defaultRenderer: string = 'json';
 
     @method static compose(
       middlewares: Array<Function>,
@@ -119,7 +137,7 @@ export default (Module) => {
       }
       Reflect.defineProperty(this.prototype, `${originMethodName}`, method(
         this.prototype, `${originMethodName}`, {
-          value: (path: string, routeFunc: Function) => {
+          value: function (path: string, routeFunc: Function) {
             assert(!!routeFunc, 'handler is required');
             const { facade } = this;
             const { ERROR, DEBUG, LEVELS, SEND_TO_LOG } = Module.NS.Pipes.NS.LogMessage;
@@ -201,15 +219,29 @@ export default (Module) => {
       }
       this.setViewComponent(voEmitter);
       this.defineRoutes();
+      this.serverListen();
     }
 
-    @method onRemove() {
+    @method async onRemove() {
       const voEmitter = this.getViewComponent();
       const eventNames = typeof voEmitter.eventNames === "function"
         ? voEmitter.eventNames()
         : Object.keys(this._eventNames || {});
       eventNames.forEach((eventName) => {
         voEmitter.removeAllListeners(eventName);
+      });
+      await new Promise((resolve) => this._httpServer.close(resolve))
+      console.log("after Switch::onRemove", this._multitonKey);
+    }
+
+    @method serverListen() {
+      const {ERROR, DEBUG, LEVELS, SEND_TO_LOG} = Module.NS.Pipes.NS.LogMessage;
+      const port = typeof process !== "undefined" && process != null && process.env != null ? process.env.PORT || this.configs.port : this.configs.port;
+      const { facade } = this;
+      this._httpServer = http.createServer(this.callback());
+      this._httpServer.listen(port, function() {
+        // console.log "listening on port #{port}"
+        facade.sendNotification(SEND_TO_LOG, `listening on port ${port}`, LEVELS[DEBUG]);
       });
     }
 
@@ -234,14 +266,15 @@ export default (Module) => {
     }
 
     @method callback(): (req: object, res: object) => Promise<void> {
-      if (this._composed == null) {
+      // if (this._composed == null) {
         this._composed = this.constructor.compose(
           this.middlewares, this.handlers
         );
-      }
+      // }
       const fn = this._composed;
-      if (this._handler == null) {
-        this._handler = async (req, res) => {
+      // if (this._handler == null) {
+        // this._handler = async (req, res) => {
+        return async (req, res) => {
           const t1 = Date.now();
           const { ERROR, DEBUG, LEVELS, SEND_TO_LOG } = Module.NS.Pipes.NS.LogMessage;
           this.sendNotification(SEND_TO_LOG, '>>>>>> START REQUEST HANDLING', LEVELS[DEBUG]);
@@ -253,14 +286,18 @@ export default (Module) => {
           } catch (error) {
             voContext.onerror(error);
           }
+
+          onFinished(res, (err) => {
+            voContext.onerror(err);
+          });
           this.sendNotification(SEND_TO_LOG, '>>>>>> END REQUEST HANDLING', LEVELS[DEBUG]);
           const reqLength = voContext.request.length;
           const resLength = voContext.response.length;
           const time = Date.now() - t1;
           await this.handleStatistics(reqLength, resLength, time, voContext);
         };
-      }
-      return this._handler;
+      // }
+      // return this._handler;
     }
 
     @method async handleStatistics(reqLength: number, resLength: number, time: number, aoContext: ContextInterface) {
@@ -287,12 +324,14 @@ export default (Module) => {
       const code = ctx.status;
       if (statuses.empty[code]) {
         ctx.body = null;
+        ctx.res.end();
         return;
       }
       if ('HEAD' === ctx.method) {
         if (!ctx.headersSent && _.isObjectLike(body)) {
           ctx.length = Buffer.byteLength(JSON.stringify(body));
         }
+        ctx.res.end();
         return;
       }
       if (body == null) {
@@ -301,15 +340,22 @@ export default (Module) => {
           ctx.type = 'text';
           ctx.length = Buffer.byteLength(body);
         }
+        ctx.res.end(body);
         return;
       }
       if (_.isBuffer(body) || _.isString(body)) {
+        ctx.res.end(body);
+        return;
+      }
+      if (body instanceof Stream) {
+        body.pipe(ctx.res);
         return;
       }
       body = JSON.stringify(body != null ? body : null);
       if (!ctx.res.headersSent) {
         ctx.length = Buffer.byteLength(body);
       }
+      ctx.res.end(body);
     }
 
     @method async perform<
@@ -374,18 +420,24 @@ export default (Module) => {
       if (opts.action === 'create') {
         ctx.status = 201;
       }
-      if ((ctx.headers && ctx.headers.accept || undefined) == null) {
-        return;
+      let voRenderer;
+      if ((ctx.headers && ctx.headers.accept || undefined) != null) {
+        const vsFormat = ctx.accepts(this.responseFormats);
+        switch (vsFormat) {
+          case false:
+            break;
+          default:
+            if (this[`${vsFormat}RendererName`] != null) {
+              voRenderer = this.rendererFor(vsFormat);
+            }
+        }
+      } else {
+        if (this[`${this.defaultRenderer}RendererName`] != null) {
+          voRenderer = this.rendererFor(this.defaultRenderer);
+        }
       }
-      const vsFormat = ctx.accepts(this.responseFormats);
-      switch (vsFormat) {
-        case false:
-          break;
-        default:
-          if (this[`${vsFormat}RendererName`] != null) {
-            const voRenderer = this.rendererFor(vsFormat);
-            ctx.body = await voRenderer.render(ctx, aoData, resource, opts);
-          }
+      if (voRenderer != null) {
+        ctx.body = await voRenderer.render(ctx, aoData, resource, opts);
       }
     }
 
@@ -412,7 +464,7 @@ export default (Module) => {
       const resourceName = inflect.camelize(inflect.underscore(`${opts.resource.replace(/[\/]/g, '_')}Resource`));
       if (typeof this[methodName] === "function") {
         this[methodName](path, async (context) => {
-          await Promise.new((resolve, reject) => {
+          await new Promise((resolve, reject) => {
             try {
               const reverse = genRandomAlphaNumbers(32);
               this.getViewComponent().once(reverse, async ({ error, result, resource }) => {

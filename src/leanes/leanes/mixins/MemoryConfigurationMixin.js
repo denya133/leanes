@@ -1,5 +1,19 @@
-const hasProp = {}.hasOwnProperty;
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
+const hasProp = {}.hasOwnProperty;
 
 export default (Module) => {
   const {
@@ -18,11 +32,10 @@ export default (Module) => {
       }
 
       @method defineConfigProperties() {
-        const manifestPath = `${this.ROOT}/../manifest.json`;
+        const manifestPath = `${this.ROOT}/manifest.json`;
         // const manifest = require(manifestPath);
         // const manifestPath = './manifest.json';
         const manifest = this.ApplicationModule.require(manifestPath);
-        console.log('>?>?>??? MemoryConfigurationMixin manifest', manifestPath, manifest);
         this._name = manifest.name;
         this._description = manifest.description;
         this._license = manifest.license;

@@ -5,14 +5,14 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant, method, property
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant, method, property
 } = LeanES.NS;
 
 describe('IterableMixin', () => {
   describe('.new', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create iterable instance', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_001';
@@ -24,21 +24,21 @@ describe('IterableMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -49,7 +49,10 @@ describe('IterableMixin', () => {
       }
       const array = [{}, {}, {}];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const cursor = await iterable.takeAll();
@@ -58,8 +61,8 @@ describe('IterableMixin', () => {
   });
   describe('.forEach', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should call lambda in each record in iterable', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_002';
@@ -70,20 +73,20 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -111,7 +114,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const spyLambda = sinon.spy(async () => {});
@@ -126,8 +132,8 @@ describe('IterableMixin', () => {
   });
   describe('.map', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should map records using lambda', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_003';
@@ -138,20 +144,20 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -179,7 +185,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const records = await iterable.map(async (record) => {
@@ -195,8 +204,8 @@ describe('IterableMixin', () => {
   });
   describe('.filter', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should filter records using lambda', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_004';
@@ -207,20 +216,20 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -248,7 +257,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const records = await iterable.filter(async (record) => {
@@ -261,8 +273,8 @@ describe('IterableMixin', () => {
   });
   describe('.reduce', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should reduce records using lambda', async () => {
       const KEY = 'TEST_ITERABLE_MIXIN_005';
@@ -273,20 +285,20 @@ describe('IterableMixin', () => {
         @meta static object = {};
       }
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static  __filename = 'TestRecord';
         @meta static object = {};
         @attribute({type: 'string'}) test;
-        @method init() {
-            this.super(...arguments);
-            this.type = 'TestRecord';
+        constructor() {
+          super(...arguments);
+          this.type = 'TestRecord';
         }
       }
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.IterableMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class Iterable extends LeanES.NS.Collection {
         @nameBy static  __filename = 'Iterable';
         @meta static object = {};
@@ -314,7 +326,10 @@ describe('IterableMixin', () => {
         }
       ];
       const collectionName = 'TestsCollection';
-      const collection = Iterable.new(collectionName, array);
+      // const collection = Iterable.new(collectionName, array);
+      const collection = Iterable.new();
+      collection.setName(collectionName);
+      collection.setData(array);
       facade.registerProxy(collection);
       const iterable = facade.retrieveProxy(collectionName);
       const records = await iterable.reduce(async (accumulator, item) => {

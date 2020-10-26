@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant
+  initialize, partOf, nameBy, meta, constant
 } = LeanES.NS;
 
 describe('Configuration', () => {
@@ -15,13 +15,15 @@ describe('Configuration', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Configuration extends LeanES.NS.Configuration {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
       }
 
-      const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configuration = Test.NS.Configuration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
       const environment = configuration.environment;
       assert.isTrue(environment != null, 'configuration.environment isnt exist');
       assert.isTrue(environment === LeanES.NS.DEVELOPMENT || environment === LeanES.NS.PRODUCTION);
@@ -37,12 +39,14 @@ describe('Configuration', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Configuration extends LeanES.NS.Configuration {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
       }
-      const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configuration = Test.NS.Configuration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
       configuration.defineConfigProperties();
       assert.propertyVal(configuration, 'test1', 'default');
       assert.propertyVal(configuration, 'test2', 42);
@@ -60,12 +64,14 @@ describe('Configuration', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class Configuration extends LeanES.NS.Configuration {
         @nameBy static  __filename = 'Configuration';
         @meta static object = {};
       }
-      const configuration = Test.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configuration = Test.NS.Configuration.new();
+      configuration.setName(LeanES.NS.CONFIGURATION);
+      configuration.setData(Test.NS.ROOT);
       configuration.onRegister();
       assert.propertyVal(configuration, 'test1', 'default');
       assert.propertyVal(configuration, 'test2', 42);

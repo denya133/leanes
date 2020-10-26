@@ -1,6 +1,20 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { ContextInterface } from '../interfaces/ContextInterface';
 import type { ResourceListResultT } from '../types/ResourceListResultT';
-
 
 export default (Module) => {
   const {
@@ -70,6 +84,7 @@ export default (Module) => {
 
       @action async list(): Promise<ResourceListResultT> {
         const receivedQuery = _.pick(this.listQuery, ['$filter', '$sort', '$limit', '$offset']);
+        // console.log('dfdfdf', receivedQuery);
         const voQuery = Module.NS.Query.new().forIn({
           '@doc': this.collection.collectionFullName()
         }).return('@doc');
@@ -111,7 +126,8 @@ export default (Module) => {
           })();
           voQuery.offset(receivedQuery.$offset);
         }
-        const limit = Number(voQuery.$limit);
+        const limit = voQuery.$limit != null ? Number(voQuery.$limit) : MAX_LIMIT;
+        // console.log('sdfsdfsd voQuery', voQuery, limit);
         if (this.needsLimitation) {
           voQuery.limit((() => {
             switch (false) {
@@ -126,7 +142,8 @@ export default (Module) => {
         } else if (!isNaN(limit)) {
           voQuery.limit(limit);
         }
-        const skip = Number(voQuery.$offset);
+        // console.log('sdfsdfsd voQuery 22', voQuery);
+        const skip = voQuery.$offset != null ? Number(voQuery.$offset) : 0;
         voQuery.offset((() => {
           switch (false) {
             case !(skip < 0):
@@ -136,12 +153,13 @@ export default (Module) => {
               return skip;
           }
         })());
+        // console.log('sdfsdfsd voQuery 33', voQuery, voQuery.$offset);
         const vlItems = await (await this.collection.query(voQuery)).toArray();
         return {
           meta: {
             pagination: {
-              limit: voQuery.$limit || 'not defined',
-              offset: voQuery.$offset || 'not defined'
+              limit: voQuery.$limit != null ? voQuery.$limit : 'not defined',
+              offset: voQuery.$offset != null ? voQuery.$offset : 'not defined'
             }
           },
           items: vlItems

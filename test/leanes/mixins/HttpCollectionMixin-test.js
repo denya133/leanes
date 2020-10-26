@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, mixin, constant, method, attribute, property
+  initialize, partOf, nameBy, meta, mixin, constant, method, attribute, property
 } = LeanES.NS;
 
 const commonServerInitializer = require('../../../test/common/server');
@@ -23,26 +23,28 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       assert.instanceOf(collection, HttpCollection, 'The `collection` is not an instance of HttpCollection')
@@ -53,13 +55,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      if (typeof facade !== "undefined" && facade !== null) {
-        if (typeof facade.remove === "function") {
-          facade.remove();
-        }
-      }
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should make simple request', async () => {
       const collectionName = 'TestsCollection';
@@ -73,107 +71,52 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection, 'The `collection` is not an instance of HttpCollection');
-      const data = await collection.sendRequest({
-        method: 'GET',
-        url: 'http://localhost:8000',
-        options: {
-          json: true,
+      const data = await collection.sendRequest(
+        'GET',
+        'http://localhost:8000',
+        {
+          responseType: 'json',
           headers: {}
         }
-      });
+      );
       assert.equal(data.status, 200);
       assert.equal((data.body != null ? data.body.message : ''), 'OK')
     });
   });
-  describe('.sendRequest', () => {
-    let facade = null;
-    before(() => {
-      return server.listen(8000);
-    });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
-    });
-    it('should make simple request', async () => {
-      const collectionName = 'TestsCollection';
-      const KEY = 'FACADE_TEST_HTTP_COLLECTION_000';
-      facade = LeanES.NS.Facade.getInstance(KEY);
-
-      @initialize
-      class Test extends LeanES {
-        @nameBy static __filename = 'Test';
-        @meta static object = {};
-      }
-
-      @initialize
-      @moduleD(Test)
-      class TestRecord extends LeanES.NS.Record {
-        @nameBy static __filename = 'TestRecord';
-        @meta static object = {};
-        @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
-        }
-      }
-
-      @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
-      @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
-      class HttpCollection extends LeanES.NS.Collection {
-        @nameBy static __filename = 'HttpCollection';
-        @meta static object = {};
-      }
-      facade.registerProxy(HttpCollection.new(collectionName, {
-        delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
-      assert.instanceOf(collection, HttpCollection);
-      const data = await collection.sendRequest({
-        method: 'GET',
-        url: 'http://localhost:8000',
-        options: {
-          json: true,
-          headers: {}
-        }
-      });
-      assert.equal(data.status, 200);
-      assert.equal(data.body != null ? data.body.message : void 0, 'OK');
-    });
-  });
-  describe('.requestToHash, .makeRequest', () => {
+  describe('.requestHashToArguments, .makeRequest', () => {
     let facade = null;
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should make simple request', async () => {
       const collectionName = 'TestsCollection';
@@ -187,39 +130,41 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
-      const hash = collection.requestToHash({
+      const hash = collection.requestHashToArguments({
         method: 'GET',
         url: 'http://localhost:8000',
         headers: {},
         data: null
       });
-      assert.equal(hash.method, 'GET', 'Method is incorrect');
-      assert.equal(hash.url, 'http://localhost:8000', 'URL is incorrect');
-      assert.equal((ref = hash.options) != null ? ref.json : void 0, true, 'JSON option is not set');
+      assert.equal(hash[0], 'GET', 'Method is incorrect');
+      assert.equal(hash[1], 'http://localhost:8000', 'URL is incorrect');
+      assert.equal(hash[2] != null ? hash[2].responseType : void 0, 'json', 'JSON option is not set');
       const data = await collection.makeRequest({
         method: 'GET',
         url: 'http://localhost:8000',
@@ -227,42 +172,44 @@ describe('HttpCollectionMixin', () => {
         data: null
       });
       assert.equal(data.status, 200, 'Request received not OK status');
-      assert.equal(data != null ? (ref1 = data.body) != null ? ref1.message : void 0 : void 0, 'OK', 'Incorrect body');
+      assert.equal(data != null ? data.body != null ? data.body.message : void 0 : void 0, 'OK', 'Incorrect body');
     });
   });
   describe('.methodForRequest', () => {
     it('should get method name from request params', () => {
       const collectionName = 'TestsCollection';
 
-      @LeanES.NS.initialize
+      @initialize
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.module(Test)
+      @initialize
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
-        @LeanES.NS.nameBy static __filename = 'TestRecord';
-        @LeanES.NS.meta static object = {};
-        @LeanES.NS.attribute({ type: 'string' }) test;
-        @LeanES.NS.method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        @nameBy static __filename = 'TestRecord';
+        @meta static object = {};
+        @attribute({ type: 'string' }) test;
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
-      @LeanES.NS.initialize
-      @LeanES.NS.mixin(LeanES.NS.QueryableCollectionMixin)
-      @LeanES.NS.mixin(LeanES.NS.HttpCollectionMixin)
-      @LeanES.NS.module(Test)
+      @initialize
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @mixin(LeanES.NS.HttpCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
-        @LeanES.NS.nameBy static __filename = 'HttpCollection';
-        @LeanES.NS.meta static object = {};
+        @nameBy static __filename = 'HttpCollection';
+        @meta static object = {};
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      });
+      });      
       let method = collection.methodForRequest({
         requestType: 'query',
         recordName: 'TestRecord'
@@ -326,28 +273,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlPrefix('Test', 'Tests');
@@ -369,28 +318,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.makeURL('Test', null, null, true);
@@ -418,28 +369,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.pathForType('Type');
@@ -461,28 +414,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForQuery('Test', {});
@@ -502,28 +457,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForPatchBy('Test', {});
@@ -543,28 +500,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRemoveBy('Test', {});
@@ -584,28 +543,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTakeAll('Test', {});
@@ -625,28 +586,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTakeBy('Test', {});
@@ -666,28 +629,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForTake('Test', '123');
@@ -707,28 +672,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForPush('Test', {});
@@ -748,28 +715,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRemove('Test', '123');
@@ -789,28 +758,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForOverride('Test', {}, '123');
@@ -830,21 +801,21 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -854,7 +825,9 @@ describe('HttpCollectionMixin', () => {
           return '';
         }
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.buildURL('Test', {}, null, 'query', {
@@ -904,21 +877,21 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -928,7 +901,9 @@ describe('HttpCollectionMixin', () => {
           return `TEST_${recordName != null ? recordName : 'RECORD_NAME'}_${id != null ? id : 'RECORD_ID'}_${JSON.stringify(snapshot) != null ? JSON.stringify(snapshot) : 'SNAPSHOT'}_${JSON.stringify(query) != null ? JSON.stringify(query) : 'QUERY'}`;
         }
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let url = collection.urlForRequest({
@@ -1027,30 +1002,34 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       collection.initializeNotifier(KEY);
@@ -1060,7 +1039,7 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
       headers = collection.headersForRequest({
         requestType: 'patchBy',
@@ -1068,7 +1047,7 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
       headers = collection.headersForRequest({
         requestType: 'removeBy',
@@ -1076,7 +1055,7 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
       headers = collection.headersForRequest({
         requestType: 'takeAll',
@@ -1084,8 +1063,8 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`,
-        'NonLimitation': configs.apiKey
+        // 'Authorization': `Bearer ${configs.apiKey}`,
+        // 'NonLimitation': configs.apiKey
       });
       headers = collection.headersForRequest({
         requestType: 'takeBy',
@@ -1093,8 +1072,8 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`,
-        'NonLimitation': configs.apiKey
+        // 'Authorization': `Bearer ${configs.apiKey}`,
+        // 'NonLimitation': configs.apiKey
       });
       headers = collection.headersForRequest({
         requestType: 'take',
@@ -1102,7 +1081,7 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
       headers = collection.headersForRequest({
         requestType: 'push',
@@ -1110,7 +1089,7 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
       headers = collection.headersForRequest({
         requestType: 'remove',
@@ -1118,7 +1097,7 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
       headers = collection.headersForRequest({
         requestType: 'override',
@@ -1126,7 +1105,7 @@ describe('HttpCollectionMixin', () => {
       });
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
       collection.headers = {
         'Allow': 'GET'
@@ -1134,7 +1113,7 @@ describe('HttpCollectionMixin', () => {
       headers = collection.headersForRequest();
       assert.deepEqual(headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`,
+        // 'Authorization': `Bearer ${configs.apiKey}`,
         'Allow': 'GET'
       });
     });
@@ -1150,28 +1129,30 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       let data = collection.dataForRequest({
@@ -1233,10 +1214,14 @@ describe('HttpCollectionMixin', () => {
     });
   });
   describe('.requestFor', () => {
+    let facade = null;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
+    });
     it('should request params', () => {
       const collectionName = 'TestsCollection';
       const KEY = 'TEST_HTTP_COLLECTION_654321';
-      const facade = LeanES.NS.Facade.getInstance(KEY);
+      facade = LeanES.NS.Facade.getInstance(KEY);
 
       @initialize
       class Test extends LeanES {
@@ -1246,30 +1231,34 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      const collection = HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(collection);
@@ -1289,8 +1278,8 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests?query=%7B%22name%22%3A%22test%22%7D',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`,
-          'NonLimitation': configs.apiKey
+          // 'Authorization': `Bearer ${configs.apiKey}`,
+          // 'NonLimitation': configs.apiKey
         },
         data: void 0
       });
@@ -1304,7 +1293,7 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`
+          // 'Authorization': `Bearer ${configs.apiKey}`
         },
         data: sampleData
       });
@@ -1319,7 +1308,7 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests/123',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`
+          // 'Authorization': `Bearer ${configs.apiKey}`
         },
         data: sampleData
       });
@@ -1336,7 +1325,7 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests/123',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`
+          // 'Authorization': `Bearer ${configs.apiKey}`
         },
         data: void 0
       });
@@ -1351,7 +1340,7 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests/123',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`
+          // 'Authorization': `Bearer ${configs.apiKey}`
         },
         data: void 0
       });
@@ -1368,7 +1357,7 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests/query',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`
+          // 'Authorization': `Bearer ${configs.apiKey}`
         },
         data: {
           query: sampleData
@@ -1387,7 +1376,7 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests/query',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`
+          // 'Authorization': `Bearer ${configs.apiKey}`
         },
         data: {
           query: sampleData
@@ -1406,7 +1395,7 @@ describe('HttpCollectionMixin', () => {
         url: 'http://localhost:8000/v1/tests/query',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${configs.apiKey}`
+          // 'Authorization': `Bearer ${configs.apiKey}`
         },
         data: {
           query: sampleData
@@ -1419,9 +1408,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should put data into collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1436,33 +1425,37 @@ describe('HttpCollectionMixin', () => {
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
         @property host = 'http://localhost:8000';
         @property namespace = 'v1';
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       const spyPush = sinon.spy(collection, 'push');
       const spySendRequest = sinon.spy(collection, 'sendRequest');
       assert.instanceOf(collection, HttpCollection);
@@ -1470,13 +1463,13 @@ describe('HttpCollectionMixin', () => {
         test: 'test1'
       });
       assert.equal(record, spyPush.args[0][0]);
-      assert.equal(spySendRequest.args[0][0].method, 'POST');
-      assert.equal(spySendRequest.args[0][0].url, 'http://localhost:8000/v1/tests');
-      assert.equal(spySendRequest.args[0][0].options.body.test, 'test1');
-      assert.equal(spySendRequest.args[0][0].options.body.type, 'Test::TestRecord');
-      assert.deepEqual(spySendRequest.args[0][0].options.headers, {
+      assert.equal(spySendRequest.args[0][0], 'POST');
+      assert.equal(spySendRequest.args[0][1], 'http://localhost:8000/v1/tests');
+      assert.equal(spySendRequest.args[0][2].body.test, 'test1');
+      assert.equal(spySendRequest.args[0][2].body.type, 'Test::TestRecord');
+      assert.deepEqual(spySendRequest.args[0][2].headers, {
         'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+        // 'Authorization': `Bearer ${configs.apiKey}`
       });
     });
   });
@@ -1485,9 +1478,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should remove data from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1500,25 +1493,27 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1528,21 +1523,22 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       const spySendRequest = sinon.spy(collection, 'sendRequest');
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         test: 'test1'
       });
       const resp = await record.destroy();
-      assert.equal(spySendRequest.args[2][0].method, 'DELETE');
-      assert.include(spySendRequest.args[2][0].url, 'http://localhost:8000/v1/tests/');
-      assert.deepEqual((ref = spySendRequest.args[2][0].options) != null ? ref.headers : void 0, {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${configs.apiKey}`
+      assert.equal(spySendRequest.lastCall.args[0], 'DELETE');
+      assert.equal(spySendRequest.lastCall.args[1], `http://localhost:8000/v1/tests/${record.id}`);
+      assert.deepEqual(spySendRequest.lastCall.args[2].headers, {
+        'Accept': 'application/json'
       });
     });
   });
@@ -1551,9 +1547,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get data item by id from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1566,25 +1562,27 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1594,10 +1592,12 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         test: 'test1'
@@ -1616,9 +1616,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get data items by id list from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1631,25 +1631,27 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1659,10 +1661,12 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const originalRecords = [];
       for (let i = 1; i <= 5; i++) {
@@ -1679,7 +1683,7 @@ describe('HttpCollectionMixin', () => {
       let k;
       for (let i = k = 1; (1 <= count ? k <= count : k >= count); i = 1 <= count ? ++k : --k) {
         const ref1 = Test.NS.TestRecord.attributes;
-        for (l = 0; l < ref1.length; l++) {
+        for (let l = 0; l < ref1.length; l++) {
           const attribute = ref1[l];
           assert.equal(originalRecords[i][attribute], recordDuplicates[i][attribute]);
         }
@@ -1691,9 +1695,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get data items by id list from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1706,25 +1710,27 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1734,10 +1740,12 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const count = 5;
       let j;
@@ -1767,9 +1775,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should get all data items from collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1782,25 +1790,27 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1810,10 +1820,12 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const originalRecords = [];
       for (let i = 1; i <= 5; i++) {
@@ -1842,9 +1854,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should replace data item by id in collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1857,25 +1869,27 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
-        @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
+        @attribute({ type: 'string' }) name;
+        constructor() {
+          super(...arguments);
           this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1885,10 +1899,12 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         name: 'test1'
@@ -1907,9 +1923,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should test if item is included in the collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1922,25 +1938,27 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
-      @moduleD(Test)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -1950,10 +1968,12 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const record = await collection.create({
         test: 'test1'
@@ -1968,9 +1988,9 @@ describe('HttpCollectionMixin', () => {
     before(() => {
       server.listen(8000);
     });
-    after(() => {
-      server.close();
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      await new Promise((resolve) => server.close(resolve))
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should count items in the collection', async () => {
       const collectionName = 'TestsCollection';
@@ -1983,26 +2003,28 @@ describe('HttpCollectionMixin', () => {
         @meta static object = {};
         @constant ROOT = `${__dirname}/config/root`;
       }
-      const configs = LeanES.NS.Configuration.new(LeanES.NS.CONFIGURATION, Test.NS.ROOT);
+      const configs = LeanES.NS.Configuration.new();
+      configs.setName(LeanES.NS.CONFIGURATION);
+      configs.setData(Test.NS.ROOT);
       facade.registerProxy(configs);
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
         @attribute({ type: 'string' }) test;
-        @method init() {
-          this.super(...arguments);
-          this.type = 'Test::Record';
+        constructor() {
+          super(...arguments);
+          this.type = 'Test::TestRecord';
         }
       }
 
       @initialize
-      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.HttpCollectionMixin)
+      @mixin(LeanES.NS.QueryableCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class HttpCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'HttpCollection';
         @meta static object = {};
@@ -2012,10 +2034,12 @@ describe('HttpCollectionMixin', () => {
           return LeanES.NS.Utils.uuid.v4();
         }
       }
-      facade.registerProxy(HttpCollection.new(collectionName, {
+      const collection = HttpCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'TestRecord'
-      }));
-      const collection = facade.retrieveProxy(collectionName);
+      });
+      facade.registerProxy(collection);
       assert.instanceOf(collection, HttpCollection);
       const count = 11;
       let j;

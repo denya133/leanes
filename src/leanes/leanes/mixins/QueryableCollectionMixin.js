@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { QueryInterface } from '../interfaces/QueryInterface';
 import type { CursorInterface } from '../interfaces/CursorInterface';
 import type { CollectionInterface } from '../interfaces/CollectionInterface';
@@ -76,7 +91,7 @@ export default (Module) => {
       @method async query(
         aoQuery: object | QueryInterface
       ): Promise<QueryInterface> {
-        console.log('>?>?? QueryableCollectionMixin::query enter');
+        // console.log('>?>?? QueryableCollectionMixin::query enter');
         const voQuery = (() => {
           if (_.isPlainObject(aoQuery)) {
             aoQuery = _.pick(aoQuery, Object.keys(aoQuery).filter((key) =>
@@ -87,7 +102,7 @@ export default (Module) => {
             return aoQuery;
           }
         })();
-        console.log('>?>?? QueryableCollectionMixin::query voQuery', voQuery);
+        // console.log('>?>?? QueryableCollectionMixin::query voQuery', voQuery);
         return await this.executeQuery(await this.parseQuery(voQuery));
       }
 

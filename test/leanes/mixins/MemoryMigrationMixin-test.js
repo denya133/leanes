@@ -6,14 +6,16 @@ const _ = require('lodash');
 const httpErrors = require('http-errors');
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module: moduleD, nameBy, meta, constant, mixin, method, attribute
+  initialize, partOf, nameBy, meta, constant, mixin, method, attribute
 } = LeanES.NS;
+
+const hasProp = {}.hasOwnProperty;
 
 describe('MemoryMigrationMixin', () => {
   describe('.new', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should create migration instance', () => {
       expect(() => {
@@ -25,13 +27,13 @@ describe('MemoryMigrationMixin', () => {
         class Test extends LeanES {
           @nameBy static __filename = 'Test';
           @meta static object = {};
-          @constant ROOT = `${__dirname}/../config/root/migrations`;
+          @constant ROOT = `${__dirname}/config/root/migrations`;
         }
 
         @initialize
         @mixin(LeanES.NS.MemoryCollectionMixin)
         @mixin(LeanES.NS.GenerateUuidIdMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class MemoryCollection extends LeanES.NS.Collection {
           @nameBy static __filename = 'MemoryCollection';
           @meta static object = {};
@@ -39,12 +41,15 @@ describe('MemoryMigrationMixin', () => {
 
         @initialize
         @mixin(LeanES.NS.MemoryMigrationMixin)
-        @moduleD(Test)
+        @partOf(Test)
         class BaseMigration extends LeanES.NS.Migration {
           @nameBy static __filename = 'BaseMigration';
           @meta static object = {};
+          @method static change() {}
         }
-        const collection = MemoryCollection.new(collectionName, {
+        const collection = MemoryCollection.new();
+        collection.setName(collectionName);
+        collection.setData({
           delegate: 'BaseMigration'
         });
         facade.registerProxy(collection);
@@ -56,8 +61,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.createCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step for create collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -68,13 +73,13 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
@@ -82,15 +87,17 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.createCollection('TestsCollection');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -104,8 +111,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.createEdgeCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step for create edge collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -116,13 +123,13 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
@@ -130,17 +137,19 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.createEdgeCollection('TestsCollection1', 'TestsCollection2', {
             prop: 'prop'
           });
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -156,8 +165,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.addField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to add field in record at collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -168,20 +177,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -190,22 +199,26 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.addField('tests', 'test', {
             type: 'number',
             default: 'Test1'
           });
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('TestsCollection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('TestsCollection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);
@@ -222,7 +235,7 @@ describe('MemoryMigrationMixin', () => {
         type: 'Test::BaseMigration'
       }, collection);
       await migration.up();
-      const ref = testsCollection[_collection];
+      const ref = testsCollection._collection;
       for (const id in ref) {
         if (!hasProp.call(ref, id)) continue;
         const doc = ref[id];
@@ -232,8 +245,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.addIndex', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to add index in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -244,13 +257,13 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
@@ -258,17 +271,19 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.addIndex('collectionName', ['attr1', 'attr2'], {
             type: "hash"
           });
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -284,8 +299,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.addTimestamps', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to add timesteps in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -296,20 +311,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -318,19 +333,23 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.addTimestamps('tests');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('TestsCollection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('TestsCollection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);
@@ -347,7 +366,7 @@ describe('MemoryMigrationMixin', () => {
         type: 'Test::BaseMigration'
       }, collection);
       await migration.up();
-      const ref = testsCollection[_collection];
+      const ref = testsCollection._collection;
       for (const id in ref) {
         if (!hasProp.call(ref, id)) continue;
         const doc = ref[id];
@@ -359,8 +378,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.changeCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to change collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -371,13 +390,13 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
@@ -385,17 +404,19 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.changeCollection('collectionName', {
             prop: 'prop'
           });
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -411,8 +432,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.changeField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to change field in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -423,20 +444,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -445,21 +466,25 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.changeField('tests', 'test', {
-            type: LeanES.NS.Migration.NS.SUPPORTED_TYPES.number
+            type: LeanES.NS.SUPPORTED_TYPES.number
           });
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('TestsCollection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('TestsCollection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);
@@ -476,7 +501,7 @@ describe('MemoryMigrationMixin', () => {
         type: 'Test::BaseMigration'
       }, collection);
       await migration.up();
-      const ref = testsCollection[_collection];
+      const ref = testsCollection._collection;
       for (const id in ref) {
         if (!hasProp.call(ref, id)) continue;
         const doc = ref[id];
@@ -486,8 +511,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.renameField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to rename field in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -498,20 +523,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -520,19 +545,23 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.renameField('tests', 'test', 'test1');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('TestsCollection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('TestsCollection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);
@@ -549,7 +578,7 @@ describe('MemoryMigrationMixin', () => {
         type: 'Test::BaseMigration'
       }, collection);
       await migration.up();
-      const ref = testsCollection[_collection];
+      const ref = testsCollection._collection;
       for (const id in ref) {
         if (!hasProp.call(ref, id)) continue;
         const doc = ref[id];
@@ -561,8 +590,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.renameIndex', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to rename index in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -573,13 +602,13 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
@@ -587,15 +616,17 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.renameIndex('collectionName', 'oldIndexname', 'newIndexName');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -609,8 +640,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.renameCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to rename collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -621,13 +652,13 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
@@ -635,15 +666,17 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.renameCollection('oldCollectionName', 'newCollectionName');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -657,8 +690,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.dropCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to drop collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -669,20 +702,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -691,19 +724,23 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.dropCollection('tests');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('TestsCollection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('TestsCollection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);
@@ -720,13 +757,13 @@ describe('MemoryMigrationMixin', () => {
         type: 'Test::BaseMigration'
       }, collection);
       await migration.up();
-      assert.deepEqual(testsCollection[_collection], {});
+      assert.deepEqual(testsCollection._collection, {});
     });
   });
   describe('.dropEdgeCollection', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to drop edge collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -737,20 +774,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -759,19 +796,23 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.dropEdgeCollection('Tests1', 'Tests2');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('Tests1Tests2Collection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('Tests1Tests2Collection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);
@@ -788,13 +829,13 @@ describe('MemoryMigrationMixin', () => {
         type: 'Test::BaseMigration'
       }, collection);
       await migration.up();
-      assert.deepEqual(testsCollection[_collection], {});
+      assert.deepEqual(testsCollection._collection, {});
     });
   });
   describe('.removeField', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to remove field in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -805,20 +846,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -827,19 +868,23 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.removeField('tests', 'test');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('TestsCollection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('TestsCollection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);
@@ -856,7 +901,7 @@ describe('MemoryMigrationMixin', () => {
         type: 'Test::BaseMigration'
       }, collection);
       await migration.up();
-      const ref = testsCollection[_collection];
+      const ref = testsCollection._collection;
       for (const id in ref) {
         if (!hasProp.call(ref, id)) continue;
         const doc = ref[id];
@@ -866,8 +911,8 @@ describe('MemoryMigrationMixin', () => {
   });
   describe('.removeIndex', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to remove index in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -878,13 +923,13 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
@@ -892,11 +937,11 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.removeIndex('collectionName', ['attr1', 'attr2'], {
             type: "hash",
             unique: true,
@@ -904,7 +949,9 @@ describe('MemoryMigrationMixin', () => {
           });
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
@@ -922,8 +969,8 @@ describe('MemoryMigrationMixin', () => {
   });
   return describe('.removeTimestamps', () => {
     let facade = null;
-    afterEach(() => {
-      facade != null ? typeof facade.remove === "function" ? facade.remove() : void 0 : void 0;
+    afterEach(async () => {
+      facade != null ? typeof facade.remove === "function" ? await facade.remove() : void 0 : void 0;
     });
     it('should apply step to remove timestamps in collection', async () => {
       const collectionName = 'MigrationsCollection';
@@ -934,20 +981,20 @@ describe('MemoryMigrationMixin', () => {
       class Test extends LeanES {
         @nameBy static __filename = 'Test';
         @meta static object = {};
-        @constant ROOT = `${__dirname}/../config/root/migrations`;
+        @constant ROOT = `${__dirname}/config/root/migrations`;
       }
 
       @initialize
       @mixin(LeanES.NS.MemoryCollectionMixin)
       @mixin(LeanES.NS.GenerateUuidIdMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class MemoryCollection extends LeanES.NS.Collection {
         @nameBy static __filename = 'MemoryCollection';
         @meta static object = {};
       }
 
       @initialize
-      @moduleD(Test)
+      @partOf(Test)
       class TestRecord extends LeanES.NS.Record {
         @nameBy static __filename = 'TestRecord';
         @meta static object = {};
@@ -956,19 +1003,23 @@ describe('MemoryMigrationMixin', () => {
 
       @initialize
       @mixin(LeanES.NS.MemoryMigrationMixin)
-      @moduleD(Test)
+      @partOf(Test)
       class BaseMigration extends LeanES.NS.Migration {
         @nameBy static __filename = 'BaseMigration';
         @meta static object = {};
-        @method change() {
+        @method static change() {
           this.removeTimestamps('tests');
         }
       }
-      const collection = MemoryCollection.new(collectionName, {
+      const collection = MemoryCollection.new();
+      collection.setName(collectionName);
+      collection.setData({
         delegate: 'BaseMigration'
       });
       facade.registerProxy(collection);
-      const testsCollection = MemoryCollection.new('TestsCollection', {
+      const testsCollection = MemoryCollection.new();
+      testsCollection.setName('TestsCollection');
+      testsCollection.setData({
         delegate: 'TestRecord'
       });
       facade.registerProxy(testsCollection);

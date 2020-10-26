@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { RouterInterface } from '../../interfaces/RouterInterface';
 import type { RouteOptionsT } from '../../types/RouteOptionsT';
 import type { RouterRouteT } from '../../types/RouterRouteT';
@@ -5,19 +20,18 @@ import type { RouterRouteT } from '../../types/RouterRouteT';
 const slice = [].slice;
 const hasProp = {}.hasOwnProperty;
 
-
 export default (Module) => {
   const {
     Proxy, Proto,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Router extends Proxy implements RouterInterface {
     @nameBy static __filename = __filename;
@@ -270,7 +284,7 @@ export default (Module) => {
       const vsParam = (asParam != null) && asParam !== '' ? asParam : ':' + inflect.singularize(inflect.underscore((asResource != null ? asResource : `${vsParentName}${vsName}`).replace(/[\/]/g, '_').replace(/[_]$/g, '')));
 
       // @._routers ?= []
-      @module(vcModule)
+      @partOf(vcModule)
       class ResourceRouter extends Router {
         // class ResourceRouter extends this.constructor {
         @nameBy static __filename = 'ResourceRouter';
@@ -278,7 +292,7 @@ export default (Module) => {
 
         @property _path: string = vsFullPath;
 
-        @property _name: String = `${vsParentName}${vsName}`;
+        @property _name: string = `${vsParentName}${vsName}`;
 
         @property _module: string = vsModule;
 
@@ -366,7 +380,7 @@ export default (Module) => {
       const vsTag = (asTag != null) && asTag !== '' ? `/${asTag}` : '';
 
       // @._routers ?= []
-      @module(vcModule)
+      @partOf(vcModule)
       class NamespaceRouter extends Router {
         // class NamespaceRouter extends this.constructor {
         @nameBy static __filename = 'NamespaceRouter';

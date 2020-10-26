@@ -3,7 +3,7 @@ const expect = chai.expect;
 const assert = chai.assert;
 const LeanES = require("../../../src/leanes/index.js").default;
 const {
-  initialize, module:moduleD, nameBy, resolver, meta, attribute, mixin, constant
+  initialize, partOf, nameBy, resolver, meta, attribute, mixin, constant
 } = LeanES.NS;
 
 describe('MemoryConfigurationMixin', () => {
@@ -18,13 +18,15 @@ describe('MemoryConfigurationMixin', () => {
 
        @initialize
        @mixin(LeanES.NS.MemoryConfigurationMixin)
-       @moduleD(Test)
+       @partOf(Test)
        class TestConfiguration extends LeanES.NS.Proxy {
          @nameBy static  __filename = 'TestConfiguration';
          @meta static object = {};
        }
 
-      const config = TestConfiguration.new('TEST_CONFIG', {
+      const config = TestConfiguration.new();
+      config.setName('TEST_CONFIG');
+      config.setData({
         test1: {
           description: 'test1 description',
           type: 'string',
