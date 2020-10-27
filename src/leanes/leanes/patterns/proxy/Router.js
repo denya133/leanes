@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { RouterInterface } from '../../interfaces/RouterInterface';
 import type { RouteOptionsT } from '../../types/RouteOptionsT';
 import type { RouterRouteT } from '../../types/RouterRouteT';
@@ -5,22 +20,21 @@ import type { RouterRouteT } from '../../types/RouterRouteT';
 const slice = [].slice;
 const hasProp = {}.hasOwnProperty;
 
-
 export default (Module) => {
   const {
     Proxy, Proto,
     ConfigurableMixin,
     assert,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { _, inflect }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Router extends Proxy implements RouterInterface {
-    @nameBy static  __filename = __filename;
+    @nameBy static __filename = __filename;
     @meta static object = {};
 
     // ipsPath = PointerT(Router.protected({
@@ -60,16 +74,16 @@ export default (Module) => {
     @property _param: ?string = null;
 
     // iplRouters = PointerT(Router.protected({
-    @property _routers: ?Array<Router> = null;
+    @property _routers: ?Array<Router> = [];
 
     // iplPathes = PointerT(Router.protected({
-    @property _pathes: ?Array<RouterRouteT> = null;
+    @property _pathes: ?Array<RouterRouteT> = [];
 
     // iplResources = PointerT(Router.protected({
-    @property _resources: ?Array<Router> = null;
+    @property _resources: ?Array<Router> = [];
 
     // iplRoutes = PointerT(Router.protected({
-    @property _routes: ?Array<RouterRouteT> = null;
+    // @property _routes: ?Array<RouterRouteT> = null;
 
     @property get path(): ?string {
       return this._path;
@@ -97,13 +111,13 @@ export default (Module) => {
 
     @method defaultEntityName(): string {
       const tmpName = this._name.replace(/\/$/, '').split('/');
-      const [ vsEntityName ] = slice.call(tmpName, -1);
+      const [vsEntityName] = slice.call(tmpName, -1);
       return inflect.singularize(vsEntityName);
     }
 
     @method map() { return; }
 
-    @method root(opts: {to: ?string, at: ?('collection' | 'member'), resource: ?string, action: ?string}) { return; }
+    @method root(opts: { to: ?string, at: ?('collection' | 'member'), resource: ?string, action: ?string }) { return; }
 
     @method defineMethod(
       container: Array<RouterRouteT>,
@@ -168,7 +182,7 @@ export default (Module) => {
       if (template == null) {
         template = resource + action;
       }
-      container.push({method, path, resource, action, tag, template, keyName, entityName, recordName});
+      container.push({ method, path, resource, action, tag, template, keyName, entityName, recordName });
     }
 
     @method 'get'(asPath: string, aoOpts: ?RouteOptionsT) {
@@ -231,6 +245,9 @@ export default (Module) => {
       if (aoOpts == null) {
         aoOpts = {};
       }
+      if (lambda == null) {
+        lambda = () => { };
+      }
       let {
         path,
         module: vsModule,
@@ -250,7 +267,7 @@ export default (Module) => {
         switch (at || this._at) {
           case 'member':
             const splittedPath = this._path.split('/');
-            const [ previously, empty ] = slice.call(splittedPath, -2);
+            const [previously, empty] = slice.call(splittedPath, -2);
             return `${this._path}:${inflect.singularize(inflect.underscore(previously))}/${vsPath}`;
           case 'collection':
             return `${this._path}${vsPath}`;
@@ -266,41 +283,63 @@ export default (Module) => {
       const vsTag = (asTag != null) && asTag !== '' ? `/${asTag}` : '';
       const vsParam = (asParam != null) && asParam !== '' ? asParam : ':' + inflect.singularize(inflect.underscore((asResource != null ? asResource : `${vsParentName}${vsName}`).replace(/[\/]/g, '_').replace(/[_]$/g, '')));
 
-        // @._routers ?= []
-      @module(vcModule)
+      // @._routers ?= []
+      @partOf(vcModule)
       class ResourceRouter extends Router {
-        @nameBy static  __filename = 'ResourceRouter';
+        // class ResourceRouter extends this.constructor {
+        @nameBy static __filename = 'ResourceRouter';
         @meta static object = {};
 
-        _path: string = vsFullPath;
+        @property _path: string = vsFullPath;
 
-        _name: String = `${vsParentName}${vsName}`;
+        @property _name: string = `${vsParentName}${vsName}`;
 
-        _module: string = vsModule;
+        @property _module: string = vsModule;
 
-        _only: ?(string | string[]) = only;
+        @property _only: ?(string | string[]) = only;
 
-        _via: ?(string | string[]) = via;
+        @property _via: ?(string | string[]) = via;
 
-        _except: ?(string | string[]) = except;
+        @property _except: ?(string | string[]) = except;
 
-        _above: ?object = above;
+        @property _above: ?object = above;
 
-        _tag: string = `${vsParentTag}${vsTag}`;
+        @property _tag: string = `${vsParentTag}${vsTag}`;
 
-        _templates: string = `${vsParentTemplates}${vsTemplates}`.replace(/[\/][\/]/g, '/');
+        @property _templates: string = `${vsParentTemplates}${vsTemplates}`.replace(/[\/][\/]/g, '/');
 
-        _param: string = vsParam;
+        @property _param: string = vsParam;
 
-        _resource: ?string = asResource;
+        @property _resource: ?string = asResource;
 
-        map() {
+        @method map() {
           return lambda.call(this);
         }
       }
       ResourceRouter.constructor = Proto;
       ResourceRouter.onInitialize();
       this._routers.push(ResourceRouter);
+      // const vlRoutes = this._routes;
+      // (this._pathes || []).forEach((item) => {
+      //   vlRoutes.push(item);
+      // });
+      // const vlResources = this._resources;
+      // if (this._routers != null) {
+      // this._routers.forEach((InheritedRouter) => {
+      const inheritedRouter = ResourceRouter.new();
+      inheritedRouter.defineValues();
+      this._resources.push(inheritedRouter);
+      // (inheritedRouter.routes || []).forEach((item) => {
+      //   vlRoutes.push(item);
+      // });
+      // (inheritedRouter.resources || []).forEach((item) => {
+      //   vlResources.push(item);
+      // });
+      // });
+      // }
+      // this._routes = vlRoutes;
+      // this._resources = vlResources;
+
     }
 
     @method namespace(
@@ -340,33 +379,55 @@ export default (Module) => {
       const vsTemplates = (alTemplates != null) && alTemplates !== '' ? alTemplates : (alTemplates != null) && alTemplates === '' ? '' : (vsModule != null) && vsModule !== '' ? vsModule : (vsModule != null) && vsModule === '' ? '' : asName;
       const vsTag = (asTag != null) && asTag !== '' ? `/${asTag}` : '';
 
-        // @._routers ?= []
-      @module(vcModule)
+      // @._routers ?= []
+      @partOf(vcModule)
       class NamespaceRouter extends Router {
-        @nameBy static  __filename = 'NamespaceRouter';
+        // class NamespaceRouter extends this.constructor {
+        @nameBy static __filename = 'NamespaceRouter';
         @meta static object = {};
 
-        _path: string = `${vsParentPath}${vsPath}`;
+        @property _path: string = `${vsParentPath}${vsPath}`;
 
-        _name: string = `${vsParentName}${vsName}`;
+        @property _name: string = `${vsParentName}${vsName}`;
 
-        _except: ?(string | string[]) = ['all'];
+        @property _except: ?(string | string[]) = ['all'];
 
-        _tag: string = `${vsParentTag}${vsTag}`;
+        @property _tag: string = `${vsParentTag}${vsTag}`;
 
-        _templates: string = `${vsParentTemplates}${vsTemplates}`.replace(/[\/][\/]/g, '/');
+        @property _templates: string = `${vsParentTemplates}${vsTemplates}`.replace(/[\/][\/]/g, '/');
 
-        _at: ?('collection' | 'member') = at;
+        @property _at: ?('collection' | 'member') = at;
 
-        _above: ?object = above;
+        @property _above: ?object = above;
 
-        map() {
+        @method map() {
           return lambda.call(this);
         }
       }
       NamespaceRouter.constructor = Proto;
       NamespaceRouter.onInitialize();
       this._routers.push(NamespaceRouter);
+      // const vlRoutes = this._routes;
+      // (this._pathes || []).forEach((item) => {
+      //   vlRoutes.push(item);
+      // });
+      // const vlResources = this._resources;
+      // if (this._routers != null) {
+      // this._routers.forEach((InheritedRouter) => {
+      const inheritedRouter = NamespaceRouter.new();
+      inheritedRouter.defineValues();
+      this._resources.push(inheritedRouter);
+      // (inheritedRouter.routes || []).forEach((item) => {
+      //   vlRoutes.push(item);
+      // });
+      // (inheritedRouter.resources || []).forEach((item) => {
+      //   vlResources.push(item);
+      // });
+      // });
+      // }
+      // this._routes = vlRoutes;
+      // this._resources = vlResources;
+
     }
 
     @method member(lambda: Function) {
@@ -388,7 +449,18 @@ export default (Module) => {
     }
 
     @property get resources(): Array<Router> {
-      return this._resources;
+      const vlResources = [];
+      (this._resources || []).forEach((item) => {
+        vlResources.push(item);
+      });
+      if (this._resources != null) {
+        this._resources.forEach((inheritedRouter) => {
+          (inheritedRouter._resources || []).forEach((item) => {
+            vlResources.push(item);
+          });
+        });
+      }
+      return vlResources;
     }
 
     @property get routes(): Array<{
@@ -402,30 +474,38 @@ export default (Module) => {
       entityName: string,
       recordName: ?string
     }> {
-      if ((this._routes != null) && this._routes.length > 0) {
-        return this._routes;
-      } else {
-        const vlRoutes = [];
-        (this._pathes || []).forEach((item) => {
-          vlRoutes.push(item);
-        });
-        const vlResources = [];
-        if (this._routers != null) {
-          this._routers.forEach((InheritedRouter) => {
-            const inheritedRouter = InheritedRouter.new();
-            vlResources.push(inheritedRouter);
-            (inheritedRouter.routes || []).forEach((item) => {
-              vlRoutes.push(item);
-            });
-            (inheritedRouter.resources || []).forEach((item) => {
-              vlResources.push(item);
-            });
+      // if ((this._routes != null) && this._routes.length > 0) {
+      //   return this._routes;
+      // } else {
+      const vlRoutes = [];
+      (this._pathes || []).forEach((item) => {
+        vlRoutes.push(item);
+      });
+      //   const vlResources = [];
+      //   if (this._routers != null) {
+      //     this._routers.forEach((InheritedRouter) => {
+      //       const inheritedRouter = InheritedRouter.new();
+      //       vlResources.push(inheritedRouter);
+      //       (inheritedRouter.routes || []).forEach((item) => {
+      //         vlRoutes.push(item);
+      //       });
+      //       (inheritedRouter.resources || []).forEach((item) => {
+      //         vlResources.push(item);
+      //       });
+      //     });
+      //   }
+      //   this._routes = vlRoutes;
+      //   this._resources = vlResources;
+      // }
+      // return this._routes;
+      if (this._resources != null) {
+        this._resources.forEach((inheritedRouter) => {
+          (inheritedRouter.routes || []).forEach((item) => {
+            vlRoutes.push(item);
           });
-        }
-        this._routes = vlRoutes;
-        this._resources = vlResources;
+        });
       }
-      return this._routes;
+      return vlRoutes;
     }
 
     // @method init(...args) {
@@ -435,10 +515,19 @@ export default (Module) => {
     // }
 
     constructor() {
-      super(... arguments);
-      this._routers = [];
-      this._pathes = [];
-      // this.init(...args);
+      super(...arguments);
+    }
+
+    @method onRegister() {
+      super.onRegister(...arguments);
+      this.defineValues();
+    }
+
+    @method onRemove() {
+      super.onRemove(...arguments);
+    }
+
+    @method defineValues() {
       this.map();
       if (_.isString(this._only)) {
         this._only = [this._only];
@@ -468,10 +557,10 @@ export default (Module) => {
         const vsKeyName = this._param && this._param.replace(/^\:/, '') || undefined;
         const vsEntityName = this._above && this._above.entityName || this.defaultEntityName();
         const vsAboveName = this._above && this._above.recordName || undefined;
-        if (_.isNil(vsAboveName) && !_.isNull(vsAboveName)) {
-          const vsDefaultName = this.defaultEntityName();
-        }
-        const vsRecordName = vsAboveName || vsDefaultName;
+        // if (_.isNil(vsAboveName) && !_.isNull(vsAboveName)) {
+        //   const vsDefaultName = this.defaultEntityName();
+        // }
+        const vsRecordName = _.isNil(vsAboveName) && !_.isNull(vsAboveName) ? this.defaultEntityName() : vsAboveName;
         if (this._only != null) {
           this._only.forEach((asAction) => {
             const vsPath = voPaths[asAction] || this._param;

@@ -1,16 +1,31 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { PipeFittingInterface } from './interfaces/PipeFittingInterface';
 
 export default (Module) => {
   const {
     CoreObject, PipeListener,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
   const splice = [].splice;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Junction extends CoreObject {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -77,6 +92,7 @@ export default (Module) => {
               return [];
           }
         }).call(this);
+        let j;
         for (let i = j = 0, len = pipesList.length; j < len; i = ++j) {
           const pipe = pipesList[i];
           if (pipe === name) {
@@ -102,11 +118,11 @@ export default (Module) => {
       return vbSuccess;
     }
 
-    @method sendMessage(outputPipeName: string, message: PipeMessageInterface): boolean {
+    @method async sendMessage(outputPipeName: string, message: PipeMessageInterface): Promise<boolean> {
       let vbSuccess = false;
       if (this.hasOutputPipe(outputPipeName)) {
         const pipe = this._pipesMap[outputPipeName];
-        vbSuccess = pipe.write(message);
+        vbSuccess = await pipe.write(message);
       }
       return vbSuccess;
     }

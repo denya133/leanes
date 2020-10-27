@@ -1,6 +1,21 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { FacadeInterface } from '../interfaces/FacadeInterface';
 import type { NotifierInterface } from '../interfaces/NotifierInterface';
-import { injectable, inject} from "inversify";
+import { injectable, decorate } from "inversify";
 
 export default (Module) => {
 
@@ -8,17 +23,19 @@ export default (Module) => {
     APPLICATION_MEDIATOR,
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
-  @injectable
+  decorate(injectable(), CoreObject);
+
   @initialize
-  @module(Module)
+  @injectable()
+  @partOf(Module)
   class Notifier extends CoreObject implements NotifierInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
-    @property static MULTITON_MSG: 'multitonKey for this Notifier not yet initialized!'
+    @property static MULTITON_MSG: string = 'multitonKey for this Notifier not yet initialized!';
 
     // ipsMultitonKey = PointerT(Notifier.protected({
     @property _multitonKey: ?string = null;
@@ -34,7 +51,7 @@ export default (Module) => {
           const voFacade = Module.NS.Facade.getInstance(this._multitonKey);
           if (typeof voFacade.retrieveMediator == 'function') {
             const voMediator = voFacade.retrieveMediator(APPLICATION_MEDIATOR);
-            if (typeof voMediator.getViewComponent == 'function') {
+            if (voMediator != null && typeof voMediator.getViewComponent == 'function') {
               const app = voMediator.getViewComponent();
               if (app && app.Module) {
                 return app.Module;
@@ -60,14 +77,14 @@ export default (Module) => {
       return Module.NS.Facade.getInstance(this._multitonKey);
     }
 
-    @method sendNotification(asName: string, aoBody: ?any, asType: ?string): void {
+    @method async sendNotification(asName: string, aoBody: ?any, asType: ?string): Promise<void> {
       if (this.facade != null) {
-        this.facade.sendNotification(asName, aoBody, asType);
+        await this.facade.sendNotification(asName, aoBody, asType);
       }
     }
 
-    @method send() {
-      return this.sendNotification(... arguments);
+    @method async send(): Promise<void> {
+      await this.sendNotification(... arguments);
     }
 
     @method async run(scriptName: string, data?: any): Promise<?any> {
@@ -76,6 +93,10 @@ export default (Module) => {
 
     @method initializeNotifier(asKey: string): void {
       this._multitonKey = asKey;
+    }
+
+    constructor() {
+      super();
     }
   }
 }

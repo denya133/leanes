@@ -1,16 +1,31 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { ProxyInterface } from '../interfaces/ProxyInterface';
-import { injectable, inject} from "inversify";
+import { injectable } from "inversify";
 
 export default (Module) => {
   const {
-    APPLICATION_MEDIATOR,
+    // APPLICATION_MEDIATOR,
     Notifier,
-    initialize, module, meta, property, method, nameBy
+    initialize, partOf, meta, property, method, nameBy
   } = Module.NS;
 
-  @injectable
   @initialize
-  @module(Module)
+  @injectable()
+  @partOf(Module)
   class Proxy extends Notifier implements ProxyInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -29,6 +44,10 @@ export default (Module) => {
       return this._proxyName;
     }
 
+    @method setName(asName: string): void {
+      this._proxyName = asName;
+    }
+
     @method setData(ahData: ?any) {
       this._data = ahData;
       return ahData;
@@ -40,9 +59,9 @@ export default (Module) => {
 
     @method onRegister(): void  { return; }
 
-    @method onRemove(): void { return; }
+    @method async onRemove(): Promise<void> { return; }
 
-    @method static async restoreObject(acModule: Class<Module>, replica: object): ProxyInterface {
+    @method static async restoreObject(acModule: Class<Module>, replica: object): Promise<ProxyInterface> {
       if ((replica != null ? replica.class : void 0) === this.name && (replica != null ? replica.type : void 0) === 'instance') {
         const facade = acModule.NS.ApplicationFacade.getInstance(replica.multitonKey);
         const proxy = facade.retrieveProxy(replica.proxyName);
@@ -52,19 +71,16 @@ export default (Module) => {
       }
     }
 
-    @method static async replicateObject(instance: ProxyInterface): object {
+    @method static async replicateObject(instance: ProxyInterface): Promise<object> {
       const replica = await super.replicateObject(instance);
       replica.multitonKey = instance._multitonKey;
       replica.proxyName = instance.getProxyName();
       return replica;
     }
 
-    constructor(asProxyName: ?string, ahData: ?any) {
+    constructor() {
       super(... arguments);
-      this._proxyName = asProxyName || this.constructor.name;
-      if (ahData != null) {
-        this.setData(ahData);
-      }
+      this._proxyName = this.constructor.name;
     }
   }
 }

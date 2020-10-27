@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { CollectionInterface } from '../interfaces/CollectionInterface';
 import type { RecordInterface } from '../interfaces/RecordInterface';
 import type { CursorInterface } from '../interfaces/CursorInterface';
@@ -6,7 +21,6 @@ import type { HttpRequestHashT } from '../types/HttpRequestHashT';
 import type {
   RequestArgumentsT, LegacyResponseInterface, AxiosResponse
 } from '../types/RequestT';
-
 
 export default (Module) => {
   const {
@@ -64,11 +78,12 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voRecord;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
-          const voRecord = await this.normalize(body[this.recordSingleName()]);
+          voRecord = await this.normalize(body[this.recordSingleName()]);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -94,11 +109,12 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voRecord;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
-          const voRecord = await this.normalize(body[this.recordSingleName()]);
+          voRecord = await this.normalize(body[this.recordSingleName()]);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -118,12 +134,13 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voCursor;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
           const vhRecordsData = body[this.recordMultipleName()];
-          const voCursor = Cursor.new(this, vhRecordsData);
+          voCursor = Cursor.new(this, vhRecordsData);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -140,11 +157,12 @@ export default (Module) => {
         const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
+        let voRecord;
         if ((body != null) && body !== '') {
           if (_.isString(body)) {
             body = JSON.parse(body);
           }
-          const voRecord = await this.normalize(body[this.recordSingleName()]);
+          voRecord = await this.normalize(body[this.recordSingleName()]);
         } else {
           assert.fail("Record payload has not existed in response body.");
         }
@@ -157,7 +175,7 @@ export default (Module) => {
       }
 
       @method async length(): Promise<number> {
-        cursor = await this.takeAll();
+        const cursor = await this.takeAll();
         return await cursor.count();
       }
 

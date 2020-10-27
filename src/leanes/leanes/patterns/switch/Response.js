@@ -1,11 +1,33 @@
-const hasProp = {}.hasOwnProperty;
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
 
 import { is as typeis } from 'type-is';
 import { contentType as getType } from 'mime-types';
+import { extname } from 'path';
+import onFinished from 'on-finished';
+import destroy from 'destroy';
+import vary from 'vary'
+import ensureErrorHandler from 'error-inject';
+import contentDisposition from 'content-disposition';
+import escapeHtml from 'escape-html';
 
 import type { SwitchInterface } from '../../interfaces/SwitchInterface';
 import type { ContextInterface } from '../../interfaces/ContextInterface';
 import type { ResponseInterface } from '../../interfaces/ResponseInterface';
+
+const hasProp = {}.hasOwnProperty;
 
 /*
 Идеи взяты из https://github.com/koajs/koa/blob/master/lib/response.js
@@ -15,13 +37,13 @@ export default (Module) => {
   const {
     CoreObject,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, statuses, assign }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Response extends CoreObject implements ResponseInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
@@ -32,7 +54,7 @@ export default (Module) => {
       return this._res;
     }
 
-    @property get switch(): SwitchInterface {
+    @property get 'switch'(): SwitchInterface {
       return this.ctx.switch;
     }
 
@@ -47,7 +69,12 @@ export default (Module) => {
     }
 
     @property get headers(): object {
-      return this.res._headers || this.res.headers;
+      // return this.res._headers || this.res.headers;
+      if (_.isFunction(this.res.getHeaders)) {
+        return this.res.getHeaders()
+      } else {
+        return this.res._headers || {}
+      }
     }
 
     @property get status(): ?number {
@@ -83,6 +110,7 @@ export default (Module) => {
     @property set body(val: any): any {
       const original = this._body;
       this._body = val;
+      if (this.res.headersSent) return;
       if (val == null) {
         if (!statuses.empty[this.status]) {
           this.status = 204;
@@ -109,6 +137,15 @@ export default (Module) => {
         }
         this.length = val.length;
         return;
+      }
+      if (_.isFunction(val.pipe)) {
+        onFinished(this.res, destroy.bind(null, val))
+        ensureErrorHandler(val, (err) => this.ctx.onerror(err))
+        if (original != null && original !== val)
+          this.remove('Content-Length');
+        if (setType)
+          this.type = 'bin';
+        return
       }
       this.remove('Content-Length');
       this.type = 'json';
@@ -141,14 +178,62 @@ export default (Module) => {
     }
 
     @property get headerSent(): ?boolean {
-      return false;
+      return this.res.headersSent;
+    }
+
+    @method vary(field: string) {
+      vary(this.res, field)
+    }
+
+    @method redirect(url: string, alt: ?string) {
+      if ('back' === url)
+        url = this.ctx.get('Referrer') || alt || '/';
+      this.set('Location', url);
+      if (!statuses.redirect[this.status])
+        this.status = 302;
+      if (this.ctx.accepts('html')) {
+        url = escapeHtml(url);
+        this.type = 'text/html; charset=utf-8';
+        this.body = `Redirecting to <a href=\"${url}\">#{url}</a>.`;
+        return
+      }
+      this.type = 'text/plain; charset=utf-8'
+      this.body = `Redirecting to ${url}`
+    }
+
+    @method attachment(filename: string) {
+      if (filename != null) {
+        this.type = extname(filename)
+      }
+      this.set('Content-Disposition', contentDisposition(filename));
+    }
+
+    @property get lastModified(): ?Date {
+      const date = this.get('last-modified')
+      if (date != null)
+        return new Date(date);
+    }
+
+    @property set lastModified(val: string | Date): Date {
+      if (_.isString(val))
+        val = new Date(val);
+      this.set('Last-Modified', val.toUTCString());
+      return val
+    }
+
+    @property get etag(): ?string {
+      return this.get('ETag')
+    }
+
+    @property set etag(val): ?string {
+      if (!/^(W\/)?"/.test(val)) val = `\"${val}\"`;
+      this.set('ETag', val);
+      return val;
     }
 
     @property get type(): ?string {
       const type = this.get('Content-Type');
-      if (!type) {
-        return '';
-      }
+      if (!type) return '';
       return type.split(';')[0];
     }
 
@@ -177,14 +262,16 @@ export default (Module) => {
       return this.headers[field.toLowerCase()] || '';
     }
 
-    @method 'set'(...args: [string | object]): ?any {
+    @method 'set'(...args: [string | object, ?any]) {
       const [ field, val ] = args;
+      let fieldValue;
       if (2 === args.length) {
         if (_.isArray(val)) {
-          this.headers[field] = val.map(String);
+          fieldValue = val.map(String);
         } else {
-          this.headers[field] = String(val);
+          fieldValue = String(val);
         }
+        this.res.setHeader(field, fieldValue)
       } else {
         for (const key in field) {
           if (!hasProp.call(field, key)) continue;
@@ -195,7 +282,7 @@ export default (Module) => {
 
     @method append(field: string, val: string | string[]): void {
       const prev = this.get(field);
-      if (prev) {
+      if (prev != null && prev !== '') {
         if (_.isArray(prev)) {
           val = prev.concat(val);
         } else {
@@ -206,17 +293,33 @@ export default (Module) => {
     }
 
     @method remove(field: string): void {
-      delete this.res[field]
+      this.res.removeHeader(field)
     }
 
     @property get writable(): boolean {
-      return true;
+      if (this.res.finished) return false;
+      const socket = this.res.socket;
+      if (socket == null) return true;
+      return socket.writable;
     }
 
     @method flushHeaders(): void {
-      const headerNames = Object.keys(this.res._headers) || Object.keys(this.res.headers);
-      for (const header of headerNames) {
-        this.remove(header);
+      // const headerNames = Object.keys(this.res._headers) || Object.keys(this.res.headers);
+      // for (const header of headerNames) {
+      //   this.remove(header);
+      // }
+      if (_.isFunction(this.res.flushHeaders)) {
+        this.res.flushHeaders();
+      } else {
+        let headerNames = {};
+        if (_.isFunction(this.res.getHeaderNames)) {
+          headerNames = this.res.getHeaderNames();
+        } else {
+          headerNames = Object.keys(this.res._headers);
+        }
+        for (const header of headerNames) {
+          this.res.removeHeader(header);
+        }
       }
     }
 
@@ -231,7 +334,7 @@ export default (Module) => {
     constructor(context: ContextInterface, res: object) {
       super(... arguments);
       this.ctx = context;
-      this._res = assign({headers: {}}, res);
+      this._res = res;
     }
   }
 }

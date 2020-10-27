@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { CollectionInterface } from '../interfaces/CollectionInterface';
 import type { RecordInterface } from '../interfaces/RecordInterface';
 import type { QueryInterface } from '../interfaces/QueryInterface';
@@ -7,7 +22,6 @@ import type { HttpRequestHashT } from '../types/HttpRequestHashT';
 import type {
   RequestArgumentsT, LegacyResponseInterface, AxiosResponse
 } from '../types/RequestT';
-
 
 export default (Module) => {
   const {
@@ -226,7 +240,7 @@ export default (Module) => {
           $limit: 1,
           $return: '@doc'
         };
-        console.log('>?>?> HttpCollectionMixin::includes before query');
+        // console.log('>?>?> HttpCollectionMixin::includes before query');
         return await (await this.query(voQuery)).hasNext();
       }
 
@@ -464,7 +478,7 @@ export default (Module) => {
       @method async parseQuery(
         aoQuery: object | QueryInterface
       ): Promise<object | string | QueryInterface> {
-        console.log('>>?? HttpCollectionMixin::parseQuery enter');
+        // console.log('>>?? HttpCollectionMixin::parseQuery enter');
         const params = {};
         switch (false) {
           case aoQuery.$remove == null:
@@ -497,9 +511,9 @@ export default (Module) => {
       @method async executeQuery(
         aoQuery: object | string | QueryInterface
       ): Promise<CursorInterface<?CollectionInterface<D>, *>> {
-        console.log('>>?? HttpCollectionMixin::executeQuery enter');
+        // console.log('>>?? HttpCollectionMixin::executeQuery enter');
         const requestObj = this.requestFor(aoQuery);
-        res = await this.makeRequest(requestObj);
+        const res = await this.makeRequest(requestObj);
         assert(res.status < 400, `Request failed with status ${res.status} ${res.message}`);
         let { body } = res;
         if ((body != null) && body !== '') {
@@ -510,14 +524,14 @@ export default (Module) => {
             body = [body];
           }
           if (aoQuery.isCustomReturn) {
-            console.log('>>?? HttpCollectionMixin::executeQuery aoQuery.isCustomReturn');
+            // console.log('>>?? HttpCollectionMixin::executeQuery aoQuery.isCustomReturn');
             return (Cursor.new(null, body): Cursor<null, *>);
           } else {
-            console.log('>>?? HttpCollectionMixin::executeQuery NOT aoQuery.isCustomReturn');
+            // console.log('>>?? HttpCollectionMixin::executeQuery NOT aoQuery.isCustomReturn');
             return (Cursor.new(this, body): Cursor<CollectionInterface<D>, D>);
           }
         } else {
-          console.log('>>?? HttpCollectionMixin::executeQuery EMPTY CURSOR');
+          // console.log('>>?? HttpCollectionMixin::executeQuery EMPTY CURSOR');
           return (Cursor.new(null, []): Cursor<null, *>);
         }
       }

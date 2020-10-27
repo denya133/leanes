@@ -1,26 +1,41 @@
-console.log('>>>>QQQQ 12-12+1');
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
+// console.log('>>>>QQQQ 12-12+1');
 import type { ApplicationInterface } from '../../interfaces/ApplicationInterface';
-console.log('>>>>QQQQ 12-12+2');
+// console.log('>>>>QQQQ 12-12+2');
 import type {
   LegacyResponseInterface, AxiosResponse, Config
 } from '../../types/RequestT';
 
 export default (Module) => {
-  console.log('>>>>QQQQ 12-12+3');
+  // console.log('>>>>QQQQ 12-12+3');
   const {
     LIGHTWEIGHT,
     APPLICATION_MEDIATOR, //APPLICATION_SWITCH,
     CONFIGURATION,
     Pipes, Facade,
     ConfigurableMixin,
-    initialize, module, meta, property, method, nameBy, mixin,
+    initialize, partOf, meta, property, method, nameBy, mixin,
     Utils: { uuid }
   } = Module.NS;
   const { PipeAwareModule } = Pipes.NS;
-  console.log('>>>>QQQQ 12-12+4');
+  // console.log('>>>>QQQQ 12-12+4');
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
   class Application extends PipeAwareModule implements ApplicationInterface {
     @nameBy static  __filename = __filename;
@@ -42,8 +57,8 @@ export default (Module) => {
       this.facade.startup(this);
     }
 
-    @method finish(): void {
-      this.facade.remove();
+    @method async finish(): void {
+      await this.facade.remove();
     }
 
     @method async migrate(opts?: {until: ?string}): Promise<void> {
@@ -102,19 +117,19 @@ export default (Module) => {
     // }
 
     constructor(name: string, ApplicationFacade: Class<Facade>, symbol: ?Symbol) {
-      console.log('>>>>QQQQ 12-12+5');
+      // console.log('>>>>QQQQ 12-12+5');
       const isLightweight = symbol === LIGHTWEIGHT;
       if (isLightweight) {
-        console.log('>>>>QQQQ 12-12+6');
+        // console.log('>>>>QQQQ 12-12+6');
         super(ApplicationFacade.getInstance(`${name}|>${uuid.v4()}`));
-        console.log('>>>>QQQQ 12-12+7');
+        // console.log('>>>>QQQQ 12-12+7');
       } else {
-        console.log('>>>>QQQQ 12-12+8');
+        // console.log('>>>>QQQQ 12-12+8');
         super(ApplicationFacade.getInstance(name));
-        console.log('>>>>QQQQ 12-12+9');
+        // console.log('>>>>QQQQ 12-12+9');
       }
       this.isLightweight = isLightweight;
-      console.log('>>>>QQQQ 12-12+10');
+      // console.log('>>>>QQQQ 12-12+10');
     }
   }
 }

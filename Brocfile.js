@@ -7,7 +7,7 @@ const babel = require("rollup-plugin-babel");
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const json = require('rollup-plugin-json');
-// const globals = require('rollup-plugin-node-globals');
+const globals = require('rollup-plugin-node-globals');
 
 const appRoot = __dirname + '/src';
 
@@ -63,27 +63,23 @@ let js = new Rollup(appRoot, {
           "@babel/plugin-transform-flow-strip-types",
           ["@babel/plugin-proposal-decorators", { "legacy": true }],
           ["@babel/plugin-proposal-class-properties", { "loose": true }],
-          'transform-class-properties',
-          // "transform-dirname-filename",
-          // ["transform-globals", {
-          //   replace: {__filename: "filename"},
-          // }]
+          // 'transform-class-properties',
         ],
       }),
-      // globals({
-      //   include: __dirname + "/lib/**",
-      //   sourceMap: true,
-      //   process: false,
-      //   buffer: false,
-      //   dirname: true,
-      //   filename: true,
-      //   global: true,
-      //   baseDir: process.cwd()
-      // }),
+      globals({
+        // include: [__dirname + "/src/**"],
+        // exclude: [__dirname + 'node_modules/**'],
+        sourceMap: false,
+        process: false,
+        buffer: false,
+        dirname: true,
+        filename: true,
+        global: false,
+        baseDir: process.cwd() + "/src/leanes/"
+      }),
     ],
     output: {
-      // name: "LeanES",
-      // format: "umd",
+      name: "LeanES",
       dir: __dirname + '/lib',
       format: "cjs",
       sourcemap: true,

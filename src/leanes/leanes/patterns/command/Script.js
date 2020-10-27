@@ -1,20 +1,37 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { NotificationInterface } from '../../../patternes';
 import type { ScriptInterface } from '../../interfaces/ScriptInterface';
 
 export default (Module) => {
   const {
     JOB_RESULT,
-    SimpleCommand,
+    // SimpleCommand,
+    Command,
     ConfigurableMixin,
-    initialize, module, meta, method, nameBy, mixin,
+    initialize, partOf, meta, method, nameBy, mixin,
     Utils: { _ }
   } = Module.NS;
 
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   @mixin(ConfigurableMixin)
-  class Script extends SimpleCommand implements ScriptInterface {
+  class Script extends Command implements ScriptInterface {
+  // class Script extends SimpleCommand implements ScriptInterface {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 

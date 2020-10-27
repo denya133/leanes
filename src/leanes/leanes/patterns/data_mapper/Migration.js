@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import type { MigrationInterface } from '../../interfaces/MigrationInterface';
 import type { RecordInterface } from '../../interfaces/RecordInterface';
 
@@ -6,18 +21,18 @@ export default (Module) => {
     UP, DOWN, SUPPORTED_TYPES, REVERSE_MAP, NON_OVERRIDDEN,
     Record,
     assert,
-    initialize, module, meta, property, method, nameBy,
+    initialize, partOf, meta, property, method, nameBy,
     Utils: { _, assign, forEach }
   } = Module.NS;
 
   @initialize
-  @module(Module)
+  @partOf(Module)
   class Migration extends Record implements MigrationInterface<REVERSE_MAP, SUPPORTED_TYPES, UP, DOWN> {
     @nameBy static  __filename = __filename;
     @meta static object = {};
 
     // iplSteps = PointerT(Migration.private({
-    @property _steps: ?Array<{|args: Array, method: $Keys<typeof REVERSE_MAP> | 'reversible'|}> = null;
+    // @property _steps: ?Array<{|args: Array, method: $Keys<typeof REVERSE_MAP> | 'reversible'|}> = null;
 
     @property get steps(): Array<{|args: Array, method: $Keys<typeof REVERSE_MAP> | 'reversible'|}> {
       return assign([], (this._steps && [... this._steps]) || []);
@@ -33,7 +48,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [name, options],
         method: 'createCollection'
       });
     }
@@ -51,7 +66,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_1, collection_2, options],
         method: 'createEdgeCollection'
       });
     }
@@ -72,7 +87,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name, options],
         method: 'addField'
       });
     }
@@ -97,7 +112,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_names, options],
         method: 'addIndex'
       });
     }
@@ -119,7 +134,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, options],
         method: 'addTimestamps'
       });
     }
@@ -136,7 +151,7 @@ export default (Module) => {
       options: object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [name, options],
         method: 'changeCollection'
       });
     }
@@ -156,7 +171,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name, options],
         method: 'changeField'
       });
     }
@@ -177,7 +192,7 @@ export default (Module) => {
       new_field_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name, new_field_name],
         method: 'renameField'
       });
     }
@@ -196,7 +211,7 @@ export default (Module) => {
       new_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, old_name, new_name],
         method: 'renameIndex'
       });
     }
@@ -214,7 +229,7 @@ export default (Module) => {
       new_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, new_name],
         method: 'renameCollection'
       });
     }
@@ -230,7 +245,7 @@ export default (Module) => {
       collection_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name],
         method: 'dropCollection'
       });
     }
@@ -246,7 +261,7 @@ export default (Module) => {
       collection_2: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_1, collection_2],
         method: 'dropEdgeCollection'
       });
     }
@@ -263,7 +278,7 @@ export default (Module) => {
       field_name: string
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_name],
         method: 'removeField'
       });
     }
@@ -285,7 +300,7 @@ export default (Module) => {
       }
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, field_names, options],
         method: 'removeIndex'
       });
     }
@@ -307,7 +322,7 @@ export default (Module) => {
       options: ?object
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [collection_name, options],
         method: 'removeTimestamps'
       });
     }
@@ -323,7 +338,7 @@ export default (Module) => {
       lambda: ({|up: () => Promise<void>, down: () => Promise<void>|}) => Promise<void>
     ): void {
       this.prototype._steps.push({
-        args: arguments,
+        args: [lambda],
         method: 'reversible'
       });
     }
@@ -342,7 +357,7 @@ export default (Module) => {
       }
     }
 
-    @method static change(): Symbol {
+    @method static change(): ?Symbol {
       return NON_OVERRIDDEN;
     }
 
@@ -361,7 +376,7 @@ export default (Module) => {
       });
     }
 
-    @method static up(): Symbol {
+    @method static up(): ?Symbol {
       return NON_OVERRIDDEN;
     }
 
@@ -381,13 +396,16 @@ export default (Module) => {
         } else if (methodName === 'renameCollection') {
           const [ oldCollectionName, newCollectionName ] = args;
           await this[methodName](newCollectionName, oldCollectionName);
+        } else if (methodName === 'addField') {
+          const [ collectionName, fieldName ] = args;
+          await this[REVERSE_MAP[methodName]](collectionName, fieldName);
         } else {
           await this[REVERSE_MAP[methodName]](...args);
         }
       });
     }
 
-    @method static down(): Symbol {
+    @method static down(): ?Symbol {
       return NON_OVERRIDDEN;
     }
 
@@ -401,9 +419,9 @@ export default (Module) => {
 
     @method static onInitialize(...args) {
       super.onInitialize(...args);
-      if (this.prototype._steps == null) {
-        this.prototype._steps = [];
-      }
+      // if (this.prototype._steps == null) {
+      this.prototype._steps = [];
+      // }
       if (this === Migration) return;
       const changeReturn = this.change();
       if (changeReturn === NON_OVERRIDDEN) {
@@ -414,7 +432,7 @@ export default (Module) => {
         hasUpDownDeined &= downFunctor !== NON_OVERRIDDEN;
         assert(hasUpDownDeined == 1, 'Static `change` method should be defined or direct static methods `up` and `down` should be defined with return lambda functors');
         Reflect.defineProperty(this.prototype, 'up', method(this.prototype, 'up', { value: upFunctor }));
-        Refle.defineProperty(this.prototype, 'down', method(this.prototype, 'down', { value: downFunctor }));
+        Reflect.defineProperty(this.prototype, 'down', method(this.prototype, 'down', { value: downFunctor }));
       }
     }
   }

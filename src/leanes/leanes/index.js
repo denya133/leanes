@@ -1,6 +1,25 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
+// console.log('?>?>?>11--1');
 import PatternES from '../patternes';
+// console.log('?>?>?>11--2');
 import Pipes from '../pipes';
+// console.log('?>?>?>11');
 import joi from 'joi-browser';
+// console.log('?>?>?>22');
 import moment from 'moment';
 import statuses from 'statuses';
 
@@ -19,6 +38,7 @@ import relatedTo from './decorators/relatedTo';
 const {
   initialize, meta, nameBy, constant, resolver, util, freeze, decorator
 } = PatternES.NS;
+// console.log('?>?>?>33');
 
 
 @initialize
@@ -162,11 +182,11 @@ jwtEncodeTF(LeanES);
 // require('./utils/request').default(LeanES);
 import requestTF from './utils/request';
 requestTF(LeanES);
-console.log('>>?MMMMM LeanES after 000');
+// console.log('>>?MMMMM LeanES after 000');
 // require('./utils/verifyPassword').default(LeanES);
 import verifyPasswordTF from './utils/verifyPassword';
 verifyPasswordTF(LeanES);
-console.log('>>?MMMMM LeanES after 111');
+// console.log('>>?MMMMM LeanES after 111');
 
 // require('./mixins/ConfigurableMixin').default(LeanES);
 import ConfigurableMixinTF from './mixins/ConfigurableMixin';
@@ -177,76 +197,76 @@ RelationsMixinTF(LeanES);
 // require('./mixins/DelayableMixin').default(LeanES);
 import DelayableMixinTF from './mixins/DelayableMixin';
 DelayableMixinTF(LeanES);
-console.log('>>?MMMMM LeanES after 222');
+// console.log('>>?MMMMM LeanES after 222');
 
 // require('./patterns/iterator/Cursor').default(LeanES);
 import CursorTF from './patterns/iterator/Cursor';
 CursorTF(LeanES);
-console.log('>>?MMMMM LeanES after 333');
+// console.log('>>?MMMMM LeanES after 333');
 // require('./patterns/data_mapper/Transform').default(LeanES);
 import TransformTF from './patterns/data_mapper/Transform';
 TransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/StringTransform').default(LeanES);
 import StringTransformTF from './patterns/data_mapper/StringTransform';
 StringTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/NumberTransform').default(LeanES);
 import NumberTransformTF from './patterns/data_mapper/NumberTransform';
 NumberTransformTF(LeanES);
 // require('./patterns/data_mapper/PrimaryKeyTransform').default(LeanES);
 import PrimaryKeyTransformTF from './patterns/data_mapper/PrimaryKeyTransform';
 PrimaryKeyTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/DateTransform').default(LeanES);
 import DateTransformTF from './patterns/data_mapper/DateTransform';
 DateTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/BooleanTransform').default(LeanES);
 import BooleanTransformTF from './patterns/data_mapper/BooleanTransform';
 BooleanTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/ObjectTransform').default(LeanES);
 import ObjectTransformTF from './patterns/data_mapper/ObjectTransform';
 ObjectTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/ArrayTransform').default(LeanES);
 import ArrayTransformTF from './patterns/data_mapper/ArrayTransform';
 ArrayTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/ComplexObjectTransform').default(LeanES);
 import ComplexObjectTransformTF from './patterns/data_mapper/ComplexObjectTransform';
 ComplexObjectTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/ComplexArrayTransform').default(LeanES);
 import ComplexArrayTransformTF from './patterns/data_mapper/ComplexArrayTransform';
 ComplexArrayTransformTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/Serializer').default(LeanES);
 import SerializerTF from './patterns/data_mapper/Serializer';
 SerializerTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/Objectizer').default(LeanES);
 import ObjectizerTF from './patterns/data_mapper/Objectizer';
 ObjectizerTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/Record').default(LeanES);
 import RecordTF from './patterns/data_mapper/Record';
 RecordTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/Queue').default(LeanES);
 import QueueTF from './patterns/data_mapper/Queue';
 QueueTF(LeanES);
-console.log('>>?MMMMM LeanES after 333+1');
+// console.log('>>?MMMMM LeanES after 333+1');
 // require('./patterns/data_mapper/Migration').default(LeanES);
 import MigrationTF from './patterns/data_mapper/Migration';
 MigrationTF(LeanES);
-console.log('>>?MMMMM LeanES after 444');
+// console.log('>>?MMMMM LeanES after 444');
 
-require('./patterns/query_object/Query').default(LeanES);
+// require('./patterns/query_object/Query').default(LeanES);
 import QueryTF from './patterns/query_object/Query';
-QueueTF(LeanES);
-console.log('>>?MMMMM LeanES after 555');
+QueryTF(LeanES);
+// console.log('>>?MMMMM LeanES after 555');
 
 // require('./patterns/proxy/Collection').default(LeanES);
 // require('./patterns/proxy/Configuration').default(LeanES);
@@ -263,7 +283,7 @@ ConfigurationTF(LeanES);
 ResourceRendererTF(LeanES);
 RouterTF(LeanES);
 ResqueTF(LeanES);
-console.log('>>?MMMMM LeanES after 666');
+// console.log('>>?MMMMM LeanES after 666');
 
 // require('./mixins/HttpCollectionMixin').default(LeanES);
 // require('./mixins/HttpSerializerMixin').default(LeanES);
@@ -286,7 +306,7 @@ GenerateAutoincrementIdMixinTF(LeanES);
 GenerateUuidIdMixinTF(LeanES);
 MemoryResqueMixinTF(LeanES);
 MemoryConfigurationMixinTF(LeanES);
-console.log('>>?MMMMM LeanES after 777');
+// console.log('>>?MMMMM LeanES after 777');
 
 // require('./mixins/IterableMixin').default(LeanES);
 // require('./mixins/QueryableCollectionMixin').default(LeanES);
@@ -309,7 +329,7 @@ SchemaModuleMixinTF(LeanES);
 CrudResourceRendererMixinTF(LeanES);
 TemplatableModuleMixinTF(LeanES);
 EmbeddableRecordMixinTF(LeanES);
-console.log('>>?MMMMM LeanES after 888');
+// console.log('>>?MMMMM LeanES after 888');
 
 // require('./patterns/switch/Request').default(LeanES);
 // require('./patterns/switch/Response').default(LeanES);
@@ -323,26 +343,26 @@ RequestTF(LeanES);
 ResponseTF(LeanES);
 ContextTF(LeanES);
 SwitchTF(LeanES);
-console.log('>>?MMMMM LeanES after 999');
+// console.log('>>?MMMMM LeanES after 999');
 
 // require('./patterns/command/Resource').default(LeanES);
 import ResourceTF from './patterns/command/Resource';
 ResourceTF(LeanES);
-console.log('>>?MMMMM LeanES after 1010');
+// console.log('>>?MMMMM LeanES after 1010');
 // require('./patterns/command/MigrateCommand').default(LeanES);
 // require('./patterns/command/RollbackCommand').default(LeanES);
 import MigrateCommandTF from './patterns/command/MigrateCommand';
 MigrateCommandTF(LeanES);
 import RollbackCommandTF from './patterns/command/RollbackCommand';
 RollbackCommandTF(LeanES);
-console.log('>>?MMMMM LeanES after 1111');
+// console.log('>>?MMMMM LeanES after 1111');
 // require('./patterns/command/Script').default(LeanES);
 // require('./patterns/command/DelayedJobScript').default(LeanES);
 import ScriptTF from './patterns/command/Script';
 ScriptTF(LeanES);
 import DelayedJobScriptTF from './patterns/command/DelayedJobScript';
 DelayedJobScriptTF(LeanES);
-console.log('>>?MMMMM LeanES after 1212');
+// console.log('>>?MMMMM LeanES after 1212');
 
 // require('./mixins/ApplicationMediatorMixin').default(LeanES);
 // require('./mixins/MemoryExecutorMixin').default(LeanES);
@@ -362,21 +382,21 @@ QueryableResourceMixinTF(LeanES);
 EditableResourceMixinTF(LeanES);
 MemoryMigrationMixinTF(LeanES);
 LoggingJunctionMixinTF(LeanES);
-console.log('>>?MMMMM LeanES after 1313');
+// console.log('>>?MMMMM LeanES after 1313');
 
 // require('./patterns/facade/Application').default(LeanES);
 import ApplicationTF from './patterns/facade/Application';
 ApplicationTF(LeanES);
-console.log('>>?MMMMM LeanES after 1414');
+// console.log('>>?MMMMM LeanES after 1414');
 
 // require('./patterns/command/LogMessageCommand').default(LeanES);
 import LogMessageCommandTF from './patterns/command/LogMessageCommand';
 LogMessageCommandTF(LeanES);
 
 // export * from '../patternes';
-console.log('>>?MMMMM LeanES after 1515');
+// console.log('>>?MMMMM LeanES after 1515');
 export * from '../pipes';
-console.log('>>?MMMMM LeanES after 1616');
+// console.log('>>?MMMMM LeanES after 1616');
 
 export type { AttributeConfigT } from './types/AttributeConfigT';
 export type { AttributeOptionsT } from './types/AttributeOptionsT';
@@ -404,7 +424,7 @@ export type { ResourceRendererListResultT } from './types/ResourceRendererListRe
 export type { RouteOptionsT } from './types/RouteOptionsT';
 export type { RouterRouteT } from './types/RouterRouteT';
 export type { StreamT } from './types/StreamT';
-console.log('>>?MMMMM LeanES after 1717');
+// console.log('>>?MMMMM LeanES after 1717');
 
 export type { ApplicationInterface } from './interfaces/ApplicationInterface';
 export type { CollectionInterface } from './interfaces/CollectionInterface';
@@ -421,7 +441,7 @@ export type { IterableInterface } from './interfaces/IterableInterface';
 // export type { MediatorInterface } from './interfaces/MediatorInterface';
 export type { MigrationInterface } from './interfaces/MigrationInterface';
 export type { MigrationStaticInterface } from './interfaces/MigrationStaticInterface';
-console.log('>>?MMMMM LeanES after 1818');
+// console.log('>>?MMMMM LeanES after 1818');
 // export type { ModelInterface } from './interfaces/ModelInterface';
 // export type { NotificationInterface } from './interfaces/NotificationInterface';
 // export type { NotifierInterface } from './interfaces/NotifierInterface';
@@ -434,7 +454,7 @@ export type { QueueInterface } from './interfaces/QueueInterface';
 export type { RecordInterface } from './interfaces/RecordInterface';
 export type { RecordStaticInterface } from './interfaces/RecordStaticInterface';
 export type { RelatableStaticInterface } from './interfaces/RelatableStaticInterface';
-console.log('>>?MMMMM LeanES after 1919');
+// console.log('>>?MMMMM LeanES after 1919');
 export type { RequestInterface } from './interfaces/RequestInterface';
 export type { ResourceInterface } from './interfaces/ResourceInterface';
 export type { ResourceRendererInterface } from './interfaces/ResourceRendererInterface';
@@ -446,8 +466,8 @@ export type { SerializableInterface } from './interfaces/SerializableInterface';
 export type { SerializerInterface } from './interfaces/SerializerInterface';
 export type { SwitchInterface } from './interfaces/SwitchInterface';
 export type { TransformStaticInterface } from './interfaces/TransformStaticInterface';
-console.log('>>?MMMMM LeanES after 2020');
+// console.log('>>?MMMMM LeanES after 2020');
 // export type { ViewInterface } from './interfaces/ViewInterface';
 
 export default freeze(LeanES);
-console.log('>>?MMMMM LeanES after 2121');
+// console.log('>>?MMMMM LeanES after 2121');

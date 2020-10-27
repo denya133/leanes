@@ -1,3 +1,18 @@
+// This file is part of LeanES.
+//
+// LeanES is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LeanES is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with LeanES.  If not, see <https://www.gnu.org/licenses/>.
+
 import assign from './utils/assign';
 import copy from './utils/copy';
 import filter from './utils/filter';
@@ -18,7 +33,7 @@ import mixin from './decorators/mixin';
 import patch from './decorators/patch';
 import plugin from './decorators/plugin';
 import meta from './decorators/meta';
-import module from './decorators/module';
+import partOf from './decorators/partOf';
 import nameBy from './decorators/nameBy';
 import constant from './decorators/constant';
 import util from './decorators/util';
@@ -133,7 +148,7 @@ class ES extends _ES.prototype.Module {
   @decorator patch = patch;
   @decorator plugin = plugin;
   @decorator meta = meta;
-  @decorator module = module;
+  @decorator partOf = partOf;
   @decorator nameBy = nameBy;
   @decorator constant = constant;
   @decorator util = util;
@@ -159,12 +174,19 @@ class ES extends _ES.prototype.Module {
 // console.log('?>?>?> CoreObject111', ES.prototype.CoreObject);
 
 ES.prototype.CoreObject.constructor = ES.prototype.Proto;
+// _ES.prototype.CoreObject.constructor = ES.prototype.Proto;
 ES.prototype.MetaObject.constructor = ES.prototype.Proto;
 
 ES.prototype.Proto.Module = ES;
 ES.prototype.CoreObject.Module = ES;
+// _ES.prototype.CoreObject.Module = ES;
 ES.prototype.MetaObject.Module = ES;
-
+// Reflect.defineProperty(ES.prototype, 'CoreObject', {
+//   configurable: false,
+//   enumerable: true,
+//   writable: false,
+//   value: injectable(_ES.prototype.CoreObject)
+// });
 // require('./statemachine/HookedObject').default(ES);
 import HookedObjectTF from './statemachine/HookedObject';
 // require('./statemachine/State').default(ES);
